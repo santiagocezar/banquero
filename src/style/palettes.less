@@ -1,0 +1,21 @@
+each(range(0, 12, 1), {
+    .pal-@{value} {
+        --p10: hsl(@value * 30deg, 60%, 97%);
+        --p30: hsl(@value * 30deg, 60%, 90%);
+        --p40: hsl(@value * 30deg, 60%, 75%);
+        --p50: hsl(@value * 30deg, 60%, 60%);
+        --p70: hsl(@value * 30deg, 60%, 30%);
+        --p90: hsl(@value * 30deg, 60%, 10%);
+        --contrast: if(luminance(hsl(@value * 30deg, 60%, 60%)) > 60%, black, white);
+    }
+});
+
+:root {
+    --p10: hsl(0, 0%, 97%);
+    --p30: hsl(0, 0%, 90%);
+    --p40: hsl(0, 0%, 75%);
+    --p50: hsl(0, 0%, 60%);
+    --p70: hsl(0, 0%, 30%);
+    --p90: hsl(0, 0%, 10%);
+    --contrast: black;
+}
