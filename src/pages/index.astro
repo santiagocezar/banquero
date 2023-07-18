@@ -1,4 +1,8 @@
 ---
+import "../style/reset.css";
+import "../style/palettes.less";
+
+import { TrucoView } from "../games/truco";
 ---
 
 <html lang="en">
@@ -7,9 +11,10 @@
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>Tally</title>
 	</head>
 	<body>
-		<h1>Astro</h1>
+		<h1>Bienvenido a Tally!</h1>
+		<a href="/truco">Jugar al truco</a>
 	</body>
 </html>
