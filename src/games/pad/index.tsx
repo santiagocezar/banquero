@@ -11,7 +11,7 @@
 // import { range } from "lib/utils";
 import './style.less'
 
-import { useGameData } from "../../bxx";
+import { useGameData } from "../../lib/bxx";
 import { For, Show, createEffect, createSignal, untrack } from "solid-js";
 import * as z from 'zod'
 import { range } from "../../lib/utils";

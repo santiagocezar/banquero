@@ -11,124 +11,128 @@
 // import { range } from "lib/utils";
 import './style.less'
 
-import { useGameData } from "../../bxx";
-import { For, Show, createEffect, createSignal, untrack } from "solid-js";
+import { createGame } from "../../lib/bxx";
+import { For, JSX, Show, createComputed, createEffect, createMemo, createSignal, untrack } from "solid-js";
 import * as z from 'zod'
+import { confetti } from 'tsparticles-confetti'
 import { range } from "../../lib/utils";
 
-
-const PadGame = z.object({
-
-}).default({
+export const PlayerData = z.object({
+    name: z.string(),
+    color: z.number(),
+    rounds: z.array(z.number()),
 })
-type PadGame = z.infer<typeof PadGame>
+
+export const TableData = z.object({
+    players: z.array(PlayerData),
+}).default({
+    players: [],
+})
+export type PlayerData = z.infer<typeof PlayerData>
+export type TableData = z.infer<typeof TableData>
+
+export const table = createGame("table", TableData)
+
+interface PlayerContentProps {
+    player: PlayerData
+}
+
+function PlayerContent(props: PlayerContentProps) {
+    return (
+        <p>{props.player.name}</p>
+    )
+}
 
 
-export function PadView() {
-    const game = useGameData(PadGame)
-    let dragging = false
-    let bar: HTMLDivElement
+interface AddPlayerContentProps {
+    onConfirm: (player: PlayerData | null) => void
+}
+function AddPlayerContent(props: AddPlayerContentProps) {
+    const [color, setColor] = createSignal(Math.floor(Math.random() * 12));
 
-    let centerX = 0, centerY = 0, prevX = 1, prevY = 0;
+    const [adding, setAdding] = createSignal(false)
 
-    const [angle, setAngle] = createSignal(0)
-
-    function dragStart(event: MouseEvent) {
-        console.log("start")
-        dragging = true
-        const rect = bar.getBoundingClientRect()
-        centerX = rect.x + rect.width / 2,
-            centerY = rect.y + rect.height / 2
-
-        console.dir({ centerX, centerY })
-    }
-    function doTheThing(deltaX: number, deltaY: number) {
-        // normalize the delta vector
-
-        // if (deltaX == 0 && deltaY == 0) return;
-
-        // const mod = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
-
-        // deltaX /= mod, deltaY /= mod
-
-        const alpha = Math.atan2(deltaY * prevX - deltaX * prevY, deltaX * prevX + deltaY * prevY)
-
-        prevX = deltaX, prevY = deltaY
-
-        setAngle(a => a + alpha)
-
-
-        // let alpha = 0;
-        // if (deltaY != 0) {
-        //     alpha = Math.atan(deltaY / deltaX)
-        //     if (deltaX < 0) {
-        //         alpha -= Math.PI
-        //     }
-        //     if (alpha < 0) {
-        //         alpha += Math.PI * 2
-        //     }
-        // }
-
-        // // let betaA = (alpha - angle() % (2 * Math.PI) + Math.PI) % (2 * Math.PI) - Math.PI;
-
-        // const trueAngle = (angle() % (2 * Math.PI) + (2 * Math.PI)) % (2 * Math.PI)
-        // const betaA = (alpha - 2 * Math.PI - trueAngle),
-        //     betaB = (alpha - trueAngle);
-
-    }
-    function debugFormSubmit(e: Event) {
-        e.preventDefault()
-        if (!(e.target instanceof HTMLFormElement)) return
-
-        const data = new FormData(e.target)
-        const x = Number(data.get("x")),
-            y = Number(data.get("y"));
-
-        console.log({ x, y })
-        doTheThing(x, y)
+    function changeColor(event: Event) {
+        if (event.target instanceof HTMLInputElement) {
+            setColor(Number(event.target.value))
+        }
     }
 
-    function drag(event: MouseEvent) {
-        if (!dragging) return
+    function create(event: Event) {
+        event.preventDefault()
+        if (!(event.target instanceof HTMLFormElement)) return
 
+        const data = new FormData(event.target);
 
-        let deltaX = event.clientX - centerX,
-            deltaY = event.clientY - centerY
+        const name1 = data.get("name")?.toString() || "Jugador"
 
-        doTheThing(deltaX, deltaY)
-        console.log("wee")
-    }
-    function dragEnd() {
-        if (dragging) console.log("finish")
-        dragging = false
-    }
+        const color1 = Number(data.get("color"))
 
-    createEffect(() => {
-        bar.animate([
-            {
-                transform: `rotate(${angle()}rad)`,
-            }
-        ], {
-            duration: 500,
-            fill: "forwards",
-            easing: "ease"
+        props.onConfirm({
+            name: name1, color: color1, rounds: []
         })
-    })
+        setAdding(false)
+        setColor(Math.floor(Math.random() * 12))
+    }
+
 
     return (
-        <div class="pad">
-            <div class="container" onMouseMove={drag} onMouseUp={dragEnd}>
-                <div ref={bar!} class="bar">
-                    Santi
-                    <div class="ball" draggable onMouseDown={dragStart} >
+        <div class={"column add-player pal-" + color()} data-adding={adding()}>
+            <Show when={adding()} fallback={<button class="add" onClick={() => setAdding(true)}>Agregar jugador</button>}>
+                <form onSubmit={create}>
+                    <label class="text-input">
+                        <p>Nombre</p>
+                        <input name={"name"}
+                            type="text" />
+                    </label>
+                    <div class="colors" onChange={changeColor} >
+                        <For
+                            each={range(12)}>
+                            {i => (
+                                <input
+                                    type="radio"
+                                    name={"color"}
+                                    checked={untrack(() => color() == i)}
+                                    value={i}
+                                    class={"pal-" + i}
+                                />
+                            )}
+                        </For>
                     </div>
-                </div>
-                <div ref={bar!} class="bar">
-                    Santi
-                    <div class="ball" draggable onMouseDown={dragStart} >
+                    <div class="actions">
+                        <button type="submit">Listo</button>
                     </div>
-                </div>
-            </div>
+                </form>
+            </Show>
         </div>
+    )
+}
+
+
+export function TableView() {
+    const game = table.useData()
+
+
+    function addPlayer(player: PlayerData | null) {
+        if (player)
+            game.players.push(player)
+    }
+
+    return (
+        <div class="table">
+            <For
+                each={game.players}
+            >
+                {player => (
+                    <div class={"column player pal-" + player.color}>
+                        <PlayerContent player={player} />
+                    </div>
+                )}
+            </For>
+            <AddPlayerContent onConfirm={addPlayer} />
+        </div>
+        // {players[0] ? players[1] ? <><Team team={players[0]} /><Team team={players[1]} /></> : <><Team team={players[0]} /><AddTeam /></> : <><AddTeam /><TeamBackground /></>}
+
+
     );
 }

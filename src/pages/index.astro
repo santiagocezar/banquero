@@ -1,14 +1,24 @@
 ---
 import "../style/reset.css";
 import "../style/palettes.less";
+import { Recents } from "../components/Recents";
 
 import { TrucoView } from "../games/truco";
 import Base from "../layouts/Base.astro";
 ---
 
 <Base title="Score">
-  <img class="logo" src="/logo.svg" alt="Score" />
-  <a href="/truco">Jugar al truco</a>
+  <h1>
+    <img class="Score" src="/logo.svg" alt="Score" />
+  </h1>
+  <main>
+    <h2>Partidas guardadas</h2>
+    <div class="recents">
+      <Recents />
+    </div>
+
+    <a href="/truco">Jugar al truco</a>
+  </main>
 </Base>
 
 <style>

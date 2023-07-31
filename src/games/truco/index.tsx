@@ -11,19 +11,19 @@
 // import { range } from "lib/utils";
 import './style.less'
 
-import { useGameData } from "../../bxx";
+import { createGame } from "../../lib/bxx";
 import { For, Show, createComputed, createEffect, createMemo, createSignal, untrack } from "solid-js";
 import * as z from 'zod'
 import { confetti } from 'tsparticles-confetti'
 import { range } from "../../lib/utils";
 
-const TrucoTeam = z.object({
+export const TrucoTeam = z.object({
     name: z.string(),
     color: z.number(),
     score: z.number(),
 })
 
-const TrucoGame = z.object({
+export const TrucoGame = z.object({
     teams: z.object({
         nosotros: TrucoTeam,
         ellos: TrucoTeam,
@@ -33,8 +33,10 @@ const TrucoGame = z.object({
     teams: null,
     goal: 15,
 })
-type TrucoTeam = z.infer<typeof TrucoTeam>
-type TrucoGame = z.infer<typeof TrucoGame>
+export type TrucoTeam = z.infer<typeof TrucoTeam>
+export type TrucoGame = z.infer<typeof TrucoGame>
+
+export const truco = createGame("truco", TrucoGame)
 
 
 interface TeamInputProps {
@@ -122,10 +124,10 @@ interface TeamProps {
 function Team(props: TeamProps) {
     let elementRefForColors: HTMLDivElement
 
-    const goalBoxes = createMemo(() => Math.floor(props.goal / 5))
-    const scoreBoxes = createMemo(() => Math.ceil(props.team.score / 5))
+    const matches = createMemo(() => props.goal % 5 == 0 ? 5 : 6)
+    const goalBoxes = createMemo(() => Math.floor(props.goal / matches()))
+    const scoreBoxes = createMemo(() => Math.ceil(props.team.score / matches()))
     const boxes = createMemo(() => Math.max(goalBoxes(), scoreBoxes()))
-    const score = createMemo(() => props.team.score % 5)
 
     console.log("aaa: " + JSON.stringify(props.team))
 
@@ -179,7 +181,7 @@ function Team(props: TeamProps) {
                     {i => <>
                         <div class="fosforo-box">
                             <For
-                                each={range(Math.min(props.team.score - i * 5, 5))}>
+                                each={range(Math.min(props.team.score - i * matches(), matches()))}>
                                 {() => (
                                     <div class="fosforo" />
                                 )}
@@ -200,7 +202,7 @@ function Team(props: TeamProps) {
 }
 
 export function TrucoView() {
-    const game = useGameData(TrucoGame)
+    const game = truco.useData()
 
     console.log(JSON.stringify(game))
 
@@ -230,8 +232,10 @@ export function TrucoView() {
                     <Team goal={game.goal} team={teams().ellos} />
                     <div class="goal-toggle" onChange={changeGoal}>
                         <span>Jugar hasta</span>
-                        <input type="radio" name="goal" aria-label="15" checked={untrack(() => game.goal == 15)} value="15" id="15" />
-                        <input type="radio" name="goal" aria-label="30" checked={untrack(() => game.goal == 30)} value="30" id="30" />
+                        <input type="radio" name="goal" aria-label="15" checked={untrack(() => game.goal == 15)} value="15" />
+                        <input type="radio" name="goal" aria-label="18" checked={untrack(() => game.goal == 18)} value="18" />
+                        <input type="radio" name="goal" aria-label="24" checked={untrack(() => game.goal == 24)} value="24" />
+                        <input type="radio" name="goal" aria-label="30" checked={untrack(() => game.goal == 30)} value="30" />
                         <span>puntos</span>
                     </div>
                 </div>}

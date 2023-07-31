@@ -8,11 +8,11 @@ interface Props {
 ---
 
 <Base title={Astro.props.title}>
-  <header>
-    <p>
-      jugando al {Astro.props.title}
-    </p>
-    <div class="grow"></div>
+  <header id="header">
+    <div class="logo">
+      <img class="Score" src="/logo.svg" alt="Score" />
+      <span>{Astro.props.title.toLowerCase()}</span>
+    </div>
     <button id="share">
       <p>Compartir</p>
       <Icon name="mdi:share" />
@@ -29,16 +29,28 @@ interface Props {
     flex-direction: column;
     height: 100%;
   }
-  header {
+  #header {
     display: flex;
     align-items: center;
     padding: 0 0.5rem;
     height: 4rem;
     flex-shrink: 0;
     border-bottom: 1px solid var(--p30);
+    justify-content: space-between;
 
-    .grow {
-      flex-grow: 1;
+    .logo {
+      display: flex;
+      align-items: end;
+      gap: 0.5rem;
+      img {
+        height: 1.25rem;
+      }
+      span {
+        font-family: "Poppins";
+        line-height: 0.7;
+        font-weight: 900;
+        font-size: 2.1rem;
+      }
     }
     button {
       display: flex;
