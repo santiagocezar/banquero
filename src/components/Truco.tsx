@@ -9,13 +9,13 @@
 // import { Input } from "components/Forms";
 // import { HEADER_HEIGHT } from "components/Header";
 // import { range } from "lib/utils";
-import './style.less'
+import './truco.less'
 
-import { createGame } from "../../lib/bxx";
+import { createGame } from "../lib/bxx";
 import { For, Show, createComputed, createEffect, createMemo, createSignal, untrack } from "solid-js";
 import * as z from 'zod'
 import { confetti } from 'tsparticles-confetti'
-import { range } from "../../lib/utils";
+import { range } from "../lib/utils";
 
 export const TrucoTeam = z.object({
     name: z.string(),
@@ -202,7 +202,7 @@ function Team(props: TeamProps) {
 }
 
 export function TrucoView() {
-    const game = truco.useData()
+    const game = truco.useData(data => data.teams !== null)
 
     console.log(JSON.stringify(game))
 

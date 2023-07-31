@@ -1,0 +1,11 @@
+---
+import "../style/reset.css";
+import "../style/palettes.less";
+
+import { TrucoView } from "../components/Truco";
+import GameLayout from "../layouts/Game.astro";
+---
+
+<GameLayout title="Truco">
+  <TrucoView client:only />
+</GameLayout>

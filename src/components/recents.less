@@ -1,0 +1,32 @@
+.recent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    padding: 1rem;
+    border-radius: 2rem;
+    overflow: hidden;
+
+    strong {
+        font-size: 1.25rem;
+    }
+
+    span {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translateX(-50%) translateY(-50%);
+    }
+
+    .background {
+        position: absolute;
+        inset: 0;
+        background-color: var(--p30);
+        z-index: -1;
+
+        div {
+            height: 100%;
+            background: linear-gradient(to right, transparent, var(--p30));
+        }
+    }
+}

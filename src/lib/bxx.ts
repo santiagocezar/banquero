@@ -9,7 +9,7 @@ interface Game<T extends z.ZodTypeAny> {
     id: string
     schema: z.ZodDefault<T>
     getData(id: string, fromData?: string | null): z.infer<T>
-    useData(): z.infer<T>
+    useData(dirty: (data: z.infer<T>) => boolean): z.infer<T>
 }
 
 export function createGame<T extends z.ZodTypeAny>(game: string, schema: z.ZodDefault<T>): Game<T> {
@@ -19,8 +19,8 @@ export function createGame<T extends z.ZodTypeAny>(game: string, schema: z.ZodDe
         getData(id, fromData) {
             return getGameData(schema, id, fromData)
         },
-        useData() {
-            return useGameData(schema, game)
+        useData(dirty) {
+            return useGameData(schema, game, dirty)
         },
     }
 }
@@ -50,8 +50,12 @@ function addToRecents(game: string, id: string) {
 
     if (recentIndex > 0) { // yes, not including index 0 is deliberate
         recents.splice(recentIndex, 1)
+        recents.splice(0, 0, { game, id, date })
     }
-    recents.splice(0, 0, { game, id, date })
+    if (recentIndex < 0) {
+        recents.splice(0, 0, { game, id, date })
+
+    }
 
     localStorage.setItem("recents", JSON.stringify(recents))
 
@@ -80,7 +84,7 @@ export function getGameData<T extends z.ZodTypeAny>(schema: z.ZodDefault<T>, id:
     return parsed
 }
 
-export function useGameData<T extends z.ZodTypeAny>(schema: z.ZodDefault<T>, game: string): z.infer<T> {
+export function useGameData<T extends z.ZodTypeAny>(schema: z.ZodDefault<T>, game: string, dirty: (data: z.infer<T>) => boolean): z.infer<T> {
     let id = nanoid();
     const url = new URL(location.href)
     if (url.searchParams.has("id")) {
@@ -101,8 +105,11 @@ export function useGameData<T extends z.ZodTypeAny>(schema: z.ZodDefault<T>, gam
     let autoSaveTaskID = -1;
 
     createDeferred(() => {
-        localStorage.setItem(id, JSON.stringify(mut))
-        console.log("saved!")
+        const data = JSON.stringify(mut)
+        if (dirty(mut)) {
+            localStorage.setItem(id, data)
+            console.log("saved!")
+        }
     })
     return mut
 }
