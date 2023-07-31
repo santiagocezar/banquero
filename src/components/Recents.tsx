@@ -42,7 +42,7 @@ export function Recents() {
     const recents = getRecents()
 
     return (
-        <For each={recents}>
+        <For each={recents} fallback={<p class="nope">No hay</p>}>
             {recent => <RecentGame recent={recent} />}
         </For>
     )
