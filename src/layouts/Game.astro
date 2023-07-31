@@ -9,10 +9,10 @@ interface Props {
 
 <Base title={Astro.props.title}>
   <header id="header">
-    <div class="logo">
+    <a href="/" class="logo">
       <img class="Score" src="/logo.svg" alt="Score" />
       <span>{Astro.props.title.toLowerCase()}</span>
-    </div>
+    </a>
     <button id="share">
       <p>Compartir</p>
       <Icon name="mdi:share" />
