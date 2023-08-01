@@ -24,7 +24,7 @@ function RecentGame(props: RecentGameProps) {
 
         if (!data.teams) return null
 
-        return <a href={"/game?id=" + props.recent.id} class="recent">
+        return <a href={"/game/?id=" + props.recent.id} class="recent">
             <div class={"background pal-" + data.teams.nosotros.color}>
                 <div class={"pal-" + data.teams.ellos.color}></div>
             </div>
