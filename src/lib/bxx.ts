@@ -10,14 +10,22 @@ interface Game<T extends z.ZodTypeAny> {
     schema: z.ZodDefault<T>
     getData(id: string, fromData?: string | null): z.infer<T>
     useData(dirty: (data: z.infer<T>) => boolean): z.infer<T>
+    rematch(id: string): string
 }
 
-export function createGame<T extends z.ZodTypeAny>(game: string, schema: z.ZodDefault<T>): Game<T> {
+export function createGame<T extends z.ZodTypeAny>(game: string, schema: z.ZodDefault<T>, rematchTransform: (data: z.infer<T>) => z.infer<T>): Game<T> {
     return {
         id: game,
         schema,
         getData(id, fromData) {
             return getGameData(schema, id, fromData)
+        },
+        rematch(id) {
+            const newMatch = rematchTransform(this.getData(id))
+            const newID = nanoid()
+
+            localStorage.setItem(newID, JSON.stringify(newMatch))
+            return newID
         },
         useData(dirty) {
             return useGameData(schema, game, dirty)
@@ -38,7 +46,23 @@ export function getRecents(): Recent[] {
     } catch (err) {
         console.warn(err)
     }
-    return recents
+    return recents.map(r => ({ ...r, date: new Date(r.date) }))
+}
+export function deleteRecent(id: string): Recent[] {
+    let recents: Recent[] = []
+    try {
+        recents = JSON.parse(localStorage.getItem("recents")!)
+        if (!recents) recents = []
+    } catch (err) {
+        console.warn(err)
+    }
+    const idx = recents.findIndex(v => v.id == id)
+    if (idx >= 0) {
+        recents.splice(idx, 1)
+    }
+    localStorage.setItem("recents", JSON.stringify(recents))
+    localStorage.removeItem(id)
+    return recents.map(r => ({ ...r, date: new Date(r.date) }))
 }
 
 function addToRecents(game: string, id: string) {

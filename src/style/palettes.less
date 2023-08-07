@@ -19,10 +19,10 @@ each(range(0, 12, 1), {
     --p90: hsl(220, 5%, 10%);
     --contrast: white;
 
-    --bg100: #fff;
-    --bg200: #eee;
-    --bg300: #ddd;
-    --bg400: #ccc;
+    --bg1: #fff;
+    --bg2: #eee;
+    --bg3: #ddd;
+    --bg4: #ccc;
 
     --text: #000;
     --textContrast: #fff;
@@ -47,4 +47,60 @@ each(range(0, 12, 1), {
     --greenl: #80ee7c;
     --green: #28db67;
     --greend: #06634f;
+
+    background-color: var(--bg1);
+    color: var(--text);
+}
+
+@media (prefers-color-scheme: dark) {
+    each(range(0, 12, 1), {
+        .pal-@{value} {
+            --p10: hsl(@value * 30deg, 60%, 10%);
+            --p30: hsl(@value * 30deg, 60%, 17%);
+            --p40: hsl(@value * 30deg, 60%, 32%);
+            --p50: hsl(@value * 30deg, 60%, 47%);
+            --p70: hsl(@value * 30deg, 60%, 77%);
+            --p90: hsl(@value * 30deg, 60%, 90%);
+            --contrast: if(luminance(hsl(@value * 30deg, 60%, 47%)) > 60%, black, white);
+        }
+    });
+
+:root {
+    --p10: hsl(220, 5%, 10%);
+    --p30: hsl(220, 5%, 17%);
+    --p40: hsl(220, 5%, 32%);
+    --p50: hsl(220, 5%, 47%);
+    --p70: hsl(220, 5%, 77%);
+    --p90: hsl(220, 5%, 90%);
+    --contrast: white;
+
+    --bg1: #111;
+    --bg2: #222;
+    --bg3: #333;
+    --bg4: #444;
+
+    --text: #eee;
+    --textContrast: #111;
+    --secondaryText: #eee8;
+    --secondaryTextContrast: #1118;
+
+    --shadow: #ddd2;
+
+    --redl: #ff7fd4;
+    --red: #fe1e6e;
+    --redd: #630081;
+
+
+    --yellowl: #fff67d;
+    --yellow: #ffc51a;
+    --yellowd: #ac4204;
+
+    --bluel: #5ab5f1;
+    --blue: #2c37de;
+    --blued: #31108b;
+
+    --greenl: #80ee7c;
+    --green: #28db67;
+    --greend: #06634f;
+}
 }

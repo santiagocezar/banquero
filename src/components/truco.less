@@ -83,8 +83,6 @@
             -webkit-appearance: none;
             appearance: none;
 
-            background-color: white;
-            color: black;
             border: 1px solid var(--blue);
             box-sizing: content-box;
             padding: 0 1rem;
@@ -129,6 +127,8 @@
         }
 
         .boxes {
+            /* fun fact!: this is important if you want to scroll elements into view */
+            position: relative;
             padding: 2rem 0;
             display: flex;
             align-items: center;

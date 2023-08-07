@@ -12,7 +12,7 @@
 import './truco.less'
 
 import { createGame } from "../lib/bxx";
-import { For, Show, createComputed, createEffect, createMemo, createSignal, untrack } from "solid-js";
+import { For, JSXElement, Show, children, createComputed, createEffect, createMemo, createRenderEffect, createSignal, onMount, untrack } from "solid-js";
 import * as z from 'zod'
 import { confetti } from 'tsparticles-confetti'
 import { range } from "../lib/utils";
@@ -36,7 +36,14 @@ export const TrucoGame = z.object({
 export type TrucoTeam = z.infer<typeof TrucoTeam>
 export type TrucoGame = z.infer<typeof TrucoGame>
 
-export const truco = createGame("truco", TrucoGame)
+export const truco = createGame("truco", TrucoGame, remacth => {
+    remacth.teams?.ellos &&
+        (remacth.teams.ellos.score = 0)
+    remacth.teams?.nosotros &&
+        (remacth.teams.nosotros.score = 0)
+
+    return remacth
+})
 
 
 interface TeamInputProps {
@@ -116,6 +123,32 @@ const AddTeam = (props: AddTeamProps) => {
 };
 
 
+interface FosforoBoxProps {
+    count: number
+}
+
+function FosforoBox(props: FosforoBoxProps) {
+    let boxRef: HTMLDivElement
+
+    createEffect(() => {
+        if (boxRef && props.count == 1) {
+            boxRef.scrollIntoView({
+                behavior: "smooth",
+                block: "end",
+            })
+        }
+    })
+
+    return <div ref={boxRef!} class="fosforo-box">
+        <For
+            each={range(props.count)}>
+            {() => (
+                <div class="fosforo" />
+            )}
+        </For>
+    </div>
+}
+
 interface TeamProps {
     team: z.infer<typeof TrucoTeam>
     goal: number
@@ -179,14 +212,7 @@ function Team(props: TeamProps) {
                 <For
                     each={range(boxes())}>
                     {i => <>
-                        <div class="fosforo-box">
-                            <For
-                                each={range(Math.min(props.team.score - i * matches(), matches()))}>
-                                {() => (
-                                    <div class="fosforo" />
-                                )}
-                            </For>
-                        </div>
+                        <FosforoBox count={Math.min(props.team.score - i * matches(), matches())} />
                         <Show when={(i + 1) == goalBoxes()}>
                             <hr />
                         </Show>
@@ -194,8 +220,8 @@ function Team(props: TeamProps) {
                 </For>
             </div>
             <div class="actions">
-                <button onClick={decrease}>-</button>
-                <button onClick={increase}>+</button>
+                <button aria-label={"Sacar un punto a " + props.team.name} onClick={decrease}>-</button>
+                <button aria-label={"Agregar un punto a " + props.team.name} onClick={increase}>+</button>
             </div>
         </div >
     )
