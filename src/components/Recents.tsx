@@ -1,6 +1,6 @@
 import "./recents.less"
 
-import { For, createSignal } from "solid-js";
+import { For, Show, createSignal } from "solid-js";
 import { Recent, deleteRecent, getRecents } from "../lib/bxx";
 import { TrucoGame, truco } from "../components/Truco";
 
@@ -29,7 +29,10 @@ function RecentGame(props: RecentGameProps) {
             location.href = "/game/?id=" + id
         }
 
-        if (!data.teams) return null
+        if (!data.teams) {
+            props.onDelete(props.recent.id)
+            return null
+        }
 
         return <div class="recent">
             <a href={"/game/?id=" + props.recent.id} class={"border pal-" + data.teams.nosotros.color}>
@@ -63,9 +66,20 @@ export function Recents() {
         setRecents(deleteRecent(id))
     }
 
+    console.log({ recents: recents() })
+
     return (
-        <For each={recents()} fallback={<p class="nope">No hay</p>}>
-            {recent => <RecentGame onDelete={onDelete} recent={recent} />}
-        </For>
+        <div class="recents">
+            <Show when={recents().length} fallback={<div class="nope">
+                <img src="/dude.webp" alt="an sketch of a dude in a hoodie pointing up" />
+                <small>No hay partidas recientes, haga click en el botón de "Nueva partida" para empezar a contar puntos</small>
+
+            </div>}>
+                <h2>Partidas recientes</h2>
+                <For each={recents()}>
+                    {recent => <RecentGame onDelete={onDelete} recent={recent} />}
+                </For>
+            </Show>
+        </div>
     )
 }
