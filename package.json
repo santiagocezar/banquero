@@ -19,6 +19,11 @@
     "nanoid": "^4.0.2",
     "solid-js": "^1.4.3",
     "tsparticles-confetti": "^2.11.0",
+    "vite-plugin-pwa": "^0.16.4",
+    "workbox-window": "^7.0.0",
     "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@vite-pwa/astro": "^0.1.1"
   }
 }

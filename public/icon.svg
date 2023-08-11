@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="22"
+   height="22"
+   viewBox="0 0 22 22"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="icon.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     showgrid="false"
+     showguides="false"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="103.06081"
+     inkscape:cy="8.3085047"
+     inkscape:window-width="1920"
+     inkscape:window-height="1007"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid132"
+       originx="-70"
+       originy="-79" />
+    <sodipodi:guide
+       position="15,2"
+       orientation="0,-1"
+       id="guide1617"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="21,3.5"
+       orientation="1,0"
+       id="guide1619"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="24,28.68979"
+       orientation="1,0"
+       id="guide1648"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="5,7"
+       orientation="0,-1"
+       id="guide1650"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="-11.5,9"
+       orientation="0,-1"
+       id="guide1658"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="95.90493,-54.94862"
+       orientation="0,-1"
+       id="guide2591"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="103.34869,-49.35037"
+       orientation="0,-1"
+       id="guide2593"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="98.13022,-49.35037"
+       orientation="1,0"
+       id="guide2597"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="100.84972,-49.35037"
+       orientation="1,0"
+       id="guide2599"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="125.03731,-38.837"
+       orientation="1,0"
+       id="guide2772"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="129.43507,-33.3735"
+       orientation="0,-1"
+       id="guide2774"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="126.81356,-40.19675"
+       orientation="0,-1"
+       id="guide3080"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="125.95606,-41.973"
+       orientation="0,-1"
+       id="guide3084"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="126.81356,-38.837"
+       orientation="1,0"
+       id="guide3086"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="126.81356,-39.30862"
+       orientation="0,-1"
+       id="guide3088"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="124.59243,-39.30862"
+       orientation="1,0"
+       id="guide3339"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="127.25649,-39.30862"
+       orientation="1,0"
+       id="guide3341"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="126.81356,-38.42049"
+       orientation="0,-1"
+       id="guide3347"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="137.76523,-22.95253"
+       orientation="1,0"
+       id="guide3437"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="139.54148,-22.95253"
+       orientation="1,0"
+       id="guide3439"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="138.65237,-23.84065"
+       orientation="0,-1"
+       id="guide3443"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4939">
+      <stop
+         style="stop-color:#630081;stop-opacity:1;"
+         offset="0"
+         id="stop4935" />
+      <stop
+         style="stop-color:#31108b;stop-opacity:1;"
+         offset="0.3081761"
+         id="stop5083" />
+      <stop
+         style="stop-color:#06634f;stop-opacity:1;"
+         offset="0.75"
+         id="stop5292" />
+      <stop
+         style="stop-color:#31108b;stop-opacity:1;"
+         offset="1"
+         id="stop4937" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4939"
+       id="linearGradient4941"
+       x1="94.685997"
+       y1="94.975502"
+       x2="140.99101"
+       y2="94.975502"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-70,-79)">
+    <g
+       id="g1576">
+      <g
+         id="g1012">
+        <rect
+           style="fill:#31108b;fill-opacity:1;stroke-width:5;stroke-linecap:round;paint-order:stroke fill markers"
+           id="rect898"
+           width="10"
+           height="3"
+           x="75"
+           y="96"
+           ry="0" />
+        <rect
+           style="fill:#2c37de;fill-opacity:1;stroke-width:5;stroke-linecap:round;paint-order:stroke fill markers"
+           id="rect236"
+           width="7"
+           height="5"
+           x="70"
+           y="95"
+           ry="2" />
+      </g>
+      <g
+         id="g1018"
+         transform="rotate(90,81,90)">
+        <rect
+           style="fill:#630081;fill-opacity:1;stroke-width:5;stroke-linecap:round;paint-order:stroke fill markers"
+           id="rect1014"
+           width="10"
+           height="3"
+           x="75"
+           y="96"
+           ry="0" />
+        <rect
+           style="fill:#fe1e6e;fill-opacity:1;stroke-width:5;stroke-linecap:round;paint-order:stroke fill markers"
+           id="rect1016"
+           width="7"
+           height="5"
+           x="70"
+           y="95"
+           ry="2" />
+      </g>
+      <g
+         id="g1024"
+         transform="rotate(180,81,90)">
+        <rect
+           style="fill:#ac4204;fill-opacity:1;stroke-width:5;stroke-linecap:round;paint-order:stroke fill markers"
+           id="rect1020"
+           width="10"
+           height="3"
+           x="75"
+           y="96"
+           ry="0" />
+        <rect
+           style="fill:#ffc51a;fill-opacity:1;stroke-width:5;stroke-linecap:round;paint-order:stroke fill markers"
+           id="rect1022"
+           width="7"
+           height="5"
+           x="70"
+           y="95"
+           ry="2" />
+      </g>
+      <g
+         id="g1030"
+         transform="rotate(-90,81,90)">
+        <rect
+           style="fill:#06634f;fill-opacity:1;stroke-width:5;stroke-linecap:round;paint-order:stroke fill markers"
+           id="rect1026"
+           width="10"
+           height="3"
+           x="75"
+           y="96"
+           ry="0" />
+        <rect
+           style="fill:#28db67;fill-opacity:1;stroke-width:5;stroke-linecap:round;paint-order:stroke fill markers"
+           id="rect1028"
+           width="7"
+           height="5"
+           x="70"
+           y="95"
+           ry="2" />
+      </g>
+      <g
+         id="g1625"
+         transform="rotate(-90,81,90)">
+        <rect
+           style="fill:#06634f;fill-opacity:1;stroke-width:5;stroke-linecap:round;paint-order:stroke fill markers"
+           id="rect1621"
+           width="10"
+           height="3"
+           x="75"
+           y="96"
+           ry="0" />
+        <rect
+           style="fill:#28db67;fill-opacity:1;stroke-width:5;stroke-linecap:round;paint-order:stroke fill markers"
+           id="rect1623"
+           width="7"
+           height="5"
+           x="70"
+           y="95"
+           ry="2" />
+      </g>
+    </g>
+  </g>
+</svg>

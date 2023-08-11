@@ -1,4 +1,7 @@
 ---
+import { pwaInfo } from "virtual:pwa-info";
+import { Reload } from "../components/Reload";
+
 interface Props {
   title: string;
 }
@@ -8,6 +11,10 @@ interface Props {
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple180.png" sizes="180x180" />
+    <!-- <link rel="mask-icon" href="/mask-icon.svg" color="#FFFFFF" /> -->
+    <meta name="description" content="El contador del truco por excelencia." />
+    <meta name="theme-color" content="#fe1e6e" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,8 +24,10 @@ interface Props {
       rel="stylesheet"
     />
     <title>{Astro.props.title}</title>
+    {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
   </head>
   <body>
+    <Reload client:only />
     <slot />
   </body>
 </html>
