@@ -8,10 +8,19 @@ import Base from "../layouts/Base.astro";
 
 <Base title="Score">
   <h1>
-    <img class="Score" src="/logo.svg" alt="Score" />truco
+    <img src="/logo.svg" alt="Score" />truco
   </h1>
   <a class="new" href="/game">Nueva partida</a>
-  <Recents client:only />
+  <Recents client:load />
+  <footer class="donate">
+    <a href="https://cafecito.app/valsan" rel="noopener" target="_blank">
+      <img
+        srcset="https://cdn.cafecito.app/imgs/buttons/button_2.png 1x, https://cdn.cafecito.app/imgs/buttons/button_2_2x.png 2x, https://cdn.cafecito.app/imgs/buttons/button_2_3.75x.png 3.75x"
+        src="https://cdn.cafecito.app/imgs/buttons/button_2.png"
+        alt="Invitame un café en cafecito.app"
+      />
+    </a>
+  </footer>
 </Base>
 
 <style lang="less">
@@ -45,5 +54,10 @@ import Base from "../layouts/Base.astro";
     font-weight: bold;
     display: block;
     flex-shrink: 0;
+  }
+  footer {
+    display: flex;
+    padding: 2rem;
+    justify-content: center;
   }
 </style>

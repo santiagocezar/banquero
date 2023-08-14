@@ -1,6 +1,6 @@
 import "./recents.less"
 
-import { For, Show, createSignal } from "solid-js";
+import { For, Show, createSignal, onMount } from "solid-js";
 import { Recent, deleteRecent, getRecents } from "../lib/bxx";
 import { TrucoGame, truco } from "../components/Truco";
 
@@ -60,7 +60,11 @@ function RecentGame(props: RecentGameProps) {
 }
 
 export function Recents() {
-    const [recents, setRecents] = createSignal(getRecents())
+    const [recents, setRecents] = createSignal<Recent[]>([])
+
+    onMount(() => {
+        setRecents(getRecents())
+    })
 
     function onDelete(id: string) {
         setRecents(deleteRecent(id))
@@ -70,11 +74,15 @@ export function Recents() {
 
     return (
         <div class="recents">
-            <Show when={recents().length} fallback={<div class="nope">
-                <img src="/dude.webp" alt="an sketch of a dude in a hoodie pointing up" />
-                <small>No hay partidas recientes, haga click en el botón de "Nueva partida" para empezar a contar puntos</small>
-
-            </div>}>
+            <Show
+                when={recents().length}
+                fallback={
+                    <div class="nope">
+                        <img src="/dude.webp" alt="an sketch of a dude in a hoodie pointing up" />
+                        <small>No hay partidas recientes, haga click en el botón de "Nueva partida" para empezar a contar puntos</small>
+                    </div>
+                }
+            >
                 <h2>Partidas recientes</h2>
                 <For each={recents()}>
                     {recent => <RecentGame onDelete={onDelete} recent={recent} />}
