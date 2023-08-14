@@ -1,6 +1,6 @@
 ---
-import { pwaInfo } from "virtual:pwa-info";
-import { Reload } from "../components/Reload";
+// import { pwaInfo } from "virtual:pwa-info";
+// import { Reload } from "../components/Reload";
 
 interface Props {
   title: string;
@@ -24,10 +24,10 @@ interface Props {
       rel="stylesheet"
     />
     <title>{Astro.props.title}</title>
-    {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
+    <!-- {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />} -->
   </head>
   <body>
-    <Reload client:only />
+    <!-- <Reload client:only /> -->
     <slot />
   </body>
 </html>
