@@ -13,6 +13,7 @@
         border-radius: 2rem;
         background-color: var(--p30);
         transition: background-color .5s ease;
+        border: 1px solid var(--p50);
         flex-grow: 1;
     }
 
@@ -28,6 +29,11 @@
 
         .actions {
             grid-column: span 2;
+
+            button {
+                background-color: var(--green);
+                color: black;
+            }
         }
     }
 
@@ -43,6 +49,10 @@
             padding: 1rem;
         }
 
+        p {
+            margin-bottom: .5rem;
+        }
+
         input {
             width: 100%;
             font-size: 1.5rem;
@@ -50,7 +60,9 @@
             outline: none;
             font-weight: bold;
             text-align: center;
-            border-bottom: .25rem solid var(--p50);
+            // border-radius: 1rem 1rem 0 0;
+            // background-color: var(--p40);
+            border-bottom: 1px solid var(--p50);
 
             &::placeholder {
                 color: var(--p70)
@@ -138,9 +150,8 @@
 
             hr {
                 width: 75%;
-                border-color: var(--p50);
-                opacity: 50%;
-                border-width: .125rem;
+                border: none;
+                border-top: 1px solid var(--p50);
             }
         }
 
@@ -166,6 +177,7 @@
             color: var(--contrast);
             font-size: 2rem;
             padding: 1rem;
+            font-weight: bold;
         }
     }
 
@@ -187,7 +199,7 @@
             border: none;
             background-color: var(--p50);
             margin: -.25rem;
-            border: .25rem solid white;
+            border: 1px solid var(--p70);
             box-sizing: content-box;
             border-radius: 100%;
 

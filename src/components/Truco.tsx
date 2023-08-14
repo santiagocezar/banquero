@@ -116,7 +116,7 @@ const AddTeam = (props: AddTeamProps) => {
             <TeamInput defaultColor={color1} team="Nosotros" />
             <TeamInput defaultColor={color2} team="Ellos" />
             <div class="actions">
-                <button type="submit">Listo</button>
+                <button type="submit">Dale!</button>
             </div>
         </form>
     )
