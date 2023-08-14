@@ -83,22 +83,37 @@
         .actions {
             grid-column: span 2;
         }
+
+        footer {
+            flex-shrink: 0;
+            grid-column: span 2;
+            display: flex;
+            padding: 1rem 0;
+            justify-content: center;
+        }
     }
 
-    .goal-toggle {
+    .goal {
         display: flex;
+        justify-self: center;
         grid-column: span 2;
-        align-items: center;
-        gap: .5rem;
+
+        border-radius: 1rem;
+        overflow: hidden;
+        border: 1px solid var(--blue);
 
         input {
             -webkit-appearance: none;
             appearance: none;
 
-            border: 1px solid var(--blue);
+            border-left: 1px solid var(--blue);
             box-sizing: content-box;
             padding: 0 1rem;
-            border-radius: .5rem;
+            font-size: 2rem;
+
+            &:first-child {
+                border: none;
+            }
 
             &::before {
                 content: attr(value);
@@ -160,6 +175,7 @@
             box-shadow: 0 0 1rem 1rem var(--p30);
             border-radius: 0;
         }
+
     }
 
     .actions {

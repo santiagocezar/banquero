@@ -69,7 +69,7 @@ function TeamInput(props: TeamInputProps) {
         </label>
         <div class="colors" onChange={changeColor} >
             <For
-                each={range(12)}>
+                each={range(8)}>
                 {i => (
                     <input
                         type="radio"
@@ -85,11 +85,12 @@ function TeamInput(props: TeamInputProps) {
 }
 
 interface AddTeamProps {
-    onConfirm: (team1: TrucoTeam, team2: TrucoTeam) => void
+    onConfirm: (team1: TrucoTeam, team2: TrucoTeam, goal: number) => void
 }
 const AddTeam = (props: AddTeamProps) => {
-    const color1 = Math.floor(Math.random() * 12),
-        color2 = (color1 + Math.ceil(Math.random() * 11)) % 12;
+    const [goal, setGoal] = createSignal(15)
+    const color1 = Math.floor(Math.random() * 8),
+        color2 = (color1 + Math.ceil(Math.random() * 7)) % 8;
 
     function create(event: Event) {
         event.preventDefault()
@@ -107,14 +108,27 @@ const AddTeam = (props: AddTeamProps) => {
             name: name1, color: color1, score: 0
         }, {
             name: name2, color: color2, score: 0
-        })
+        }, goal())
     }
 
+
+
+    function changeGoal(event: Event) {
+        if (event.target instanceof HTMLInputElement) {
+            setGoal(Number(event.target.value))
+        }
+    }
 
     return (
         <form class="add-teams" onSubmit={create}>
             <TeamInput defaultColor={color1} team="Nosotros" />
             <TeamInput defaultColor={color2} team="Ellos" />
+            <div class="goal" onChange={changeGoal}>
+                <input type="radio" name="goal" aria-label="Hasta 15 puntos" checked={untrack(() => goal() == 15)} value="15" />
+                <input type="radio" name="goal" aria-label="Hasta 18 puntos" checked={untrack(() => goal() == 18)} value="18" />
+                <input type="radio" name="goal" aria-label="Hasta 24 puntos" checked={untrack(() => goal() == 24)} value="24" />
+                <input type="radio" name="goal" aria-label="Hasta 30 puntos" checked={untrack(() => goal() == 30)} value="30" />
+            </div>
             <div class="actions">
                 <button type="submit">Dale!</button>
             </div>
@@ -237,13 +251,6 @@ export function TrucoView() {
             nosotros, ellos
         }
     }
-
-    function changeGoal(event: Event) {
-        if (event.target instanceof HTMLInputElement) {
-            game.goal = Number(event.target.value)
-        }
-    }
-
     return (
         <div class="truco">
             <Show
@@ -256,14 +263,16 @@ export function TrucoView() {
                 {teams => <div class="teams">
                     <Team goal={game.goal} team={teams().nosotros} />
                     <Team goal={game.goal} team={teams().ellos} />
-                    <div class="goal-toggle" onChange={changeGoal}>
-                        <span>Jugar hasta</span>
-                        <input type="radio" name="goal" aria-label="15" checked={untrack(() => game.goal == 15)} value="15" />
-                        <input type="radio" name="goal" aria-label="18" checked={untrack(() => game.goal == 18)} value="18" />
-                        <input type="radio" name="goal" aria-label="24" checked={untrack(() => game.goal == 24)} value="24" />
-                        <input type="radio" name="goal" aria-label="30" checked={untrack(() => game.goal == 30)} value="30" />
-                        <span>puntos</span>
-                    </div>
+
+                    <footer class="donate">
+                        <a href="https://cafecito.app/valsan" rel="noopener" target="_blank">
+                            <img
+                                srcset="https://cdn.cafecito.app/imgs/buttons/button_2.png 1x, https://cdn.cafecito.app/imgs/buttons/button_2_2x.png 2x, https://cdn.cafecito.app/imgs/buttons/button_2_3.75x.png 3.75x"
+                                src="https://cdn.cafecito.app/imgs/buttons/button_2.png"
+                                alt="Invitame un café en cafecito.app"
+                            />
+                        </a>
+                    </footer>
                 </div>}
             </Show>
         </div>
