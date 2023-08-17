@@ -1,20 +1,18 @@
-// import { JSX, Show, createSignal, onMount, ComponentProps, splitProps, Accessor } from "solid-js";
+import { JSX, Show, createSignal, onMount } from "solid-js";
 
+interface BrowserOnlyProps {
+    children: JSX.Element,
+    fallback?: JSX.Element,
+}
 
-// type ShowFunction<T> = typeof Show<T, ((item: NonNullable<T>) => JSX.Element>
+export function BrowserOnly(props: BrowserOnlyProps) {
+    const [isBrowser, setIsBrowser] = createSignal(false)
 
-// type BrowserOnlyProps<T> = Omit<
-//     ComponentProps<typeof >, 'when'
-// >
+    onMount(() => {
+        setIsBrowser(true)
+    })
 
-// export function BrowserOnly(props: BrowserOnlyProps) {
-//     const [isBrowser, setIsBrowser] = createSignal(false)
-
-//     onMount(() => {
-//         setIsBrowser(true)
-//     })
-
-//     return <Show when={isBrowser()} {...props}>
-//         {props.children}
-//     </Show>
-// }
+    return <Show when={isBrowser()} fallback={props.fallback}>
+        {props.children}
+    </Show>
+}

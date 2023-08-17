@@ -3,6 +3,7 @@ import "./recents.less"
 import { For, Show, createSignal, onMount } from "solid-js";
 import { Recent, deleteRecent, getRecents } from "../lib/bxx";
 import { TrucoGame, truco } from "../components/Truco";
+import { BrowserOnly } from "../lib/BrowserOnly";
 
 function friendlyName(recent: Recent) {
     if (recent.game == truco.id) {
@@ -59,12 +60,12 @@ function RecentGame(props: RecentGameProps) {
     }
 }
 
-export function Recents() {
-    const [recents, setRecents] = createSignal<Recent[]>([])
+// function letters(text: string) {
+//     return [...text].map((c, i) => <span style={{ "--i": i }}>{c}</span>)
+// }
 
-    onMount(() => {
-        setRecents(getRecents())
-    })
+export function Recents() {
+    const [recents, setRecents] = createSignal(getRecents())
 
     function onDelete(id: string) {
         setRecents(deleteRecent(id))
@@ -74,20 +75,22 @@ export function Recents() {
 
     return (
         <div class="recents">
-            <Show
-                when={recents().length}
-                fallback={
-                    <div class="nope">
-                        <img src="/dude.webp" alt="an sketch of a dude in a hoodie pointing up" />
-                        <small>No hay partidas recientes, haga click en el botón de "Nueva partida" para empezar a contar puntos</small>
-                    </div>
-                }
-            >
-                <h2>Partidas recientes</h2>
-                <For each={recents()}>
-                    {recent => <RecentGame onDelete={onDelete} recent={recent} />}
-                </For>
-            </Show>
+            <BrowserOnly>
+                <Show
+                    when={recents().length}
+                    fallback={
+                        <div class="nope">
+                            <img src="/dude.webp" alt="an sketch of a dude in a hoodie pointing up" />
+                            <small>No hay partidas recientes, haga click en el botón de "Nueva partida" para empezar a contar puntos</small>
+                        </div>
+                    }
+                >
+                    <h2>Partidas recientes</h2>
+                    <For each={recents()}>
+                        {recent => <RecentGame onDelete={onDelete} recent={recent} />}
+                    </For>
+                </Show>
+            </BrowserOnly>
         </div>
     )
 }
