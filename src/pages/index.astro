@@ -8,7 +8,7 @@ import Base from "../layouts/Base.astro";
 
 <Base title="Score">
   <h1>
-    <img src="/logo.svg" alt="Score" />truco
+    <img src="/icon.svg" alt="Score" />trucomatic
   </h1>
   <a class="new" href="/game">Nueva partida</a>
   <Recents client:load />
@@ -31,16 +31,18 @@ import Base from "../layouts/Base.astro";
   }
   h1 {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    gap: .5em;
     justify-content: center;
     align-items: center;
     height: 6rem;
     text-align: center;
     font-family: "Poppins";
-    font-size: 1.5rem;
+    font-size: 2rem;
     flex-shrink: 0;
+    user-select: none;
     img {
-      height: 2rem;
+      height: 1.375em;
     }
   }
   .new {
