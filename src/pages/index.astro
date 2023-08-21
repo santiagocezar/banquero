@@ -13,6 +13,7 @@ import Base from "../layouts/Base.astro";
   <a class="new" href="/game">Nueva partida</a>
   <Recents client:load />
   <footer class="donate">
+  	<p>
     <a href="https://cafecito.app/valsan" rel="noopener" target="_blank">
       <img
         srcset="https://cdn.cafecito.app/imgs/buttons/button_2.png 1x, https://cdn.cafecito.app/imgs/buttons/button_2_2x.png 2x, https://cdn.cafecito.app/imgs/buttons/button_2_3.75x.png 3.75x"
@@ -20,6 +21,10 @@ import Base from "../layouts/Base.astro";
         alt="Invitame un café en cafecito.app"
       />
     </a>
+    </p>
+    <p>
+    <small>Desarrollo de carácter educativo. No se permite el uso para fines lucrativos.</small>
+    </p>
   </footer>
 </Base>
 
@@ -58,8 +63,10 @@ import Base from "../layouts/Base.astro";
     flex-shrink: 0;
   }
   footer {
-    display: flex;
-    padding: 2rem;
-    justify-content: center;
+    img {
+      display:inline-block;
+    }
+    padding: 2rem 1rem;
+    text-align: center;
   }
 </style>
