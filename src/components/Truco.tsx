@@ -246,10 +246,11 @@ export function TrucoView() {
 
     console.log(JSON.stringify(game))
 
-    function addTeams(nosotros: TrucoTeam, ellos: TrucoTeam) {
+    function addTeams(nosotros: TrucoTeam, ellos: TrucoTeam, goal: number) {
         game.teams = {
             nosotros, ellos
         }
+        game.goal = goal
     }
     return (
         <div class="truco">
