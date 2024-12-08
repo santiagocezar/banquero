@@ -1,6 +1,4 @@
 import type * as z from 'zod'
-import { createEffect, createDeferred, splitProps } from "solid-js"
-import { createMutable } from 'solid-js/store'
 import { nanoid } from 'nanoid'
 import * as fflate from "fflate";
 import * as base64 from "js-base64";
@@ -124,11 +122,11 @@ export function useGameData<T extends z.ZodTypeAny>(schema: z.ZodDefault<T>, gam
 
     addToRecents(game, id)
 
-    const mut = createMutable(getGameData(schema, id, dataParam))
+    const mut = $state(getGameData(schema, id, dataParam))
 
     let autoSaveTaskID = -1;
 
-    createDeferred(() => {
+    $effect(() => {
         const data = JSON.stringify(mut)
         if (dirty(mut)) {
             localStorage.setItem(id, data)

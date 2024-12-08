@@ -2,10 +2,10 @@
 import "../style/reset.css";
 import "../style/palettes.less";
 
-import { TrucoView } from "../components/Truco";
+import Truco from "../components/Truco.svelte";
 import GameLayout from "../layouts/Game.astro";
 ---
 
 <GameLayout title="Truco">
-  <TrucoView client:only />
+  <Truco client:only />
 </GameLayout>

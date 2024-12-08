@@ -1,8 +1,8 @@
 import "./recents.less"
 
 import { For, Show, createSignal, onMount } from "solid-js";
-import { Recent, deleteRecent, getRecents } from "../lib/bxx";
-import { TrucoGame, truco } from "../components/Truco";
+import { type Recent, deleteRecent, getRecents } from "../lib/bxx.svelte";
+import { TrucoGame, truco } from "../components/truco";
 import { BrowserOnly } from "../lib/BrowserOnly";
 
 function friendlyName(recent: Recent) {

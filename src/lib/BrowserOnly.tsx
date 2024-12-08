@@ -1,4 +1,4 @@
-import { JSX, Show, createSignal, onMount } from "solid-js";
+import { type JSX, Show, createSignal, onMount } from "solid-js";
 
 interface BrowserOnlyProps {
     children: JSX.Element,
