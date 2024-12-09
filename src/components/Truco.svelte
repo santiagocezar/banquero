@@ -118,8 +118,8 @@ function addTeams(nosotros: TrucoTeam, ellos: TrucoTeam, goal: number) {
 
     .teams {
         display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr min-content;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr min-content;
         height: 100%;
         gap: .5rem;
         overflow: hidden;
@@ -132,7 +132,7 @@ function addTeams(nosotros: TrucoTeam, ellos: TrucoTeam, goal: number) {
 
         footer {
             flex-shrink: 0;
-/*             grid-column: span 2; */
+            grid-column: span 2;
             display: flex;
             padding: 1rem 0;
             justify-content: center;

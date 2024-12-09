@@ -60,10 +60,11 @@ $effect(() => {
 .boxes {
     /* fun fact!: this is important if you want to scroll elements into view */
     position: relative;
-    padding: 2rem 0;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: auto auto;
     place-items: center;
+    place-content: space-evenly;
+    gap: 1rem 0;
     overflow-y: auto;
     flex-direction: column;
     flex-grow: 1;
@@ -78,9 +79,9 @@ $effect(() => {
 .fosforo-box {
     position: relative;
     width: 7em;
-    font-size: .75rem;
+    font-size: .55rem;
     flex-shrink: 0;
-    height: 9em;
+    height: 7em;
 
     * {
         position: absolute;
@@ -125,16 +126,22 @@ $effect(() => {
     width: .5em;
     height: 5em;
     background-color: var(--p90);
-    transition: opacity .2s;
-    
+    transition: background-color .2s;
+    box-sizing: border-box;
+
     &[data-new="true"] {
-        opacity: .25;
+/*         opacity: .25; */
+        background-color: var(--p40);
+        &::before {
+            background-color: var(--p40);
+        }
     }
     
     &::before {
         content: "";
         display: block;
         background-color: var(--p50);
+        transition: background-color .2s;
         height: 1.5em;
         margin: -.125em;
         width: .75em;

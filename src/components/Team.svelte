@@ -1,5 +1,7 @@
 <script lang="ts">
-import Fosforos from "./Fosforos.svelte" 
+import Fosforos from "./Fosforos.svelte"
+import MdiAdd from "~icons/mdi/add"
+import MdiRemove from "~icons/mdi/minus"
 import { TrucoTeam } from "./truco" 
 import { range } from "../lib/utils" 
 
@@ -56,35 +58,34 @@ $effect(() => {
         <h2>
             {team.name}
         </h2>
-        <div class="actions">
-            <button aria-label="Sacar un punto a {team.name}" onclick={decrease}>-</button>
-            <button aria-label="Agregar un punto a {team.name}" onclick={increase}>+</button>
-        </div>
+        <p class="number">{team.score}</p>
     </header>
     <div class="content">
-        <p class="number">{team.score}</p>
         <div class="goal">primero<br>a {goal}</div>
         <Fosforos score={team.score} goal={goal} />
+    </div>
+    <div class="actions">
+        <button aria-label="Sacar un punto a {team.name}" onclick={decrease}>
+            <MdiRemove />
+        </button>
+        <button aria-label="Agregar un punto a {team.name}" onclick={increase}>
+            <MdiAdd />
+        </button>
     </div>
 </div>
 
 <style lang="less">
 .team {
-    display: grid;
-    grid-template: min-content 1fr / 1fr;
-
     header {
         z-index: 1;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background-color: var(--p50);
-        height: 2rem;
-        padding: 1rem 0 0 1.25rem;
-        color: var(--contrast);
-        height: 2rem;
+        background-image: linear-gradient(to bottom, var(--p50), transparent);
+        padding: 1rem;
+        color: var(--p90);
+        height: 4rem;
         flex-shrink: 0;
-        box-shadow: 0 0 1rem 1rem var(--p50);
     }
     .content {
         position: relative;
@@ -98,13 +99,13 @@ $effect(() => {
     }
 
     .number {
-        position: absolute;
+        font-weight: 900;
+        font-size: 2rem;
+        /*position: absolute;
         left: 1rem;
         bottom: -.05em;
-        font-weight: 900;
         font-variant-numeric: tabular-nums;
-        font-size: 4rem;
-        color: var(--p40);
+        color: var(--p40);*/
     }
 
     .goal {
@@ -122,13 +123,12 @@ $effect(() => {
     .actions {
         border-radius: 0;
 /*         gap: .5rem; */
-        width: 8rem;
-        
+/*         width: 8rem; */
+
         button {
-            height: auto;
-            box-sizing: border-box;
-            padding: 0 1rem;
-            background-color: transparent;
+            font-size: 16px;
+            display: grid;
+            place-items: center;
         }
     }
 }

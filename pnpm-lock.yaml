@@ -53,6 +53,13 @@ importers:
       zod:
         specifier: ^3.23.8
         version: 3.23.8
+    devDependencies:
+      '@iconify/types':
+        specifier: ^2.0.0
+        version: 2.0.0
+      unplugin-icons:
+        specifier: ^0.21.0
+        version: 0.21.0(svelte@5.8.1)
 
 packages:
 
@@ -62,6 +69,9 @@ packages:
 
   '@antfu/install-pkg@0.4.1':
     resolution: {integrity: sha512-T7yB5QNG29afhWVkVq7XeIMBa5U/vs9mX69YqayXypPRmYzUmzwnYltplHmPtZ4HPCn+sQKeXW8I47wCbuBOjw==}
+
+  '@antfu/install-pkg@0.5.0':
+    resolution: {integrity: sha512-dKnk2xlAyC7rvTkpkHmu+Qy/2Zc3Vm/l8PtNyIOGDBtXPY3kThfU4ORNEp3V7SXw5XSOb+tOJaUYpfquPzL/Tg==}
 
   '@antfu/utils@0.7.10':
     resolution: {integrity: sha512-+562v9k4aI80m1+VuMHehNJWLOFjBnXn3tdOitzD0il5b7smkSBal4+a3oKiQTbrwMmN/TBUMDvbdoWDehgOww==}
@@ -3170,6 +3180,33 @@ packages:
     resolution: {integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==}
     engines: {node: '>= 10.0.0'}
 
+  unplugin-icons@0.21.0:
+    resolution: {integrity: sha512-sRic+yj7cCbpDFwrRj+m55ogOZi6PQRDc/WUEmjHLAnc90v0g5UVxE0cVAZgBOsAPCieizZJui/sgrCYrVx8mQ==}
+    peerDependencies:
+      '@svgr/core': '>=7.0.0'
+      '@svgx/core': ^1.0.1
+      '@vue/compiler-sfc': ^3.0.2 || ^2.7.0
+      svelte: ^3.0.0 || ^4.0.0 || ^5.0.0
+      vue-template-compiler: ^2.6.12
+      vue-template-es2015-compiler: ^1.9.0
+    peerDependenciesMeta:
+      '@svgr/core':
+        optional: true
+      '@svgx/core':
+        optional: true
+      '@vue/compiler-sfc':
+        optional: true
+      svelte:
+        optional: true
+      vue-template-compiler:
+        optional: true
+      vue-template-es2015-compiler:
+        optional: true
+
+  unplugin@1.16.0:
+    resolution: {integrity: sha512-5liCNPuJW8dqh3+DM6uNM2EI3MLLpCKp/KY+9pB5M2S2SR2qvvDHhKgBOaTWEbZTAws3CXfB0rKTIolWKL05VQ==}
+    engines: {node: '>=14.0.0'}
+
   upath@1.2.0:
     resolution: {integrity: sha512-aZwGpamFO61g3OlfT7OQCHqhGnW43ieH9WZeP7QxN/G/jS4jfqUkZxoryvJgVPEcrl5NL/ggHsSmLMHuH64Lhg==}
     engines: {node: '>=4'}
@@ -3268,6 +3305,9 @@ packages:
   webidl-conversions@4.0.2:
     resolution: {integrity: sha512-YQ+BmxuTgd6UXZW3+ICGfyqRyHXVlD5GtQr5+qjiNW7bF0cqrzX500HVXPBOvgXb5YnzDd+h0zqyv61KUD7+Sg==}
 
+  webpack-virtual-modules@0.6.2:
+    resolution: {integrity: sha512-66/V2i5hQanC51vBQKPH4aI8NMAcBW59FVBs+rC7eGHupMyfn34q7rZIE+ETlJ+XTevqfUhVVBgSUNSW2flEUQ==}
+
   whatwg-encoding@3.1.1:
     resolution: {integrity: sha512-6qN4hJdMwfYBtE3YBTTHhoeuUrDBPZmbQaxWAqSALV/MeEnR5z1xd8UKud2RAkFoPkmB+hli1TZSnyi84xz1vQ==}
     engines: {node: '>=18'}
@@ -3328,6 +3368,7 @@ packages:
 
   workbox-google-analytics@7.0.0:
     resolution: {integrity: sha512-MEYM1JTn/qiC3DbpvP2BVhyIH+dV/5BjHk756u9VbwuAhu0QHyKscTnisQuz21lfRpOwiS9z4XdqeVAKol0bzg==}
+    deprecated: It is not compatible with newer versions of GA starting with v4, as long as you are using GAv3 it should be ok, but the package is not longer being maintained
 
   workbox-navigation-preload@7.0.0:
     resolution: {integrity: sha512-juWCSrxo/fiMz3RsvDspeSLGmbgC0U9tKqcUPZBCf35s64wlaLXyn2KdHHXVQrb2cqF7I0Hc9siQalainmnXJA==}
@@ -3419,6 +3460,11 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.25
 
   '@antfu/install-pkg@0.4.1':
+    dependencies:
+      package-manager-detector: 0.2.7
+      tinyexec: 0.3.1
+
+  '@antfu/install-pkg@0.5.0':
     dependencies:
       package-manager-detector: 0.2.7
       tinyexec: 0.3.1
@@ -7160,6 +7206,25 @@ snapshots:
 
   universalify@2.0.1: {}
 
+  unplugin-icons@0.21.0(svelte@5.8.1):
+    dependencies:
+      '@antfu/install-pkg': 0.5.0
+      '@antfu/utils': 0.7.10
+      '@iconify/utils': 2.2.0
+      debug: 4.4.0
+      kolorist: 1.8.0
+      local-pkg: 0.5.1
+      unplugin: 1.16.0
+    optionalDependencies:
+      svelte: 5.8.1
+    transitivePeerDependencies:
+      - supports-color
+
+  unplugin@1.16.0:
+    dependencies:
+      acorn: 8.14.0
+      webpack-virtual-modules: 0.6.2
+
   upath@1.2.0: {}
 
   update-browserslist-db@1.1.1(browserslist@4.24.2):
@@ -7227,6 +7292,8 @@ snapshots:
   web-namespaces@2.0.1: {}
 
   webidl-conversions@4.0.2: {}
+
+  webpack-virtual-modules@0.6.2: {}
 
   whatwg-encoding@3.1.1:
     dependencies:
