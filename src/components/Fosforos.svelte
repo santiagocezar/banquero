@@ -1,5 +1,5 @@
 <script lang="ts">
-import { range } from "../lib/utils" 
+import { range, delayEffect } from "../lib/utils.svelte" 
 
 interface Props {
     score: number
@@ -9,10 +9,29 @@ interface Props {
 const { score, goal }: Props = $props()
 let ref: HTMLDivElement | undefined = $state()
 
+let prevScore = $state(score)
+
+delayEffect(() => {
+    score;
+    return () => {
+        prevScore = score
+    }
+}, 1000)
+
 const matches = $derived(goal % 6 == 0 ? 6 : 5)
 const goalBoxes = $derived(Math.floor(goal / matches))
 const scoreBoxes = $derived(Math.ceil(score / matches))
 const boxes = $derived(Math.max(goalBoxes, scoreBoxes))
+
+function forBox(boxN: number) {
+    return Math.min(Math.max(score, prevScore) - boxN * matches, matches)
+}
+function isNew(boxN: number, matchN: number) {
+    const displayScore = boxN * matches + matchN;
+    return score >= prevScore
+        ? displayScore >= prevScore
+        : displayScore >= score
+}
 /*
 $effect(() => {
     if (ref && count == 1) {
@@ -27,13 +46,13 @@ $effect(() => {
 <div class="boxes">
     {#each range(boxes) as i}
         <div bind:this={ref} class="fosforo-box">
-            {#each range(Math.min(score - i * matches, matches)) as i}
-                <div class="fosforo" />
+            {#each range(forBox(i)) as j}
+                <div class="fosforo" data-new={isNew(i, j)} />
             {/each}
         </div>
-        {#if (i + 1) == goalBoxes}
+      <!--  {#if (i + 1) == goalBoxes}
             <hr />
-        {/if}
+        {/if}-->
     {/each}
 </div>
 
@@ -42,8 +61,9 @@ $effect(() => {
     /* fun fact!: this is important if you want to scroll elements into view */
     position: relative;
     padding: 2rem 0;
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    place-items: center;
     overflow-y: auto;
     flex-direction: column;
     flex-grow: 1;
@@ -57,62 +77,68 @@ $effect(() => {
 
 .fosforo-box {
     position: relative;
-    width: 7rem;
+    width: 7em;
+    font-size: .75rem;
     flex-shrink: 0;
-    height: 9rem;
+    height: 9em;
 
     * {
         position: absolute;
     }
 
     :nth-child(1) {
-        top: 2rem;
+        top: 2em;
     }
 
     :nth-child(2) {
-        left: 3.25rem;
-        top: -1.25rem;
+        left: 3.25em;
+        top: -1.25em;
         transform: rotate(90deg);
     }
 
     :nth-child(3) {
-        top: 2rem;
+        top: 2em;
         right: 0;
         transform: rotate(180deg);
     }
 
     :nth-child(4) {
-        left: 3.25rem;
-        top: 5.25rem;
+        left: 3.25em;
+        top: 5.25em;
         transform: rotate(270deg);
     }
 
     :nth-child(5) {
-        left: 3.25rem;
-        top: 2rem;
+        left: 3.25em;
+        top: 2em;
         transform: rotate(45deg);
     }
 
     :nth-child(6) {
-        left: 3.25rem;
-        top: 2rem;
+        left: 3.25em;
+        top: 2em;
         transform: rotate(-45deg);
     }
 }
 .fosforo {
     display: block;
-    width: .5rem;
-    height: 5rem;
+    width: .5em;
+    height: 5em;
     background-color: var(--p90);
-
+    transition: opacity .2s;
+    
+    &[data-new="true"] {
+        opacity: .25;
+    }
+    
     &::before {
         content: "";
         display: block;
         background-color: var(--p50);
-        height: 1.5rem;
-        margin: -.125rem;
-        width: .75rem;
-        border-radius: .25rem;
+        height: 1.5em;
+        margin: -.125em;
+        width: .75em;
+        border-radius: .25em;
     }
 }
 </style>
