@@ -1,5 +1,6 @@
 <script lang="ts">
 import { range, delayEffect } from "../lib/utils.svelte" 
+import Box from "./Box.svelte" 
 
 interface Props {
     score: number
@@ -22,18 +23,12 @@ const MAX_ROWS = 6
 
 const matches = $derived(goal % 6 == 0 ? 6 : 5)
 const goalBoxes = $derived(Math.floor(goal / matches))
-const scoreBoxes = $derived(Math.ceil(score / matches))
+const scoreBoxes = $derived(Math.ceil(Math.max(score, prevScore) / matches))
 const boxes = $derived(Math.max(goalBoxes, scoreBoxes))
 const size = $derived(Math.min(1 / Math.floor((scoreBoxes - 1) / MAX_ROWS + 1), (1 / scoreBoxes + 1) / 2))
 
-function forBox(boxN: number) {
-    return Math.min(Math.max(score, prevScore) - boxN * matches, matches)
-}
-function isNew(boxN: number, matchN: number) {
-    const displayScore = boxN * matches + matchN;
-    return score >= prevScore
-        ? displayScore >= prevScore
-        : displayScore >= score
+function forBox(score, boxN: number) {
+    return Math.min(score - boxN * matches, matches)
 }
 /*
 $effect(() => {
@@ -46,13 +41,15 @@ $effect(() => {
 })*/
 </script>
 
+
 <div class="boxes" style="font-size: {size}rem">
     {#each range(boxes) as i}
         <div class="goal-box" data-goal={(i + 1) == goalBoxes}>
             <div bind:this={ref} class="fosforo-box" data-goal={(i + 1) == goalBoxes}>
-                {#each range(forBox(i)) as j}
-                    <div class="fosforo" data-new={isNew(i, j)} />
-                {/each}
+                <Box
+                    minCount={forBox(Math.min(score, prevScore), i)}
+                    maxCount={forBox(Math.max(score, prevScore), i)}
+                />
             </div>
         </div>
       <!--  {#if }
@@ -95,7 +92,7 @@ $effect(() => {
     flex-shrink: 0;
     height: 7em;
     
-    * {
+   /* * {
         position: absolute;
     }
 
@@ -131,7 +128,7 @@ $effect(() => {
         left: 3.25em;
         top: 1em;
         transform: rotate(-45deg);
-    }
+    }*/
 }
 .fosforo {
     display: block;
