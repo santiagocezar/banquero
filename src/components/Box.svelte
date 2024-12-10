@@ -57,8 +57,9 @@ text {
     fill: red;
 }
 .match {
-    transition: .15s opacity linear, .15s transform ease;
+    transition: .2s opacity linear, .3s filter cubic-bezier(.17,.67,.12,1), .3s transform cubic-bezier(.17,.67,.12,1);
     transform-box: fill-box;
+    transform-origin: center center;
 
     .stick {
         transition: .15s fill linear;
@@ -71,7 +72,8 @@ text {
 
     &[data-hidden="true"] {
         opacity: 0;
-        transform: rotate(-10deg) translate(-10px, -10px) scale(1.1);
+        transform: scale(1.25);
+        filter: blur(5px);
     }
 
     &[data-hidden="true"],

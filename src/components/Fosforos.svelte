@@ -47,7 +47,7 @@ function forBox(score, boxN: number) {
         class="wrapper"
         transform="translate({(contentSize.width - BOX_SIZE * boxScale) / 2}, 0) scale({boxScale})"
     >
-        {#each range(boxes) as i}
+        {#each range(boxes + 1) as i}
             <Box
                 minCount={forBox(Math.min(score, prevScore), i)}
                 maxCount={forBox(Math.max(score, prevScore), i)}
