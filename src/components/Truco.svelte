@@ -1,7 +1,6 @@
 <script lang="ts">
 import AddTeam from './AddTeam.svelte'
 import Team from './Team.svelte'
-import { confetti } from 'tsparticles-confetti'
 import { range } from "../lib/utils";
 import { truco } from "./truco";
 

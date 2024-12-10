@@ -4,6 +4,7 @@ import MdiAdd from "~icons/mdi/add"
 import MdiRemove from "~icons/mdi/minus"
 import { TrucoTeam } from "./truco" 
 import { range } from "../lib/utils" 
+import { confetti } from 'tsparticles-confetti'
 
 interface Props {
     team: TrucoTeam
@@ -61,8 +62,8 @@ $effect(() => {
         <p class="number">{team.score}</p>
     </header>
     <div class="content">
-        <div class="goal">primero<br>a {goal}</div>
         <Fosforos score={team.score} goal={goal} />
+        <div class="goal">primero<br>a {goal}</div>
     </div>
     <div class="actions">
         <button aria-label="Sacar un punto a {team.name}" onclick={decrease}>
@@ -76,6 +77,8 @@ $effect(() => {
 
 <style lang="less">
 .team {
+    user-select: none;
+
     header {
         z-index: 1;
         display: flex;
@@ -88,7 +91,8 @@ $effect(() => {
         flex-shrink: 0;
     }
     .content {
-        position: relative;
+        display: flex;
+        flex-direction: column;
         height: 100%;
         overflow: hidden;
     }
@@ -109,14 +113,12 @@ $effect(() => {
     }
 
     .goal {
-        position: absolute;
-        right: .75rem;
-        bottom: 1rem;
         text-align: right;
         font-weight: 400;
         font-variant-numeric: tabular-nums;
         font-size: 1.5rem;
         line-height: 1;
+        padding: 1rem;
         color: var(--p40);
     }
 
