@@ -18,10 +18,13 @@ delayEffect(() => {
     }
 }, 1000)
 
+const MAX_ROWS = 6
+
 const matches = $derived(goal % 6 == 0 ? 6 : 5)
 const goalBoxes = $derived(Math.floor(goal / matches))
 const scoreBoxes = $derived(Math.ceil(score / matches))
 const boxes = $derived(Math.max(goalBoxes, scoreBoxes))
+const size = $derived(Math.min(1 / Math.floor((scoreBoxes - 1) / MAX_ROWS + 1), (1 / scoreBoxes + 1) / 2))
 
 function forBox(boxN: number) {
     return Math.min(Math.max(score, prevScore) - boxN * matches, matches)
@@ -43,14 +46,16 @@ $effect(() => {
 })*/
 </script>
 
-<div class="boxes">
+<div class="boxes" style="font-size: {size}rem">
     {#each range(boxes) as i}
-        <div bind:this={ref} class="fosforo-box">
-            {#each range(forBox(i)) as j}
-                <div class="fosforo" data-new={isNew(i, j)} />
-            {/each}
+        <div class="goal-box" data-goal={(i + 1) == goalBoxes}>
+            <div bind:this={ref} class="fosforo-box" data-goal={(i + 1) == goalBoxes}>
+                {#each range(forBox(i)) as j}
+                    <div class="fosforo" data-new={isNew(i, j)} />
+                {/each}
+            </div>
         </div>
-      <!--  {#if (i + 1) == goalBoxes}
+      <!--  {#if }
             <hr />
         {/if}-->
     {/each}
@@ -61,13 +66,15 @@ $effect(() => {
     /* fun fact!: this is important if you want to scroll elements into view */
     position: relative;
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-rows: repeat(6, auto);
+    grid-auto-columns: auto auto;
+    grid-auto-flow: column;
     place-items: center;
-    place-content: space-evenly;
-    gap: 1rem 0;
-    overflow-y: auto;
-    flex-direction: column;
-    flex-grow: 1;
+    place-content: start space-evenly;
+    gap: .25em 0;
+    overflow: hidden;
+    height: 100%;
+    transition: .2s ease font-size, .2s ease grid-template-columns;
 
     hr {
         width: 75%;
@@ -75,49 +82,54 @@ $effect(() => {
         border-top: 1px solid var(--p50);
     }
 }
+.goal-box {
+    padding: 1em;
 
+    &[data-goal="true"] {
+        border-bottom: 1px solid var(--p50);
+    }   
+}
 .fosforo-box {
     position: relative;
     width: 7em;
-    font-size: .55rem;
     flex-shrink: 0;
     height: 7em;
-
+    
     * {
         position: absolute;
     }
 
     :nth-child(1) {
-        top: 2em;
+        top: 1em;
     }
 
     :nth-child(2) {
         left: 3.25em;
-        top: -1.25em;
+        top: -2.25em;
         transform: rotate(90deg);
     }
 
     :nth-child(3) {
-        top: 2em;
+        top: 1em;
         right: 0;
         transform: rotate(180deg);
     }
 
     :nth-child(4) {
         left: 3.25em;
-        top: 5.25em;
+        top: 4.25em;
         transform: rotate(270deg);
     }
 
     :nth-child(5) {
         left: 3.25em;
-        top: 2em;
+        top: 1em;
         transform: rotate(45deg);
     }
 
     :nth-child(6) {
         left: 3.25em;
-        top: 2em;
+        top: 1em;
         transform: rotate(-45deg);
     }
 }
