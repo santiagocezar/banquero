@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@iconify/types": "^2.0.0",
+    "@iconify/utils": "^2.2.0",
     "esbuild": "^0.24.0",
     "unplugin-icons": "^0.21.0"
   }

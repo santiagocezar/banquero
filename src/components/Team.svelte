@@ -9,9 +9,10 @@ import { confetti } from 'tsparticles-confetti'
 interface Props {
     team: TrucoTeam
     goal: number
+    onwin: (team: TrucoTeam) => void
 }
 
-const { team, goal }: Props = $props()
+const { team = $bindable(), goal, onwin }: Props = $props()
 
 let elementRefForColors: HTMLDivElement | undefined = $state()
 
@@ -49,6 +50,7 @@ $effect(() => {
             scalar: 1.5,
             colors: computed.getPropertyValue("--p50"),
         });
+        onwin(team)
     }
     prevScore = score
 })

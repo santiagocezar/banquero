@@ -1,10 +1,26 @@
 <script lang="ts">
 import AddTeam from './AddTeam.svelte'
 import Team from './Team.svelte'
+import FancyDialog from './FancyDialog.svelte'
+import { TrucoTeam } from "./truco" 
 import { range } from "../lib/utils";
 import { truco } from "./truco";
 
-const game = truco.useData(data => data.teams !== null)
+const {id, data: game} = truco.useData(data => data.teams !== null)
+let winDialog: HTMLDialogElement = $state()
+let winner: TrucoTeam | undefined = $state()
+let winDialogOpen = $state(false)
+
+
+function onWin(team: TrucoTeam) {
+    if (winner) return
+    winner = team
+    console.log("papitas")
+    
+    setTimeout(() => {
+        winDialogOpen = true
+    }, 1000)
+}
 
 console.log(JSON.stringify(game))
 
@@ -14,6 +30,21 @@ function addTeams(nosotros: TrucoTeam, ellos: TrucoTeam, goal: number) {
     }
     game.goal = goal
 }
+
+function playAgain() {}
+
+function share() {
+    const data = localStorage.getItem(id)!; // won't work the first 2 seconds
+    const compressed = fflate.gzipSync(new TextEncoder().encode(data));
+    const encoded = base64.fromUint8Array(compressed, true);
+    url.searchParams.delete("id");
+    url.searchParams.set("data", encoded);
+    navigator.share({
+        title: "Compartir partida",
+        url: url.toString(),
+    });
+}
+
 </script>
 <!--
 <svg style="display: none;" id="fire" width="128" height="128" xmlns="http://www.w3.org/2000/svg">
@@ -48,18 +79,23 @@ function addTeams(nosotros: TrucoTeam, ellos: TrucoTeam, goal: number) {
 <div class="truco">
     {#if game.teams}
         <div class="teams">
-            <Team goal={game.goal} team={game.teams.nosotros} />
-            <Team goal={game.goal} team={game.teams.ellos} />
-
-            <footer class="donate">
-                <a href="https://cafecito.app/valsan" rel="noopener" target="_blank">
-                    <img
-                        srcset="https://cdn.cafecito.app/imgs/buttons/button_2.png 1x, https://cdn.cafecito.app/imgs/buttons/button_2_2x.png 2x, https://cdn.cafecito.app/imgs/buttons/button_2_3.75x.png 3.75x"
-                        src="https://cdn.cafecito.app/imgs/buttons/button_2.png"
-                        alt="Invitame un café en cafecito.app"
-                    />
-                </a>
-            </footer>
+            <Team goal={game.goal} bind:team={game.teams.nosotros} onwin={onWin} />
+            <Team goal={game.goal} bind:team={game.teams.ellos} onwin={onWin} />
+            
+            <FancyDialog bind:open={winDialogOpen}>
+                <div class="win-dialog">
+                    <h1>¡Ganó <span class="pal-{winner?.color}">{winner?.name}</span>!</h1>
+                    <button onclick={playAgain} >Revancha</button>
+                    <button onclick={share}>Compartir</button>
+                    <a href="https://cafecito.app/valsan" rel="noopener" target="_blank">
+                        <img
+                            srcset="https://cdn.cafecito.app/imgs/buttons/button_2.png 1x, https://cdn.cafecito.app/imgs/buttons/button_2_2x.png 2x, https://cdn.cafecito.app/imgs/buttons/button_2_3.75x.png 3.75x"
+                            src="https://cdn.cafecito.app/imgs/buttons/button_2.png"
+                            alt="Invitame un café en cafecito.app"
+                        />
+                    </a>
+                </div>
+            </FancyDialog>
         </div>
     {:else}
         <AddTeam onconfirm={addTeams} />
@@ -92,6 +128,7 @@ function addTeams(nosotros: TrucoTeam, ellos: TrucoTeam, goal: number) {
         }
     }
 }
+
 .truco {
     display: block;
     flex-grow: 1;
@@ -157,5 +194,40 @@ function addTeams(nosotros: TrucoTeam, ellos: TrucoTeam, goal: number) {
     width: 128px;
     height: 128px;
     animation: 2s linear fire infinite;
+}
+
+.win-dialog {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    margin-bottom: .5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    text-align: center;
+    
+    h1 {
+        font: bold 1.5rem "Poppins";
+        span {
+            color: var(--p50);
+        }
+    }
+    button {
+        background-color: var(--blue);
+        color: white;
+        display: grid;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        gap: 0.5rem;
+        place-items: center;
+
+        svg {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+    }
+    a {
+        place-self: center;
+    }
 }
 </style>

@@ -106,7 +106,8 @@ export function getGameData<T extends z.ZodTypeAny>(schema: z.ZodDefault<T>, id:
     return parsed
 }
 
-export function useGameData<T extends z.ZodTypeAny>(schema: z.ZodDefault<T>, game: string, dirty: (data: z.infer<T>) => boolean): z.infer<T> {
+export function useGameData<T extends z.ZodTypeAny>(schema: z.ZodDefault<T>, game: string, dirty: (data: z.infer<T>) => boolean):
+{id: string, data: z.infer<T>} {
     let id = nanoid();
     const url = new URL(location.href)
     if (url.searchParams.has("id")) {
@@ -122,13 +123,13 @@ export function useGameData<T extends z.ZodTypeAny>(schema: z.ZodDefault<T>, gam
 
     addToRecents(game, id)
 
-    const mut = $state(getGameData(schema, id, dataParam))
+    const mut = $state({id, data: getGameData(schema, id, dataParam)})
 
     let autoSaveTaskID = -1;
 
     $effect(() => {
-        const data = JSON.stringify(mut)
-        if (dirty(mut)) {
+        const data = JSON.stringify(mut.data)
+        if (dirty(mut.data)) {
             localStorage.setItem(id, data)
             console.log("saved!")
         }
