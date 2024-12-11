@@ -1,8 +1,8 @@
 import { getIcons, iconToSVG, expandIconSet } from '@iconify/utils'
-import { type IconifyJSON } from '@iconify/types'
-export { type IconifyJSON } from '@iconify/types';
+import { loadCollectionFromFS } from "@iconify/utils/lib/loader/fs";
 
-export function generateSymbols(iconPack: IconifyJSON, names: string[], overridePrefix?: string) {
+export async function generateSymbols(pack: string, names: string[], overridePrefix?: string) {
+    const iconPack = (await loadCollectionFromFS(pack))!
     expandIconSet(iconPack)
 
     const { icons = {}, not_found = [], prefix, aliases = {}} = getIcons(iconPack, names, true) ?? {}

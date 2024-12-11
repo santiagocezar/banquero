@@ -2,7 +2,6 @@
 import Base from "./Base.astro";
 import IconSet from "../components/IconSet.astro";
 import Icon from "../components/Icon.astro";
-import { icons } from '@iconify-json/material-symbols'
 
 interface Props {
   title: string;
@@ -10,7 +9,7 @@ interface Props {
 ---
 
 <Base title={Astro.props.title}>
-  <IconSet pack={icons} prefix="ic" names={[
+  <IconSet pack="material-symbols" prefix="ic" names={[
     "arrow-back",
     "chevron-right",
     "share",
