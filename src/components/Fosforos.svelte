@@ -32,7 +32,7 @@ const size = $derived(Math.min(1 / Math.floor((scoreBoxes - 1) / MAX_ROWS + 1), 
 
 $inspect({boxes, h: contentSize.height})
 const boxScale = $derived(
-    Math.min(contentSize.width, contentSize.height / boxes)
+    Math.min(contentSize.width - BOX_MARGIN * 2, contentSize.height / scoreBoxes)
     / (BOX_SIZE + BOX_MARGIN)
 )
 
