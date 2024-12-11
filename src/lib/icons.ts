@@ -1,26 +1,27 @@
-import { icons as mdiIcons } from '@iconify-json/mdi'
 import { getIcons, iconToSVG, expandIconSet } from '@iconify/utils'
+import { type IconifyJSON } from '@iconify/types'
+export { type IconifyJSON } from '@iconify/types';
 
-export function generateSymbols(names: string[]) {
-    expandIconSet(mdiIcons)
+export function generateSymbols(iconPack: IconifyJSON, names: string[], overridePrefix?: string) {
+    expandIconSet(iconPack)
 
-    const { icons = {}, not_found = [], prefix } = getIcons(mdiIcons, names, true) ?? {}
+    const { icons = {}, not_found = [], prefix, aliases = {}} = getIcons(iconPack, names, true) ?? {}
 
+    overridePrefix ??= prefix
+    
+    console.log(aliases )
 
     if (not_found.length)
         console.warn(`some icons were not found: ${not_found}`)
 
-    console.log(names)
-
     let symbols = ""
 
-    for (const icon in icons) {
+    for (const name of names) {
+        const icon = aliases[name]?.parent ?? name
         const { body, attributes } = iconToSVG(icons[icon]!)
-        console.log(icons[icon]!)
-        console.log(attributes)
 
         symbols += `
-            <symbol id="${prefix}:${icon}" viewBox="${attributes.viewBox}">
+            <symbol id="${overridePrefix}-${name}" viewBox="${attributes.viewBox}">
                 ${body}
             </symbol>
         `

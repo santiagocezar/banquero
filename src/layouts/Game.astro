@@ -1,7 +1,8 @@
 ---
-import { Icon } from "astro-icon/components";
 import Base from "./Base.astro";
 import IconSet from "../components/IconSet.astro";
+import Icon from "../components/Icon.astro";
+import { icons } from '@iconify-json/material-symbols'
 
 interface Props {
   title: string;
@@ -9,21 +10,23 @@ interface Props {
 ---
 
 <Base title={Astro.props.title}>
-  <IconSet names={[
+  <IconSet pack={icons} prefix="ic" names={[
     "arrow-back",
-    "share"
+    "chevron-right",
+    "share",
+    "remove",
+    "add",
+    "swords",
   ]} />
   <header id="header">
     <a href="/" class="button">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-        <use href="#mdi:arrow-back" />
-      </svg>
+      <Icon use="ic-arrow-back" />
     </a>
     <a href="/" class="logo">
       <img src="/icon.svg" alt="Score" />trucomatic
     </a>
     <button class="button" id="share">
-      <Icon name="mdi:share" />
+      <Icon use="ic-share" />
     </button>
   </header>
   <slot />

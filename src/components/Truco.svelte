@@ -2,6 +2,7 @@
 import AddTeam from './AddTeam.svelte'
 import Team from './Team.svelte'
 import FancyDialog from './FancyDialog.svelte'
+import Icon from "./Icon.svelte"
 import { TrucoTeam } from "./truco" 
 import { range } from "../lib/utils";
 import { shareGameData } from "../lib/bxx.svelte";
@@ -91,15 +92,18 @@ function dismiss() {
         <div class="win-dialog">
             <h1>¡Ganó <span class="pal-{winner?.color}">{winner?.name}</span>!</h1>
             <div class="even-row">
-                <button onclick={rematch}>
+                <button class="rematch" onclick={rematch}>
+                    <Icon use="ic-swords" />
                     Revancha
                 </button>
-                <button onclick={share}>
+                <button class="share" onclick={share}>
+                    <Icon use="ic-share" />
                     Compartir
                 </button>
             </div>
             <button class="dismiss" onclick={dismiss}>
                 Continuar
+                <Icon use="ic-chevron-right" />
             </button>
             <a href="https://cafecito.app/valsan" rel="noopener" target="_blank">
                 <img
@@ -223,18 +227,17 @@ function dismiss() {
         margin-bottom: .5em;
     }
     button {
+        display: flex;
+        align-items: center;
+        justify-content: center;        
         background-color: var(--blue);
         color: white;
-        display: grid;
         padding: 0.75rem 1rem;
         border-radius: 0.5rem;
         gap: 0.5rem;
-        place-items: center;
-
-        svg {
-            width: 1.5rem;
-            height: 1.5rem;
-        }
+    }
+    .rematch {
+        background-color: var(--red);        
     }
     .dismiss {
         background-color: #eee;

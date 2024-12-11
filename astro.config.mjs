@@ -3,9 +3,6 @@ import { defineConfig } from 'astro/config';
 import solidJs from "@astrojs/solid-js";
 import svelte from '@astrojs/svelte';
 
-// I KNOW THIS SEEMS WEIRD but ones for astro and the other for svelte
-import icon from 'astro-icon';
-import Icons from 'unplugin-icons/vite'
 // its kinda funny honestly
 
 
@@ -14,12 +11,6 @@ import Icons from 'unplugin-icons/vite'
 // https://astro.build/config
 export default defineConfig({
   vite: {
-    plugins: [
-      Icons({
-        compiler: "svelte",
-        scale: 1,
-      })
-    ],
     build: {
       sourcemap: "inline",
     }
@@ -27,7 +18,6 @@ export default defineConfig({
   integrations: [
     solidJs(),
     svelte(),
-    icon({include: ["mdi"]})
     // astroPWA({
     //   devOptions: {
     //     enabled: true

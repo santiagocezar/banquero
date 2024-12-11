@@ -1,7 +1,6 @@
 <script lang="ts">
 import Fosforos from "./Fosforos.svelte"
-import MdiAdd from "~icons/mdi/add"
-import MdiRemove from "~icons/mdi/minus"
+import Icon from "./Icon.svelte"
 import { TrucoTeam } from "./truco" 
 import { range } from "../lib/utils" 
 import { confetti } from 'tsparticles-confetti'
@@ -69,10 +68,10 @@ $effect(() => {
     </div>
     <div class="actions even-row">
         <button aria-label="Sacar un punto a {team.name}" onclick={decrease}>
-            <MdiRemove />
+            <Icon use="ic-remove" />
         </button>
         <button aria-label="Agregar un punto a {team.name}" onclick={increase}>
-            <MdiAdd />
+            <Icon use="ic-add" />
         </button>
     </div>
 </div>
