@@ -3,20 +3,19 @@ import { type Snippet } from 'svelte'
 
 interface Props {
     open: boolean
-    returnValue: string | undefined
     children?: Snippet
 }
 
-let { open = $bindable(false), returnValue = $bindable(), children } = $props()
+let { open = $bindable(false), children } = $props()
 let dialog: HTMLDialogElement | undefined = $state()
 
 $effect(() => {
     if (open) dialog!.showModal()
+    else dialog.close()
 })
 
 function handleClose() {
     open = false
-    returnValue = dialog!.returnValue
 }
 function handleClick(event: Event) {
     event.target == dialog && dialog.close()
@@ -32,13 +31,15 @@ dialog {
     background-color: transparent;
     transform: translateY(100%);
     opacity: 0;
-    margin-bottom: 0;
+    margin: auto auto .5rem auto;
+    max-width: 100%;
+    max-height: 100%;
     padding: 0;
     transition:
-        opacity 0.7s ease-out,
-        transform 0.7s ease-out,
-        overlay 0.7s ease-out allow-discrete,
-        display 0.7s ease-out allow-discrete;
+        opacity 0.3s linear,
+        transform 0.5s cubic-bezier(.17,.67,.12,1),
+        overlay 0.3s ease-out allow-discrete,
+        display 0.3s ease-out allow-discrete;
 }
 
 dialog[open] {

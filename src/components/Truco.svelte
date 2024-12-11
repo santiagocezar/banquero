@@ -4,6 +4,7 @@ import Team from './Team.svelte'
 import FancyDialog from './FancyDialog.svelte'
 import { TrucoTeam } from "./truco" 
 import { range } from "../lib/utils";
+import { shareGameData } from "../lib/bxx.svelte";
 import { truco } from "./truco";
 
 const {id, data: game} = truco.useData(data => data.teams !== null)
@@ -31,18 +32,18 @@ function addTeams(nosotros: TrucoTeam, ellos: TrucoTeam, goal: number) {
     game.goal = goal
 }
 
-function playAgain() {}
+function rematch() {
+    const newID = truco.rematch(id)
+
+    location.href = "/game/?id=" + newID
+}
 
 function share() {
-    const data = localStorage.getItem(id)!; // won't work the first 2 seconds
-    const compressed = fflate.gzipSync(new TextEncoder().encode(data));
-    const encoded = base64.fromUint8Array(compressed, true);
-    url.searchParams.delete("id");
-    url.searchParams.set("data", encoded);
-    navigator.share({
-        title: "Compartir partida",
-        url: url.toString(),
-    });
+    shareGameData(id)
+}
+
+function dismiss() {
+    winDialogOpen = false;
 }
 
 </script>
@@ -81,25 +82,34 @@ function share() {
         <div class="teams">
             <Team goal={game.goal} bind:team={game.teams.nosotros} onwin={onWin} />
             <Team goal={game.goal} bind:team={game.teams.ellos} onwin={onWin} />
-            
-            <FancyDialog bind:open={winDialogOpen}>
-                <div class="win-dialog">
-                    <h1>¡Ganó <span class="pal-{winner?.color}">{winner?.name}</span>!</h1>
-                    <button onclick={playAgain} >Revancha</button>
-                    <button onclick={share}>Compartir</button>
-                    <a href="https://cafecito.app/valsan" rel="noopener" target="_blank">
-                        <img
-                            srcset="https://cdn.cafecito.app/imgs/buttons/button_2.png 1x, https://cdn.cafecito.app/imgs/buttons/button_2_2x.png 2x, https://cdn.cafecito.app/imgs/buttons/button_2_3.75x.png 3.75x"
-                            src="https://cdn.cafecito.app/imgs/buttons/button_2.png"
-                            alt="Invitame un café en cafecito.app"
-                        />
-                    </a>
-                </div>
-            </FancyDialog>
         </div>
     {:else}
         <AddTeam onconfirm={addTeams} />
     {/if}
+
+    <FancyDialog bind:open={winDialogOpen}>
+        <div class="win-dialog">
+            <h1>¡Ganó <span class="pal-{winner?.color}">{winner?.name}</span>!</h1>
+            <div class="even-row">
+                <button onclick={rematch}>
+                    Revancha
+                </button>
+                <button onclick={share}>
+                    Compartir
+                </button>
+            </div>
+            <button class="dismiss" onclick={dismiss}>
+                Continuar
+            </button>
+            <a href="https://cafecito.app/valsan" rel="noopener" target="_blank">
+                <img
+                    srcset="https://cdn.cafecito.app/imgs/buttons/button_2.png 1x, https://cdn.cafecito.app/imgs/buttons/button_2_2x.png 2x, https://cdn.cafecito.app/imgs/buttons/button_2_3.75x.png 3.75x"
+                    src="https://cdn.cafecito.app/imgs/buttons/button_2.png"
+                    alt="Invitame un café en cafecito.app"
+                />
+            </a>
+        </div>
+    </FancyDialog>
 </div>
 
 <style lang="less">
@@ -116,8 +126,6 @@ function share() {
                 // margin: -.25rem;
 
                 button {
-                    width: 0;
-                    flex-grow: 1;
                     background-color: var(--p50);
                     color: var(--contrast);
                     font-size: 2rem;
@@ -200,17 +208,19 @@ function share() {
     background-color: white;
     padding: 2rem;
     border-radius: 1rem;
-    margin-bottom: .5rem;
     display: flex;
     flex-direction: column;
     gap: .5rem;
     text-align: center;
+    width: calc(100vw - 2rem);
+    max-width: 80rem;
     
     h1 {
         font: bold 1.5rem "Poppins";
         span {
             color: var(--p50);
         }
+        margin-bottom: .5em;
     }
     button {
         background-color: var(--blue);
@@ -226,6 +236,11 @@ function share() {
             height: 1.5rem;
         }
     }
+    .dismiss {
+        background-color: #eee;
+        color: black;
+    }
+
     a {
         place-self: center;
     }

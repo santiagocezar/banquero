@@ -138,3 +138,16 @@ export function useGameData<T extends z.ZodTypeAny>(schema: z.ZodDefault<T>, gam
     })
     return mut
 }
+
+export async function shareGameData(id: string) {
+    const url = new URL(location.href);
+    const data = localStorage.getItem(id)!
+    const compressed = fflate.gzipSync(new TextEncoder().encode(data))
+    const encoded = base64.fromUint8Array(compressed, true)
+    url.searchParams.delete("id")
+    url.searchParams.set("data", encoded)
+    await navigator.share({
+        title: "Compartir partida",
+        url: url.toString(),
+    })
+}

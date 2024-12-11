@@ -65,9 +65,9 @@ $effect(() => {
     </header>
     <div class="content">
         <Fosforos score={team.score} goal={goal} />
-        <div class="goal">primero<br>a {goal}</div>
+        <div class="goal">hasta {goal}</div>
     </div>
-    <div class="actions">
+    <div class="actions even-row">
         <button aria-label="Sacar un punto a {team.name}" onclick={decrease}>
             <MdiRemove />
         </button>

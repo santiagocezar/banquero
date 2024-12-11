@@ -10,8 +10,8 @@ const { onconfirm }: Props = $props()
 let goal = $state(15)
 let name1 = $state("")
 let name2 = $state("")
-let color1 = Math.floor(Math.random() * 8)
-let color2 = (color1 + Math.ceil(Math.random() * 7)) % 8
+let color1 = $state(Math.floor(Math.random() * 8))
+let color2 = $state((color1 + Math.ceil(Math.random() * 7)) % 8)
 
 function create(event: Event) {
     event.preventDefault()
@@ -29,15 +29,15 @@ function create(event: Event) {
 {/snippet}
 
 <form class="add-teams" onsubmit={create}>
-    <TeamInput color={color1} placeholder="Nosotros" />
-    <TeamInput color={color2} placeholder="Ellos" />
+    <TeamInput bind:name={name1} bind:color={color1} placeholder="Nosotros" />
+    <TeamInput bind:name={name2} bind:color={color2} placeholder="Ellos" />
     <div class="goal">
         {@render toggle(15)}
         {@render toggle(18)}
         {@render toggle(24)}
         {@render toggle(30)}
     </div>
-    <div class="actions">
+    <div class="actions even-row">
         <button type="submit">Dale!</button>
     </div>
 </form>
