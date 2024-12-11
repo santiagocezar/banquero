@@ -1,0 +1,11 @@
+---
+import { generateSymbols } from '../lib/icons'
+interface Props {
+  names: string[];
+}
+
+const symbols = generateSymbols(Astro.props.names)
+---
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;" set:html={symbols}>
+</svg>

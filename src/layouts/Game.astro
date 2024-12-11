@@ -1,6 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import Base from "./Base.astro";
+import IconSet from "../components/IconSet.astro";
 
 interface Props {
   title: string;
@@ -8,9 +9,15 @@ interface Props {
 ---
 
 <Base title={Astro.props.title}>
+  <IconSet names={[
+    "arrow-back",
+    "share"
+  ]} />
   <header id="header">
     <a href="/" class="button">
-      <Icon name="mdi:arrow-back" />
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <use href="#mdi:arrow-back" />
+      </svg>
     </a>
     <a href="/" class="logo">
       <img src="/icon.svg" alt="Score" />trucomatic
