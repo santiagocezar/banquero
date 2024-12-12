@@ -129,9 +129,17 @@ $effect(() => {
 /*         width: 8rem; */
 
         button {
+            border-radius: 0;
+            background-color: transparent;
+/*             background-image: linear-gradient(to bottom, transparent, var(--p10)); */
+            color: var(--p90);
             font-size: 16px;
             display: grid;
             place-items: center;
+
+            &:last-child {
+                border-left: 1px solid var(--p50);
+            }
         }
     }
 }

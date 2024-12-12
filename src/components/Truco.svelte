@@ -137,6 +137,16 @@ function dismiss() {
                     font-weight: bold;
                 }
             }
+            .background {
+                display: flex;
+                overflow: hidden;
+                flex-direction: column;
+                border-radius: 2rem;
+                background-color: var(--p30);
+                transition: background-color .5s ease;
+                border: 1px solid var(--p50);
+                flex-grow: 1;
+            }
         }
     }
 }
@@ -149,20 +159,6 @@ function dismiss() {
     flex-basis: 0;
     overflow: hidden;
 /*     mask-image: url(#fire-mask); */
-    
-    :global {
-        .background {
-            display: flex;
-            overflow: hidden;
-            flex-direction: column;
-            border-radius: 2rem;
-            background-color: var(--p30);
-            transition: background-color .5s ease;
-            border: 1px solid var(--p50);
-            flex-grow: 1;
-        }
-    }
-    
 
     .teams {
         display: grid;

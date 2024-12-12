@@ -14,10 +14,10 @@ function friendlyName(recent: Recent) {
 }
 
 
-const recents = $state(getRecents())
+let recents = $state(getRecents())
 
 function onDelete(id: string) {
-    setRecents(deleteRecent(id))
+    recents = deleteRecent(id)
 }
 </script>
 

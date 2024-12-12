@@ -44,7 +44,7 @@ function rematch() {
             <Icon use="ic-swords" />
             Revancha
         </button>
-        <button class="red" onclick={() => onDelete(props.recent.id)}>
+        <button class="red" onclick={() => onDelete(recent.id)}>
             <Icon use="ic-delete" />
         </button>
     </div>
