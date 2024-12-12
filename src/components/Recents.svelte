@@ -13,7 +13,7 @@ function onDelete(id: string) {
 <div class="recents">
     {#if recents.length}
         <h2>Partidas recientes</h2>
-        {#each recents as recent}
+        {#each recents as recent (recent.id)}
             <RecentItem onDelete={onDelete} recent={recent} />
         {/each}
     {:else}
