@@ -1,18 +1,32 @@
 @colors: 8;
 @spacing: (360deg / @colors);
 
+.palette(@hue, @sat) {
+    --p10: hsl(@hue, @sat, 97%);
+    --p30: hsl(@hue, @sat, 90%);
+    --p40: hsl(@hue, @sat, 75%);
+    --p50: hsl(@hue, @sat, 60%);
+    --p70: hsl(@hue, @sat, 30%);
+    --p90: hsl(@hue, @sat, 10%);
+    --contrast: if(luminance(hsl(@hue, @sat, 60%)) > 60%, black, white);
+}
+.pal-0 { .palette(0deg, 75%) }
+.pal-1 { .palette(40deg, 90%) }
+.pal-2 { .palette(90deg, 80%) }
+.pal-3 { .palette(140deg, 70%) }
+.pal-4 { .palette(180deg, 70%) }
+.pal-5 { .palette(225deg, 60%) }
+.pal-6 { .palette(280deg, 80%) }
+.pal-7 { .palette(315deg, 100%) }
 
-each(range(0, @colors - 1, 1), {
-    .pal-@{value} {
-        --p10: hsl(@value * @spacing, 60%, 97%);
-        --p30: hsl(@value * @spacing, 60%, 90%);
-        --p40: hsl(@value * @spacing, 60%, 75%);
-        --p50: hsl(@value * @spacing, 60%, 60%);
-        --p70: hsl(@value * @spacing, 60%, 30%);
-        --p90: hsl(@value * @spacing, 60%, 10%);
-        --contrast: if(luminance(hsl(@value * @spacing, 60%, 60%)) > 60%, black, white);
-    }
-});
+// each(range(0, @colors - 1, 1), {
+//     .pal-@{value} {
+//         .palette(@value * @spacing, 60%)
+//     }
+// });
+
+
+
 
 :root {
     --p10: hsl(220, 5%, 97%);
