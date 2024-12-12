@@ -3,17 +3,6 @@ import { type Recent, deleteRecent, getRecents } from "../lib/bxx.svelte";
 import { TrucoGame, truco } from "./truco";
 import RecentItem from "./RecentItem.svelte";
 
-function friendlyName(recent: Recent) {
-    if (recent.game == truco.id) {
-        const teams = truco.getData(recent.id).teams
-        if (teams) {
-            return `${teams.nosotros.name} v. ${teams.ellos.name}`
-        }
-    }
-    return recent.game
-}
-
-
 let recents = $state(getRecents())
 
 function onDelete(id: string) {

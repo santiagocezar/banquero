@@ -18,12 +18,12 @@ function rematch() {
     location.href = "/game/?id=" + id
 }
 
-// if (!data.teams) {
-//     onDelete(recent.id)
-//     return null
-// }
+if (!data.teams) {
+    onDelete(recent.id)
+}
 </script>
 
+{#if data.teams}
 <div class="recent">
     <a href="/game/?id={recent.id}" class="border pal-{data.teams.nosotros.color}">
         <div class="border-gradient pal-{data.teams.ellos.color}"></div>
@@ -49,6 +49,7 @@ function rematch() {
         </button>
     </div>
 </div>
+{/if}
 
 <style lang="less">
 .recent {
