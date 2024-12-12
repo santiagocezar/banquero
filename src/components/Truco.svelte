@@ -226,16 +226,6 @@ function dismiss() {
         }
         margin-bottom: .5em;
     }
-    button {
-        display: flex;
-        align-items: center;
-        justify-content: center;        
-        background-color: var(--blue);
-        color: white;
-        padding: 0.75rem 1rem;
-        border-radius: 0.5rem;
-        gap: 0.5rem;
-    }
     .rematch {
         background-color: var(--red);        
     }
