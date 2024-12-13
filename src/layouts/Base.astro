@@ -1,8 +1,9 @@
 ---
-// import { pwaInfo } from "virtual:pwa-info";
-// import { Reload } from "../components/Reload";
 import "../style/global.less";
+
+import { pwaInfo } from 'virtual:pwa-info';
 import IconSet from "../components/IconSet.astro";
+import Reload from "../components/Reload.svelte";
 
 interface Props {
   title: string;
@@ -27,14 +28,15 @@ interface Props {
     />
     <title>Trucomatic</title>
     <script async src="https://analytics.umami.is/script.js" data-website-id="2caa0867-f528-4c96-bccc-0ebe3ceec902"></script>
-    <!-- {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />} -->
+    {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
   </head>
   <body>
     <IconSet pack="material-symbols" prefix="ic" names={[
       "swords",
       "delete",
+      "close",
     ]} />
-    <!-- <Reload client:only /> -->
+    <Reload client:only />
     <slot />
   </body>
 </html>
