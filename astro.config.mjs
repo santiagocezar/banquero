@@ -9,24 +9,27 @@ export default defineConfig({
   integrations: [
     svelte(),
     astroPWA({
+      includeAssets: [
+        '*.svg',
+        '*.png',
+        '*.webp',
+      ],
       devOptions: {
         enabled: true
       },
+      workbox: {
+        // globPatterns: ['**/*'],
+        // navigateFallback: '/404',
+        ignoreURLParametersMatching: [/./],
+      },
+      experimental: {
+        directoryAndTrailingSlashHandler: true,
+      },
       manifest: {
-        includeAssets: [
-          'favicon.svg',
-          'apple180.png',
-          'apple1024.png',
-          'maskable_icon_x192.png',
-          'maskable_icon_x512.png',
-          'maskable_icon.png',
-          'dude.webp',
-          'logo.svg',
-        ],
         short_name: "Trucomatic",
         name: "Trucomatic",
         description: "El contador del truco por excelencia.",
-        theme_color: "#fe1e6e",
+        theme_color: "#2c37de",
         display: "standalone",
         icons: [
           {
