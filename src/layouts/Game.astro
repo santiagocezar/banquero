@@ -17,9 +17,9 @@ interface Props {
     "add",
   ]} />
   <header id="header">
-    <a href="/" class="button">
+    <button onclick="history.back()" class="button back">
       <Icon use="ic-arrow-back" />
-    </a>
+    </button>
     <a href="/" class="logo">
       <img transition:name="logo" src="/icon.svg" alt="Score" />
       <span transition:name="type">trucomatic</span>
@@ -68,6 +68,9 @@ interface Props {
         width: 1.5rem;
         height: 1.5rem;
       }
+    }
+    .back {
+      background: none;
     }
     #share {
       background-color: var(--blue);
