@@ -8,9 +8,10 @@ import Base from "../layouts/Base.astro";
 ---
 
 <Base title="Score">
-  <h1>
-    <img src="/icon.svg" alt="Score" />trucomatic
-  </h1>
+  <a href="/" class="logo">
+    <img transition:name="logo" src="/icon.svg" alt="Score" />
+    <span transition:name="type">trucomatic</span>
+  </a>
   <a class="new" href="/game">Nueva partida</a>
   <Recents client:load />
   <footer class="donate">
@@ -35,7 +36,7 @@ import Base from "../layouts/Base.astro";
     max-width: 50rem;
     overflow: auto;
   }
-  h1 {
+  .logo {
     display: flex;
     flex-direction: row;
     gap: .5em;

@@ -21,7 +21,8 @@ interface Props {
       <Icon use="ic-arrow-back" />
     </a>
     <a href="/" class="logo">
-      <img src="/icon.svg" alt="Score" />trucomatic
+      <img transition:name="logo" src="/icon.svg" alt="Score" />
+      <span transition:name="type">trucomatic</span>
     </a>
     <button class="button" id="share">
       <Icon use="ic-share" />

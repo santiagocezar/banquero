@@ -117,8 +117,44 @@ function dismiss() {
 </div>
 
 <style lang="less">
+@keyframes slide-right {
+    0% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0%);
+    }
+}
+
+@keyframes slide-left {
+    0% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0%);
+    }
+}
+
 /* basically !unimportant */
 @layer {
+    :global(.truco .background) {
+        display: flex;
+        overflow: hidden;
+        flex-direction: column;
+        border-radius: 2rem;
+        background-color: var(--p30);
+        transition: background-color .5s ease;
+        border: 1px solid var(--p50);
+        flex-grow: 1;
+        animation: slide-left .4s ease-out;
+        &:first-child {
+            animation: slide-right .4s ease-out;
+        }
+    }
     .truco {
         :global {
             .actions {
@@ -136,16 +172,6 @@ function dismiss() {
                     padding: 1rem;
                     font-weight: bold;
                 }
-            }
-            .background {
-                display: flex;
-                overflow: hidden;
-                flex-direction: column;
-                border-radius: 2rem;
-                background-color: var(--p30);
-                transition: background-color .5s ease;
-                border: 1px solid var(--p50);
-                flex-grow: 1;
             }
         }
     }
