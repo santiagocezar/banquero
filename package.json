@@ -34,7 +34,7 @@
   },
   "overrides": {
     "@vite-pwa/astro": {
-      "astro": "$astro",
+      "astro": "$astro"
     }
   }
 }
