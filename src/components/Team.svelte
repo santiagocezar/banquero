@@ -55,7 +55,7 @@ $effect(() => {
 })
 </script>
 
-<div bind:this={elementRefForColors} class="team background pal-{team.color}">
+<div bind:this={elementRefForColors} class="team truco-background pal-{team.color}">
     <header>
         <h2>
             {team.name}

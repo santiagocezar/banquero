@@ -11,7 +11,7 @@ let { placeholder, name = $bindable(""), color = $bindable(0) }: Props = $props(
 
 </script>
 
-<div class="add-team background pal-{color}">
+<div class="add-team truco-background pal-{color}">
     <label>
         <p>Nombre</p>
         <input
