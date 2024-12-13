@@ -13,19 +13,29 @@ export default defineConfig({
         enabled: true
       },
       manifest: {
-        includeAssets: ['favicon.svg', 'apple180.png', 'apple1024.png', 'mask-icon.svg', 'dude.webp', 'logo.svg'],
+        includeAssets: [
+          'favicon.svg',
+          'apple180.png',
+          'apple1024.png',
+          'maskable_icon_x192.png',
+          'maskable_icon_x512.png',
+          'maskable_icon.png',
+          'dude.webp',
+          'logo.svg',
+        ],
         short_name: "Trucomatic",
         name: "Trucomatic",
         description: "El contador del truco por excelencia.",
         theme_color: "#fe1e6e",
+        display: "standalone",
         icons: [
           {
-            src: 'pwa192.png',
+            src: 'maskable_icon_x192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: 'pwa512.png',
+            src: 'maskable_icon_x512.png',
             sizes: '512x512',
             type: 'image/png'
           },
@@ -35,8 +45,8 @@ export default defineConfig({
             type: 'image/png'
           },
           {
-            src: 'pwa512.png',
-            sizes: '512x512',
+            src: 'maskable_icon.png',
+            sizes: '1024x1024',
             type: 'image/png',
             purpose: 'any maskable'
           },

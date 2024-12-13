@@ -78,10 +78,6 @@ if (!data.teams) {
         flex-grow: 1;
         align-items: center;
         justify-content: end;
-
-        span {
-            flex-grow: 1;
-        }
     }
 
     button {
