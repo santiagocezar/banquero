@@ -213,7 +213,7 @@ function dismiss() {
     gap: .5rem;
     text-align: center;
     width: calc(100vw - 2rem);
-    max-width: 80rem;
+    max-width: 30rem;
     
     h1 {
         font: bold 1.5rem "Poppins";

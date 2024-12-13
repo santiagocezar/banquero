@@ -11,7 +11,9 @@ function onDelete(id: string) {
 </script>
 
 <div class="recents">
-    {#if recents.length}
+    {#if recents === null}
+        <div class="loading"></div>
+    {:else if recents.length}
         <h2>Partidas recientes</h2>
         {#each recents as recent (recent.id)}
             <RecentItem onDelete={onDelete} recent={recent} />
@@ -54,5 +56,26 @@ function onDelete(id: string) {
         font-weight: bold;
         font-size: 1.5rem;
     }
+}
+
+@keyframes rotate {
+    0% {
+        rotate: 0deg;
+    }
+    100% {
+        rotate: 360deg;
+    }
+}
+
+.loading {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 6rem;
+    border: .25rem solid currentColor;
+    border-bottom-color: transparent;
+    will-change: rotate;
+    animation: rotate .4s infinite linear;
+    margin: 4rem auto
+
 }
 </style>

@@ -36,9 +36,10 @@ export interface Recent {
     id: string
     date: Date
 }
-export function getRecents(): Recent[] {
+export function getRecents(): Recent[] | null {
     let recents: Recent[] = []
-    if (typeof localStorage === "undefined") return []
+    if (typeof localStorage === "undefined")
+        return null
 
     try {
         recents = JSON.parse(localStorage.getItem("recents")!)
