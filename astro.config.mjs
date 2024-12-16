@@ -15,7 +15,7 @@ export default defineConfig({
         '*.webp',
       ],
       devOptions: {
-        enabled: true
+        enabled: false
       },
       workbox: {
         // globPatterns: ['**/*'],
@@ -25,6 +25,7 @@ export default defineConfig({
       experimental: {
         directoryAndTrailingSlashHandler: true,
       },
+      registerType: 'autoUpdate',
       manifest: {
         short_name: "Trucomatic",
         name: "Trucomatic",
