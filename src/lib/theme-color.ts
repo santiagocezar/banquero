@@ -1,6 +1,5 @@
-const themeColor = document.getElementById("theme-color") as HTMLMetaElement
-
 function setThemeColor() {
+    const themeColor = document.getElementById("theme-color") as HTMLMetaElement
     try {
         themeColor.content = getComputedStyle(document.documentElement).backgroundColor
     } catch (err) {
