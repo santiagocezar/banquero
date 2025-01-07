@@ -1,38 +1,49 @@
 <script lang="ts">
-    import type { Recent } from "../lib/bxx.svelte"
-    import { truco } from "./truco"
-    import Icon from "./Icon.svelte"
+    import {
+        generateID,
+        loadSave,
+        storeSave,
+        type Recent,
+    } from "../lib/bxx.svelte";
+    import { truco } from "./truco";
+    import Icon from "./Icon.svelte";
 
     interface Props {
-        onDelete: (id: string) => void
-        recent: Recent
+        onDelete: (id: string) => void;
+        recent: Recent;
     }
 
-    const { onDelete, recent }: Props = $props()
+    const { onDelete, recent }: Props = $props();
 
-    const data = truco.getData(recent.id)
+    const data = loadSave(truco, recent.id)!;
+
+    console.dir({
+        recent,
+        data,
+    });
 
     function rematch() {
-        const id = truco.rematch(recent.id)
+        const id = generateID(truco);
+        storeSave(id, truco.reset(data));
 
-        location.href = "/game/?id=" + id
+        location.href = "/game#" + id;
     }
 
-    if (!data.teams) {
-        onDelete(recent.id)
+    if (!data || !data.teams) {
+        onDelete(recent.id);
     }
 </script>
 
-{#if data.teams}
+{#if data && data.teams}
     <div class="recent">
         <a
-            href="/game/?id={recent.id}"
+            href="/game#{recent.id}"
             class="border pal-{data.teams.nosotros.color}"
         >
             <div class="border-gradient pal-{data.teams.ellos.color}"></div>
         </a>
         <a
-            href="/game/?id={recent.id}"
+            href="/game#{recent.id}"
             class="background pal-{data.teams.nosotros.color}"
         >
             <div class="background-gradient pal-{data.teams.ellos.color}"></div>

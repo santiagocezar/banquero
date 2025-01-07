@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { createGame } from "../lib/bxx.svelte"
+import { type Game } from "../lib/bxx.svelte"
 
 export const TrucoTeam = z.object({
     name: z.string(),
@@ -7,26 +7,40 @@ export const TrucoTeam = z.object({
     score: z.number(),
 })
 
-export const TrucoGame = z
-    .object({
-        teams: z
-            .object({
-                nosotros: TrucoTeam,
-                ellos: TrucoTeam,
-            })
-            .nullable(),
-        goal: z.number(),
-    })
-    .default({
-        teams: null,
-        goal: 15,
-    })
+export const TrucoGame = z.object({
+    teams: z
+        .object({
+            nosotros: TrucoTeam,
+            ellos: TrucoTeam,
+        })
+        .nullable(),
+    goal: z.number(),
+})
+
 export type TrucoTeam = z.infer<typeof TrucoTeam>
 export type TrucoGame = z.infer<typeof TrucoGame>
 
-export const truco = createGame("truco", TrucoGame, (remacth) => {
-    remacth.teams?.ellos && (remacth.teams.ellos.score = 0)
-    remacth.teams?.nosotros && (remacth.teams.nosotros.score = 0)
-
-    return remacth
-})
+export const truco: Game<TrucoGame> = {
+    identifier: "truco",
+    validate: TrucoGame.parse,
+    initial: () => ({
+        goal: 15,
+        teams: null,
+    }),
+    reset: (old) => ({
+        teams:
+            old.teams === null
+                ? null
+                : {
+                      nosotros: {
+                          ...old.teams.nosotros,
+                          score: 0,
+                      },
+                      ellos: {
+                          ...old.teams.ellos,
+                          score: 0,
+                      },
+                  },
+        goal: old.goal,
+    }),
+}

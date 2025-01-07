@@ -1,6 +1,5 @@
 <script lang="ts">
-    import { type Recent, deleteRecent, getRecents } from "../lib/bxx.svelte"
-    import { TrucoGame, truco } from "./truco"
+    import { deleteRecent, getRecents } from "../lib/bxx.svelte"
     import RecentItem from "./RecentItem.svelte"
 
     let recents = $state(getRecents())

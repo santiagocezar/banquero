@@ -4,19 +4,21 @@
     import FancyDialog from "./FancyDialog.svelte"
     import Icon from "./Icon.svelte"
     import { TrucoTeam } from "./truco"
-    import { range } from "../lib/utils"
-    import { shareGameData } from "../lib/bxx.svelte"
+    import {
+        generateID,
+        shareGameData,
+        storeSave,
+        useGame,
+    } from "../lib/bxx.svelte"
     import { truco } from "./truco"
 
-    const { id, data: game } = truco.useData((data) => data.teams !== null)
-    let winDialog: HTMLDialogElement = $state()
+    const { id, data: game } = useGame(truco, (data) => data.teams !== null)
     let winner: TrucoTeam | undefined = $state()
     let winDialogOpen = $state(false)
 
     function onWin(team: TrucoTeam) {
         if (winner) return
         winner = team
-        console.log("papitas")
 
         setTimeout(() => {
             winDialogOpen = true
@@ -34,9 +36,10 @@
     }
 
     function rematch() {
-        const newID = truco.rematch(id)
+        const id = generateID(truco)
+        storeSave(id, truco.reset(game))
 
-        location.href = "/game/?id=" + newID
+        location.href = "/game#" + id
     }
 
     function share() {
@@ -75,7 +78,7 @@
         </mask>
     </defs>
     <rect x="0" y="0" width="128" height="128" fill="red" mask="url(#fire-mask)"/>
-    
+
 </svg>-->
 
 <div class="truco">
