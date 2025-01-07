@@ -1,27 +1,30 @@
 ---
-import Base from "../layouts/Base.astro";
-import { range } from "../lib/utils";
-import "../style/palettes.less";
-
-
+import Base from "../layouts/Base.astro"
+import { range } from "../lib/utils"
+import "../style/palettes.less"
 ---
 
 <Base title="Test de colores">
     <div class="palette">
-    {["10", "30", "40", "50", "70", "90"].map(val => (
-        range(8).map(i => (
-            <div class={`pal-${i} color`} style={`background-color: var(--p${val})`} />
-        ))
-    ))}
+        {
+            ["10", "30", "40", "50", "70", "90"].map((val) =>
+                range(8).map((i) => (
+                    <div
+                        class={`pal-${i} color`}
+                        style={`background-color: var(--p${val})`}
+                    />
+                ))
+            )
+        }
     </div>
 </Base>
 
 <style>
-.palette {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-}
-.color {
-    height: 2rem;
-}
+    .palette {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+    }
+    .color {
+        height: 2rem;
+    }
 </style>

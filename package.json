@@ -29,6 +29,9 @@
     "@iconify/utils": "^2.2.0",
     "@vite-pwa/astro": "^0.4.3",
     "esbuild": "^0.24.0",
+    "prettier": "^3.4.2",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-svelte": "^3.3.2",
     "svelte-language-server": "^0.17.7",
     "workbox-window": "^7.3.0"
   },

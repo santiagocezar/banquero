@@ -1,74 +1,81 @@
 ---
-import "../style/reset.css";
-import "../style/palettes.less";
-import Recents from "../components/Recents.svelte";
-import IconSet from "../components/IconSet.astro";
+import "../style/reset.css"
+import "../style/palettes.less"
+import Recents from "../components/Recents.svelte"
+import IconSet from "../components/IconSet.astro"
 
-import Base from "../layouts/Base.astro";
+import Base from "../layouts/Base.astro"
 ---
 
 <Base title="Score">
-  <a href="/" class="logo">
-    <img transition:name="logo" src="/icon.svg" alt="Score" />
-    <span transition:name="type">trucomatic</span>
-  </a>
-  <a class="new" href="/game">Nueva partida</a>
-  <Recents client:load />
-  <footer class="donate">
-  	<p>
-    <a href="https://cafecito.app/valsan" rel="noopener" target="_blank">
-      <img
-        srcset="https://cdn.cafecito.app/imgs/buttons/button_2.png 1x, https://cdn.cafecito.app/imgs/buttons/button_2_2x.png 2x, https://cdn.cafecito.app/imgs/buttons/button_2_3.75x.png 3.75x"
-        src="https://cdn.cafecito.app/imgs/buttons/button_2.png"
-        alt="Invitame un café en cafecito.app"
-      />
+    <a href="/" class="logo">
+        <img transition:name="logo" src="/icon.svg" alt="Score" />
+        <span transition:name="type">trucomatic</span>
     </a>
-    </p>
-    <p>
-    <small>Desarrollo de carácter educativo. No se permite el uso para fines lucrativos.</small>
-    </p>
-  </footer>
+    <a class="new" href="/game">Nueva partida</a>
+    <Recents client:load />
+    <footer class="donate">
+        <p>
+            <a
+                href="https://cafecito.app/valsan"
+                rel="noopener"
+                target="_blank"
+            >
+                <img
+                    srcset="https://cdn.cafecito.app/imgs/buttons/button_2.png 1x, https://cdn.cafecito.app/imgs/buttons/button_2_2x.png 2x, https://cdn.cafecito.app/imgs/buttons/button_2_3.75x.png 3.75x"
+                    src="https://cdn.cafecito.app/imgs/buttons/button_2.png"
+                    alt="Invitame un café en cafecito.app"
+                />
+            </a>
+        </p>
+        <p>
+            <small
+                >Desarrollo de carácter educativo. No se permite el uso para
+                fines lucrativos.</small
+            >
+        </p>
+    </footer>
 </Base>
 
 <style lang="less">
-  body {
-    margin: 0 auto;
-    max-width: 50rem;
-    overflow: auto;
-  }
-  .logo {
-    display: flex;
-    flex-direction: row;
-    gap: .5em;
-    justify-content: center;
-    align-items: center;
-    height: 6rem;
-    text-align: center;
-    font-family: "Poppins";
-    font-size: 2rem;
-    flex-shrink: 0;
-    user-select: none;
-    img {
-      height: 1.375em;
+    body {
+        margin: 0 auto;
+        max-width: 50rem;
+        overflow: auto;
     }
-  }
-  .new {
-    background-color: var(--blue);
-    color: white;
-    margin: 1rem;
-    padding: 1rem;
-    font-size: 2rem;
-    text-align: center;
-    border-radius: 2rem;
-    font-weight: bold;
-    display: block;
-    flex-shrink: 0;
-  }
-  footer {
-    img {
-      display:inline-block;
+    .logo {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5em;
+        justify-content: center;
+        align-items: center;
+        height: 6rem;
+        text-align: center;
+        font-family: "Poppins";
+        font-size: 2rem;
+        flex-shrink: 0;
+        user-select: none;
+        img {
+            height: 1.375em;
+        }
     }
-    padding: 2rem 1rem;
-    text-align: center;
-  }
+    .new {
+        background-color: var(--blue);
+        color: white;
+        margin: 1rem;
+        padding: 1rem;
+        font-size: 2rem;
+        text-align: center;
+        border-radius: 2rem;
+        font-weight: bold;
+        display: block;
+        flex-shrink: 0;
+    }
+    footer {
+        img {
+            display: inline-block;
+        }
+        padding: 2rem 1rem;
+        text-align: center;
+    }
 </style>

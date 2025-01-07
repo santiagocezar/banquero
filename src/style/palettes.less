@@ -10,23 +10,36 @@
     --p90: hsl(@hue, @sat, 10%);
     --contrast: if(luminance(hsl(@hue, @sat, 60%)) > 60%, black, white);
 }
-.pal-0 { .palette(0deg, 75%) }
-.pal-1 { .palette(40deg, 90%) }
-.pal-2 { .palette(90deg, 80%) }
-.pal-3 { .palette(140deg, 70%) }
-.pal-4 { .palette(180deg, 70%) }
-.pal-5 { .palette(225deg, 60%) }
-.pal-6 { .palette(280deg, 80%) }
-.pal-7 { .palette(315deg, 100%) }
+.pal-0 {
+    .palette(0deg, 75%);
+}
+.pal-1 {
+    .palette(40deg, 90%);
+}
+.pal-2 {
+    .palette(90deg, 80%);
+}
+.pal-3 {
+    .palette(140deg, 70%);
+}
+.pal-4 {
+    .palette(180deg, 70%);
+}
+.pal-5 {
+    .palette(225deg, 60%);
+}
+.pal-6 {
+    .palette(280deg, 80%);
+}
+.pal-7 {
+    .palette(315deg, 100%);
+}
 
 // each(range(0, @colors - 1, 1), {
 //     .pal-@{value} {
 //         .palette(@value * @spacing, 60%)
 //     }
 // });
-
-
-
 
 :root {
     --p10: hsl(220, 5%, 97%);
@@ -52,7 +65,6 @@
     --redl: #ff7fd4;
     --red: #fe1e6e;
     --redd: #630081;
-
 
     --yellowl: #fff67d;
     --yellow: #ffc51a;
@@ -83,42 +95,41 @@
         }
     });
 
-:root {
-    --p10: hsl(220, 5%, 10%);
-    --p30: hsl(220, 5%, 17%);
-    --p40: hsl(220, 5%, 32%);
-    --p50: hsl(220, 5%, 47%);
-    --p70: hsl(220, 5%, 77%);
-    --p90: hsl(220, 5%, 90%);
-    --contrast: white;
+    :root {
+        --p10: hsl(220, 5%, 10%);
+        --p30: hsl(220, 5%, 17%);
+        --p40: hsl(220, 5%, 32%);
+        --p50: hsl(220, 5%, 47%);
+        --p70: hsl(220, 5%, 77%);
+        --p90: hsl(220, 5%, 90%);
+        --contrast: white;
 
-    --bg1: #111;
-    --bg2: #222;
-    --bg3: #333;
-    --bg4: #444;
+        --bg1: #111;
+        --bg2: #222;
+        --bg3: #333;
+        --bg4: #444;
 
-    --text: #eee;
-    --textContrast: #111;
-    --secondaryText: #eee8;
-    --secondaryTextContrast: #1118;
+        --text: #eee;
+        --textContrast: #111;
+        --secondaryText: #eee8;
+        --secondaryTextContrast: #1118;
 
-    --shadow: #ddd2;
+        --shadow: #ddd2;
 
-    --redl: #ff7fd4;
-    --red: #fe1e6e;
-    --redd: #630081;
+        --redl: #ff7fd4;
+        --red: #fe1e6e;
+        --redd: #630081;
 
+        --yellowl: #fff67d;
+        --yellow: #ffc51a;
+        --yellowd: #ac4204;
 
-    --yellowl: #fff67d;
-    --yellow: #ffc51a;
-    --yellowd: #ac4204;
+        --bluel: #5ab5f1;
+        --blue: #2c37de;
+        --blued: #31108b;
 
-    --bluel: #5ab5f1;
-    --blue: #2c37de;
-    --blued: #31108b;
-
-    --greenl: #80ee7c;
-    --green: #28db67;
-    --greend: #06634f;
-}
+        --greenl: #80ee7c;
+        --green: #28db67;
+        --greend: #06634f;
+    }
 }

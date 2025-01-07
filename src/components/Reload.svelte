@@ -1,15 +1,15 @@
 <script lang="ts">
-    import { useRegisterSW } from 'virtual:pwa-register/svelte'
-    import Icon from './Icon.svelte'
+    import { useRegisterSW } from "virtual:pwa-register/svelte"
+    import Icon from "./Icon.svelte"
 
     const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
         onRegistered(swr) {
             console.log(`SW registered: ${swr}`)
         },
         onRegisterError(error) {
-            console.log('SW registration error', error)
-        }
-    });
+            console.log("SW registration error", error)
+        },
+    })
 
     function close() {
         offlineReady.set(false)
@@ -20,19 +20,12 @@
 </script>
 
 {#if toast}
-    <div
-        class="pwa-toast"
-        role="alert"
-    >
+    <div class="pwa-toast" role="alert">
         <div class="message">
             {#if $offlineReady}
-                <span>
-                    Trucomatic ahora funciona sin conexión!
-                </span>
+                <span> Trucomatic ahora funciona sin conexión! </span>
             {:else}
-                <span>
-                    Hay una actualización disponible...
-                </span>
+                <span> Hay una actualización disponible... </span>
             {/if}
         </div>
         {#if $needRefresh}
@@ -53,7 +46,7 @@
         color: white;
 
         .message {
-            padding: .5rem 1rem;
+            padding: 0.5rem 1rem;
             flex-grow: 1;
         }
 

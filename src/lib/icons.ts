@@ -1,15 +1,24 @@
-import { getIcons, iconToSVG, expandIconSet } from '@iconify/utils'
-import { loadCollectionFromFS } from "@iconify/utils/lib/loader/fs";
+import { getIcons, iconToSVG, expandIconSet } from "@iconify/utils"
+import { loadCollectionFromFS } from "@iconify/utils/lib/loader/fs"
 
-export async function generateSymbols(pack: string, names: string[], overridePrefix?: string) {
+export async function generateSymbols(
+    pack: string,
+    names: string[],
+    overridePrefix?: string
+) {
     const iconPack = (await loadCollectionFromFS(pack))!
     expandIconSet(iconPack)
 
-    const { icons = {}, not_found = [], prefix, aliases = {}} = getIcons(iconPack, names, true) ?? {}
+    const {
+        icons = {},
+        not_found = [],
+        prefix,
+        aliases = {},
+    } = getIcons(iconPack, names, true) ?? {}
 
     overridePrefix ??= prefix
-    
-    console.log(aliases )
+
+    console.log(aliases)
 
     if (not_found.length)
         console.warn(`some icons were not found: ${not_found}`)
