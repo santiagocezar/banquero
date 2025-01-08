@@ -29,6 +29,7 @@
     let from: number | null = $state(null)
     let to: number | null = $state(null)
     let withProperty: number | null = $state(null)
+    let transferAmount: number = $state(0)
 
     // TODO: this right away when the player gets added
     // function onPlayerAdded(id: number) {
