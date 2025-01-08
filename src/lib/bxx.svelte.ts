@@ -58,10 +58,7 @@ export function useGame<T>(
     const url = new URL(location.href)
     let id = url.hash.substring(1) || url.searchParams.get("id")
     let data: T
-    if (id) {
-        // TODO: handle non-existing games
-        data = loadSave(game, id)!
-    } else {
+    if (!id || (data = loadSave(game, id)!) === undefined) {
         let encoded = url.searchParams.get("data")
         id = generateID(game)
 
