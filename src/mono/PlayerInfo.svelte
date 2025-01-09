@@ -25,8 +25,16 @@
 
 <section class="pal-{player.color}">
     <header>
-        <h2>{player.name}</h2>
-        <p>${player.money}</p>
+        <nav>
+            <button>
+                <Icon use="ic-arrow-back" />
+            </button>
+            {player.name}
+        </nav>
+        <div class="value">
+            <p>Balance</p>
+            <p>${player.money}</p>
+        </div>
         <button>
             <Icon use="ic-upload" />
             Pagar</button
@@ -78,18 +86,27 @@
         gap: 1rem 0.5rem;
         padding: 0.5rem;
 
-        & h2 {
-            font-size: 1.5rem;
+        & nav {
+            display: flex;
+            text-align: left;
+            gap: 1rem;
+            line-height: 1;
+            align-items: center;
             font-weight: bold;
+            font-size: 1.5rem;
+            grid-column: span 2;
         }
-        & p {
-            font-size: 3.5rem;
-            font-weight: 300;
-            font-variant: tabular-nums;
-        }
-        & h2,
-        & p {
+        & .value {
             text-align: center;
+            place-self: center;
+            margin-top: -2rem;
+
+            & p:last-child {
+                font-variant: tabular-nums;
+                font-weight: 300;
+                font-size: 3.5rem;
+                line-height: 1;
+            }
             grid-column: span 2;
         }
         & button {

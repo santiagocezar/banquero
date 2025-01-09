@@ -109,15 +109,15 @@
 -->
 <!-- <SendMoney /> -->
 <main>
-    <PlayerList
+    <!--<PlayerList
         bind:from
         bind:to
         players={data.players}
         onclick={onPlayerClick}
         ondelete={onPlayerDelete}
-    />
+    />-->
     <PlayerInfo player={data.players[0]} />
-    <ManageProperty owned={data.players[0].properties[5]} />
+    <!--     <ManageProperty owned={data.players[0].properties[12]} /> -->
     <!--<Transfer
         {from}
         {to}
@@ -162,7 +162,8 @@
 <style>
     main {
         display: grid;
-        grid-template-columns: 2fr 1fr 1fr;
+        /*         grid-template-columns: 2fr 1fr 1fr; */
+        grid-template-columns: 1fr;
         height: 100%;
         gap: 0.5rem;
         overflow: hidden;
