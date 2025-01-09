@@ -22,21 +22,21 @@ export interface Transfer {
     defaultValue?: number;
 }
 
-const Transaction = z.object({
+export const Transaction = z.object({
     id: z.number(),
     action: z.string(),
     money: z.number(),
 })
 export type Transaction = z.infer<typeof Transaction>
 
-const OwnedProperty = z.object({
+export const OwnedProperty = z.object({
     id: z.number(),
     houses: z.number().default(0),
     mortgaged: z.boolean().default(false),
 })
 export type OwnedProperty = z.infer<typeof OwnedProperty>
 
-const Player = z.object({
+export const Player = z.object({
     name: z.string(),
     color: z.number(),
     money: z.number(),

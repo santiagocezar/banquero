@@ -1,6 +1,9 @@
 <script lang="ts">
     import { useGame } from "../lib/bxx.svelte"
     import PlayerList from "./PlayerList.svelte"
+    import PlayerInfo from "./PlayerInfo.svelte"
+    import Transfer from "./Transfer.svelte"
+    import ManageProperty from "./ManageProperty.svelte"
     import {
         type Player,
         type MonopolyProperty,
@@ -26,10 +29,25 @@
 
     const { id, data } = useGame(mono, (data) => true)
 
+    data.players = [
+        {
+            name: "Santi",
+            money: 1500,
+            color: 2,
+            properties: properties.map((p) => ({
+                id: p.id,
+                houses: 0,
+                mortgaged: false,
+            })),
+        },
+    ]
+
     let from: number | null = $state(null)
     let to: number | null = $state(null)
-    let withProperty: number | null = $state(null)
     let transferAmount: number = $state(0)
+    let gives: number[] = $state([])
+    let recieves: number[] = $state([])
+    let houses: number = $state(0)
 
     // TODO: this right away when the player gets added
     // function onPlayerAdded(id: number) {
@@ -90,20 +108,26 @@
             <MainView>
 -->
 <!-- <SendMoney /> -->
-<PlayerList
-    bind:from
-    bind:to
-    players={[
-        {
-            name: "Santi",
-            money: 1500,
-            color: 2,
-            properties: [{ id: 2, houses: 0, mortgaged: false }],
-        },
-    ]}
-    onclick={onPlayerClick}
-    ondelete={onPlayerDelete}
-/>
+<main>
+    <PlayerList
+        bind:from
+        bind:to
+        players={data.players}
+        onclick={onPlayerClick}
+        ondelete={onPlayerDelete}
+    />
+    <PlayerInfo player={data.players[0]} />
+    <ManageProperty owned={data.players[0].properties[5]} />
+    <!--<Transfer
+        {from}
+        {to}
+        players={data.players}
+        {gives}
+        {recieves}
+        value={transferAmount}
+        {houses}
+    />-->
+</main>
 <!--
             </MainView>
         )}
@@ -137,12 +161,10 @@
 
 <style>
     main {
-        display: flex;
-        position: relative;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
         height: 100%;
-        flex-direction: column;
         gap: 0.5rem;
-        overflow: auto;
-        align-items: stretch;
+        overflow: hidden;
     }
 </style>
