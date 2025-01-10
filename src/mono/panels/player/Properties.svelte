@@ -1,25 +1,22 @@
 <script lang="ts">
-    import { OwnedProperty, properties } from "./index.svelte"
+    import { OwnedProperty, properties } from "$mono"
 
     interface Props {
         owns: OwnedProperty[]
+        onpropertyselected: (id: number) => void
     }
 
-    const { owns }: Props = $props()
-
-    let selected = $state(0)
+    const { owns, onpropertyselected: selectProperty }: Props = $props()
 </script>
 
 <div class="properties">
-    <div class="label">Nombre</div>
-    <div class="label">Viviendas</div>
-    <div class="label">Alquiler</div>
-    {#each owns as p, i}
-        <button
-            class="reset item"
-            onclick={() => (selected = i)}
-            data-selected={selected == i}
-        >
+    <div class="labels">
+        <span>Nombre</span>
+        <span>Viviendas</span>
+        <span>Alquiler</span>
+    </div>
+    {#each owns as p}
+        <button class="reset item" onclick={() => selectProperty(p.id)}>
             <div class="name">
                 <div style="--c: {properties[p.id].block}"></div>
                 <span>
@@ -36,11 +33,16 @@
     .properties {
         display: grid;
         grid-template-columns: 1fr auto auto;
-        gap: 0 0.5rem;
+        gap: 0 1rem;
 
-        & .label {
-            font-size: 0.75rem;
+        & .labels {
+            font-size: 0.8rem;
+            font-weight: bold;
             text-align: right;
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: subgrid;
+            grid-column: span 3;
 
             &:first-child {
                 text-align: left;
@@ -51,15 +53,11 @@
             display: grid;
             grid-column: span 3;
             grid-template-columns: subgrid;
-            padding: 0.5rem;
+            padding: 0.5rem 1rem;
             border-radius: 0.5rem;
             align-items: center;
 
-            & .actions {
-                grid-column: span 3;
-            }
-
-            &[data-selected="true"] {
+            &:hover {
                 background-color: var(--p10);
             }
         }

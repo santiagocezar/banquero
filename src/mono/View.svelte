@@ -1,16 +1,15 @@
 <script lang="ts">
     import { useGame } from "../lib/bxx.svelte"
     import PlayerList from "./PlayerList.svelte"
-    import PlayerInfo from "./PlayerInfo.svelte"
     import Transfer from "./Transfer.svelte"
-    import ManageProperty from "./ManageProperty.svelte"
+    import ManagePlayer from "./panels/player/ManagePlayer.svelte"
     import {
         type Player,
         type MonopolyProperty,
         type MonopolyGame,
         properties,
         mono,
-    } from "./index.svelte"
+    } from "."
 
     // import MdHistory from '~icons/ic/round-history';
     // import MdLeaderboard from '~icons/ic/round-leaderboard';
@@ -36,7 +35,7 @@
             color: 2,
             properties: properties.map((p) => ({
                 id: p.id,
-                houses: 0,
+                houses: 2,
                 mortgaged: false,
             })),
         },
@@ -116,8 +115,7 @@
         onclick={onPlayerClick}
         ondelete={onPlayerDelete}
     />-->
-    <PlayerInfo player={data.players[0]} />
-    <!--     <ManageProperty owned={data.players[0].properties[12]} /> -->
+    <ManagePlayer player={data.players[0]} />
     <!--<Transfer
         {from}
         {to}

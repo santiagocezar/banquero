@@ -2,5 +2,11 @@
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
     "target": "ES2016",
+    "baseUrl": ".",
+    "paths": {
+      "$lib/*": ["src/lib/*"],
+      "$mono/*": ["src/mono/*"],
+      "$mono": ["src/mono"],
+    }
   }
 }

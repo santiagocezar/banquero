@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { BANK, properties, type Player } from "./index.svelte"
+    import { BANK, properties, type Player } from "."
     import Icon from "../components/Icon.svelte"
     import type { TransitionConfig } from "svelte/transition"
 

@@ -1,6 +1,6 @@
 import { type Game } from '../lib/bxx.svelte';
 import { z } from "zod";
-import { properties as untypedProperties } from "./hasbro_argentina.json"
+import { properties as untypedProperties } from "./hasbro_argentina_extra.json"
 
 export const properties = untypedProperties as MonopolyProperty[]
 
@@ -9,11 +9,14 @@ export type MonopolyProperty = {
     name: string;
     price: number;
     block: string;
-    rent?: number[];
-    housing?: number;
-    special?: 'station' | 'service';
-    description?: string;
-};
+    count: number;
+    rent: number[];
+} & ({
+    kind: "lot"
+    housing: number;
+} | {
+    kind: 'station' | 'service';
+});
 
 export interface Transfer {
     from?: number,
@@ -74,3 +77,14 @@ export const mono: Game<MonopolyGame> = {
         history: []
     })
 };
+
+export function rent(owns: OwnedProperty, sameBlock: number) {
+    const prop = properties[owns.id]
+
+    return prop.kind === "lot"
+        ? owns.houses > 0
+            ? prop.rent[owns.houses]
+            : prop.rent[0] * (sameBlock == prop.count ? 2 : 1)
+        : prop.rent[sameBlock - 1]
+
+}

@@ -1,11 +1,12 @@
 <script lang="ts">
     import Properties from "./Properties.svelte"
-    import Icon from "../components/Icon.svelte"
+    import Icon from "src/components/Icon.svelte"
     import { createTabs, melt } from "@melt-ui/svelte"
-    import { Player, properties } from "./index.svelte"
+    import { Player, properties } from "$mono"
 
     interface Props {
         player: Player
+        onpropertyselected: (id: number) => void
     }
 
     const {
@@ -20,7 +21,7 @@
         { id: "history", title: "Movimientos" },
     ]
 
-    const { player }: Props = $props()
+    const { player, onpropertyselected }: Props = $props()
 </script>
 
 <section class="pal-{player.color}">
@@ -33,13 +34,13 @@
         </nav>
         <div class="value">
             <p>Balance</p>
-            <p>${player.money}</p>
+            <p class="big">${player.money}</p>
         </div>
-        <button>
+        <button class="action">
             <Icon use="ic-upload" />
             Pagar</button
         >
-        <button>
+        <button class="action">
             <Icon use="ic-download" />
             Cobrar</button
         >
@@ -58,19 +59,15 @@
         </div>
 
         <div class="tabview" use:melt={$content("properties")}>
-            <Properties owns={player.properties} />
+            <Properties owns={player.properties} {onpropertyselected} />
         </div>
         <div class="tabview" use:melt={$content("history")}></div>
     </main>
 </section>
 
 <style>
-    section {
-        display: grid;
-        grid-template-rows: 2fr 3fr;
-        height: 100%;
-        overflow: hidden;
-    }
+    @import "../../foreheader.css";
+
     main {
         display: grid;
         grid-template-rows: auto 1fr;
@@ -80,44 +77,25 @@
     header {
         background-color: var(--p50);
         color: var(--contrast);
-        display: grid;
         grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto 1fr auto;
-        gap: 1rem 0.5rem;
         padding: 0.5rem;
 
         & nav {
-            display: flex;
-            text-align: left;
-            gap: 1rem;
-            line-height: 1;
-            align-items: center;
-            font-weight: bold;
             font-size: 1.5rem;
             grid-column: span 2;
         }
         & .value {
-            text-align: center;
-            place-self: center;
-            margin-top: -2rem;
-
-            & p:last-child {
-                font-variant: tabular-nums;
-                font-weight: 300;
-                font-size: 3.5rem;
-                line-height: 1;
-            }
             grid-column: span 2;
         }
-        & button {
+        & .action {
             background-color: var(--p10);
             color: var(--p90);
         }
     }
     .tablist {
         display: flex;
-        gap: 0.5rem;
-        padding: 0.5rem;
+        gap: 1rem;
+        padding: 1rem;
         & button {
             background-color: var(--p10);
             color: var(--p70);

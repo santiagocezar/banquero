@@ -1,0 +1,41 @@
+section {
+    display: grid;
+    grid-template-rows: 2fr 3fr;
+    height: 100%;
+    overflow: hidden;
+}
+header {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    text-align: center;
+    padding: .5rem;
+
+    & nav {
+        display: flex;
+        text-align: left;
+        gap: 1rem;
+        line-height: 1;
+        align-items: center;
+        font-weight: bold;
+    }
+    & .value {
+        text-align: center;
+        place-self: center;
+        margin-top: -1rem;
+
+        & .big {
+            font-variant: tabular-nums;
+            font-weight: 300;
+            font-size: 3.5rem;
+            line-height: 1;
+        }
+    }
+    & button {
+        background-color: inherit;
+        color: inherit;
+    }
+    & .action {
+        margin: 0.5rem;
+    }
+}
