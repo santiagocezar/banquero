@@ -1,15 +1,17 @@
 <script lang="ts">
     import { useGame } from "../lib/bxx.svelte"
     import PlayerList from "./PlayerList.svelte"
-    import Transfer from "./Transfer.svelte"
+    import Transfer from "./panels/transfer/Transfer.svelte"
     import ManagePlayer from "./panels/player/ManagePlayer.svelte"
     import {
         type Player,
         type MonopolyProperty,
         type MonopolyGame,
+        BANK,
         properties,
         mono,
     } from "."
+    import Icon from "src/components/Icon.svelte"
 
     // import MdHistory from '~icons/ic/round-history';
     // import MdLeaderboard from '~icons/ic/round-leaderboard';
@@ -32,17 +34,27 @@
         {
             name: "Santi",
             money: 1500,
-            color: 2,
-            properties: properties.map((p) => ({
-                id: p.id,
+            color: 7,
+            properties: [0, 4, 7, 1].map((id) => ({
+                id,
+                houses: 2,
+                mortgaged: false,
+            })),
+        },
+        {
+            name: "Flor",
+            money: 1500,
+            color: 3,
+            properties: [2, 3, 6].map((id) => ({
+                id,
                 houses: 2,
                 mortgaged: false,
             })),
         },
     ]
 
-    let from: number | null = $state(null)
-    let to: number | null = $state(null)
+    let from: number | null = $state(0)
+    let to: number | null = $state(1)
     let transferAmount: number = $state(0)
     let gives: number[] = $state([])
     let recieves: number[] = $state([])
@@ -91,6 +103,15 @@
             )
         )
     }
+    function changeSeller() {
+        to = null
+    }
+    function cancelExchange() {
+        from = to = null
+    }
+    function exchange() {
+        // TODO
+    }
     /*
     const transactionItems = useMemo(
         () =>
@@ -107,24 +128,41 @@
             <MainView>
 -->
 <!-- <SendMoney /> -->
+<header>
+    <button onclick={() => history.back()} class="button back">
+        <Icon use="ic-arrow-back" />
+    </button>
+    <a href="/" class="logo">
+        <img src="/icon.svg" alt="Score" />
+        <span>trucomatic</span>
+    </a>
+    <button class="button" id="share">
+        <Icon use="ic-share" />
+    </button>
+</header>
 <main>
-    <!--<PlayerList
+    <PlayerList
         bind:from
         bind:to
         players={data.players}
         onclick={onPlayerClick}
         ondelete={onPlayerDelete}
-    />-->
+    />
     <ManagePlayer player={data.players[0]} />
-    <!--<Transfer
-        {from}
-        {to}
-        players={data.players}
-        {gives}
-        {recieves}
-        value={transferAmount}
-        {houses}
-    />-->
+    <!--{#if from !== null && to !== null}
+        <Transfer
+            {from}
+            {to}
+            {gives}
+            {recieves}
+            {houses}
+            {changeSeller}
+            {cancelExchange}
+            {exchange}
+            players={data.players}
+            bankProperties={[]}
+        />
+    {:else}{/if}-->
 </main>
 <!--
             </MainView>
@@ -160,10 +198,17 @@
 <style>
     main {
         display: grid;
-        /*         grid-template-columns: 2fr 1fr 1fr; */
-        grid-template-columns: 1fr;
+        grid-template-columns: 2fr 1fr;
+        /*         grid-template-columns: 1fr; */
         height: 100%;
         gap: 0.5rem;
         overflow: hidden;
+        user-select: none;
+    }
+    header {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem;
+        align-items: center;
     }
 </style>

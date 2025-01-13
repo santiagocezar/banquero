@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Properties from "./Properties.svelte"
+    import Properties from "$mono/Properties.svelte"
     import Icon from "src/components/Icon.svelte"
     import { createTabs, melt } from "@melt-ui/svelte"
     import { Player, properties } from "$mono"
@@ -25,7 +25,7 @@
 </script>
 
 <section class="pal-{player.color}">
-    <header>
+    <header class="plastic auto-pal">
         <nav>
             <button>
                 <Icon use="ic-arrow-back" />
@@ -36,14 +36,16 @@
             <p>Balance</p>
             <p class="big">${player.money}</p>
         </div>
-        <button class="action">
-            <Icon use="ic-upload" />
-            Pagar</button
-        >
-        <button class="action">
-            <Icon use="ic-download" />
-            Cobrar</button
-        >
+        <div class="actions">
+            <button class="plastic">
+                <Icon use="ic-upload" />
+                Pagar</button
+            >
+            <button class="plastic">
+                <Icon use="ic-download" />
+                Cobrar</button
+            >
+        </div>
     </header>
     <main use:melt={$root}>
         <div
@@ -77,19 +79,21 @@
     header {
         background-color: var(--p50);
         color: var(--contrast);
-        grid-template-columns: 1fr 1fr;
         padding: 0.5rem;
+
+        --border: var(--p90);
+        --bevel: var(--p70);
 
         & nav {
             font-size: 1.5rem;
-            grid-column: span 2;
         }
-        & .value {
-            grid-column: span 2;
-        }
-        & .action {
+        & .actions > button {
             background-color: var(--p10);
             color: var(--p90);
+            --light: white;
+            --dark: var(--p30);
+            --shadow: color-mix(in srgb, var(--p70), transparent 75%);
+            --border: var(--p70);
         }
     }
     .tablist {

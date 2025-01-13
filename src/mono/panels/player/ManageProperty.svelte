@@ -222,11 +222,6 @@
             }
         }
     }
-    h3 {
-        font-size: 1.25rem;
-        font-weight: bold;
-        padding: 1.5rem 0.25rem 0.5rem 0.25rem;
-    }
     main {
         padding: 0 1rem;
         overflow: auto;

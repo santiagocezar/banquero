@@ -1,4 +1,4 @@
-section {
+section, form {
     display: grid;
     grid-template-rows: 2fr 3fr;
     height: 100%;
@@ -10,6 +10,12 @@ header {
     grid-template-rows: auto 1fr auto;
     text-align: center;
     padding: .5rem;
+
+    /* for global.css > .plastic */
+    --light: transparent;
+    border-radius: 0 0 .5rem .5rem;
+    border-width: 0;
+    border-bottom-width: 1px;
 
     & nav {
         display: flex;
@@ -35,7 +41,19 @@ header {
         background-color: inherit;
         color: inherit;
     }
-    & .action {
-        margin: 0.5rem;
+    & .actions {
+        display: flex;
+        gap: 1rem;
+        padding: .5rem;
+
+        & > button {
+            width: 0;
+            flex: 1;
+        }
     }
+}
+h3 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    padding: 1.5rem 0.25rem 0.5rem 0.25rem;
 }
