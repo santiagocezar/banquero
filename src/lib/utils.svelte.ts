@@ -47,9 +47,11 @@ function component(C: number) {
         : ((c + 0.055) / 1.055) ** 2.4
 }
 
-const reference = document.createElement('div')
-reference.style.display = 'none'
-document.body.appendChild(reference)
+if (typeof document !== "undefined") {
+    const reference = document.createElement('div')
+    reference.style.display = 'none'
+    document.body.appendChild(reference)
+}
 
 export function contrast(node: HTMLElement | SVGElement, color: string) {
     function update(color: string) {
