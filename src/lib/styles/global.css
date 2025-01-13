@@ -45,11 +45,13 @@
         }
     }
     .plastic {
+        --elevation: 1px;
+        
         border-radius: 0.5rem;
         box-shadow:
             0 1px 0 0 inset var(--light, #fff4),
             0 -2px 0 0 inset var(--dark, #0004),
-            0 1px 4px var(--shadow, #0004);
+            0 var(--elevation) calc(var(--elevation) * 4) var(--shadow, #0004);
         border: 1px solid var(--border, #000);
 
     }
@@ -57,7 +59,7 @@
         --light: var(--p30);
         --dark: var(--p70);
         --border: var(--p90);
-        --shadow: color-mix(in srgb, var(--p50), transparent 75%);
+        --shadow: color-mix(in srgb, var(--p50), transparent 60%);
     }
 
     button:not(:is(.reset)) {

@@ -20,7 +20,7 @@
 
 
 @mixin palette($hue, $sat) {
-    $p50: oklch(60% $sat ($hue + 45deg));
+    $p50: oklch(60% 70% ($hue + 45deg));
 
     --p10: #{hsl($hue, $sat, 97%)};
     --p30: #{hsl($hue, $sat, 90%)};
@@ -43,11 +43,18 @@
     --p50: #{$p50};
     --p70: #{color-mix(in oklab, $p50, #0a000a 25%)};
     --p90: #{color-mix(in oklab, $p50, #0a000a 60%)};
+    
+    --p10: #{color.scale($p50, $chroma: -60%, $lightness: 100%, $space: oklch)};
+    --p30: #{color.scale($p50, $chroma: -30%, $lightness: 70%, $space: oklch)};
+    --p40: #{color.scale($p50, $chroma: -10%, $lightness: 45%, $space: oklch)};
+    --p50: #{$p50};
+    --p70: #{color.scale($p50, $lightness: -25%, $space: oklch)};
+    --p90: #{color.scale($p50, $lightness: -60%, $space: oklch)};
 
     --contrast: #{contrasting($p50)};
 
     @media (prefers-color-scheme: dark) {
-        $p50: hsl($hue, $sat, 47%);
+        $p50: oklch(50% 50% ($hue + 45deg));
 
         --p10: #{hsl($hue, $sat, 10%)};
         --p30: #{hsl($hue, $sat, 17%)};
@@ -55,14 +62,14 @@
         --p50: #{$p50};
         --p70: #{hsl($hue, $sat, 77%)};
         --p90: #{hsl($hue, $sat, 90%)};
-
-        --p10: #{color-mix(in oklab, $p50, #0a000a 90%)};
-        --p30: #{color-mix(in oklab, $p50, #0a000a 70%)};
-        --p40: #{color-mix(in oklab, $p50, #0a000a 45%)};
+        
+        --p10: #{color.scale($p50, $chroma: -50%, $lightness: 80%, $space: oklch)};
+        --p30: #{color.scale($p50, $chroma: -30%, $lightness: 40%, $space: oklch)};
+        --p40: #{color.scale($p50, $chroma: -10%, $lightness: 20%, $space: oklch)};
         --p50: #{$p50};
-        --p70: #{color-mix(in oklab, $p50, #fffffa  25%)};
-        --p90: #{color-mix(in oklab, $p50, #fffffa  60%)};
-
+        --p70: #{color.scale($p50, $lightness: -35%, $space: oklch)};
+        --p90: #{color.scale($p50, $lightness: -70%, $space: oklch)};
+        
         --contrast: #{contrasting($p50)};
     }
 }

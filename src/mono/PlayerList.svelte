@@ -68,7 +68,7 @@
     </div>
     {#each players as player, i (player.name)}
         <div
-            class="player-card pal-{player.color}"
+            class="player-card pal-{player.color} plastic auto-pal"
             data-active={from === i || to === i}
             onclick={() => onclick(i)}
         >
@@ -143,13 +143,13 @@
         align-items: start;
         padding: 0.5rem;
         border-radius: 1rem;
-        background-color: var(--p30);
-        background-image: linear-gradient(30deg, var(--p40), transparent);
-        color: var(--p90);
+        background-color: var(--p50);
+/*         background-image: linear-gradient(30deg, var(--p40), transparent); */
+        color: var(--contrast);
         user-select: none;
         flex-shrink: 0;
         gap: 0.5rem;
-        box-shadow: 0 0.15rem 0.5rem var(--p30);
+/*         box-shadow: 0 0.15rem 0.5rem var(--p30); */
         transition:
             transform 0.4s,
             color 0.2s,
@@ -233,8 +233,9 @@
         }
 
         &[data-active="true"] {
-            box-shadow: 0 0.4rem 1rem var(--p40);
+/*             box-shadow: 0 0.4rem 1rem var(--p40); */
             color: var(--contrast);
+            --elevation: 0.25rem;
             background-color: var(--p50);
             transform: translateY(-0.25rem);
         }
