@@ -1,11 +1,89 @@
 ---
-import "../style/reset.css"
-import "../style/palettes.less"
-
-import View from "../mono/View.svelte"
-import GameLayout from "../layouts/Game.astro"
+import Base from "../layouts/Base.astro"
+import IconSet from "../components/IconSet.astro"
+import Icon from "../components/Icon.astro"
+import { View, name, showHeader, iconPack, iconPrefix, icons } from "../game"
 ---
 
-<GameLayout title="Truco">
+<Base title={name}>
+    <IconSet pack={iconPack} prefix={iconPrefix} names={icons} />
+    {
+        showHeader && (
+            <header id="header">
+                <button onclick="history.back()" class="button back">
+                    <Icon use="ic-arrow-back" />
+                </button>
+                <a href="/" class="logo">
+                    <img transition:name="logo" src="/icon.svg" alt="Score" />
+                    <span transition:name="type">trucomatic</span>
+                </a>
+                <button class="button" id="share">
+                    <Icon use="ic-share" />
+                </button>
+            </header>
+        )
+    }
     <View client:only />
-</GameLayout>
+</Base>
+
+<style lang="less">
+    #header {
+        display: flex;
+        align-items: center;
+        padding: 0 0.5rem;
+        height: 4rem;
+        flex-shrink: 0;
+        border-bottom: 1px solid var(--p30);
+        justify-content: space-between;
+
+        .logo {
+            display: flex;
+            flex-direction: row;
+            gap: 0.5em;
+            justify-content: center;
+            align-items: center;
+            height: 6rem;
+            text-align: center;
+            font-family: "Poppins";
+            font-size: 1rem;
+            flex-shrink: 0;
+            user-select: none;
+            img {
+                height: 1.375em;
+            }
+        }
+        .button {
+            display: flex;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            gap: 0.5rem;
+            align-items: center;
+
+            svg {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+        }
+        .back {
+            background: none;
+            color: inherit;
+        }
+        #share {
+            background-color: var(--blue);
+            color: white;
+        }
+    }
+</style>
+
+<script>
+    import { shareGameData } from "../lib/bxx.svelte"
+
+    const shareBtn = document.getElementById("share")
+    if (shareBtn instanceof HTMLButtonElement) {
+        shareBtn.addEventListener("click", async (btn) => {
+            const url = new URL(location.href)
+            const id = url.searchParams.get("id")!
+            await shareGameData(id)
+        })
+    }
+</script>

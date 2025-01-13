@@ -1,0 +1,171 @@
+@use 'sass:color';
+@use 'sass:math';
+
+@function brightness($color) {
+    @return round(
+        (color.channel($color, "red", $space: rgb) * 299) +
+        (color.channel($color, "green", $space: rgb) * 587) +
+        (color.channel($color, "blue", $space: rgb) * 0.114)
+    );
+}
+
+@function contrasting($color) {
+    @if brightness($color) < math.div(brightness(white), 2) {
+        @return white;
+    } @else {
+        @return black;
+    }
+}
+
+
+
+@mixin palette($hue, $sat) {
+    $p50: oklch(60% $sat ($hue + 45deg));
+
+    --p10: #{hsl($hue, $sat, 97%)};
+    --p30: #{hsl($hue, $sat, 90%)};
+    --p40: #{hsl($hue, $sat, 75%)};
+    --p50: #{$p50};
+    --p70: #{hsl($hue, $sat, 30%)};
+    --p90: #{hsl($hue, $sat, 10%)};
+
+
+    --p10: #{oklab(from $p50 99% a b)};
+    --p30: #{oklab(from $p50 90% a b)};
+    --p40: #{oklab(from $p50 75% a b)};
+    --p50: #{oklab(from $p50 60% a b)};
+    --p70: #{oklab(from $p50 30% a b)};
+    --p90: #{oklab(from $p50 10% a b)};
+
+    --p10: #{color-mix(in oklab, $p50, #fffffa 90%)};
+    --p30: #{color-mix(in oklab, $p50, #fffffa 70%)};
+    --p40: #{color-mix(in oklab, $p50, #fffffa 45%)};
+    --p50: #{$p50};
+    --p70: #{color-mix(in oklab, $p50, #0a000a 25%)};
+    --p90: #{color-mix(in oklab, $p50, #0a000a 60%)};
+
+    --contrast: #{contrasting($p50)};
+
+    @media (prefers-color-scheme: dark) {
+        $p50: hsl($hue, $sat, 47%);
+
+        --p10: #{hsl($hue, $sat, 10%)};
+        --p30: #{hsl($hue, $sat, 17%)};
+        --p40: #{hsl($hue, $sat, 32%)};
+        --p50: #{$p50};
+        --p70: #{hsl($hue, $sat, 77%)};
+        --p90: #{hsl($hue, $sat, 90%)};
+
+        --p10: #{color-mix(in oklab, $p50, #0a000a 90%)};
+        --p30: #{color-mix(in oklab, $p50, #0a000a 70%)};
+        --p40: #{color-mix(in oklab, $p50, #0a000a 45%)};
+        --p50: #{$p50};
+        --p70: #{color-mix(in oklab, $p50, #fffffa  25%)};
+        --p90: #{color-mix(in oklab, $p50, #fffffa  60%)};
+
+        --contrast: #{contrasting($p50)};
+    }
+}
+
+.pal-0 { @include palette(0deg, 75%); }
+.pal-1 { @include palette(40deg, 90%); }
+.pal-2 { @include palette(90deg, 80%); }
+.pal-3 { @include palette(140deg, 70%); }
+.pal-4 { @include palette(180deg, 70%); }
+.pal-5 { @include palette(225deg, 60%); }
+.pal-6 { @include palette(280deg, 80%); }
+.pal-7 { @include palette(315deg, 100%); }
+
+.pal-0 { @include palette(0deg,70%); }
+.pal-1 { @include palette(45deg,90%); }
+.pal-2 { @include palette(90deg,70%); }
+.pal-3 { @include palette(140deg,60%); }
+.pal-4 { @include palette(180deg,70%); }
+.pal-5 { @include palette(235deg,70%); }
+.pal-6 { @include palette(280deg,70%); }
+.pal-7 { @include palette(310deg, 70%); }
+
+:root {
+    --p10: hsl(220, 5%, 97%);
+    --p30: hsl(220, 5%, 90%);
+    --p40: hsl(220, 5%, 75%);
+    --p50: hsl(220, 5%, 60%);
+    --p70: hsl(220, 5%, 30%);
+    --p90: hsl(220, 5%, 10%);
+    --contrast: white;
+
+    --bg0: #eeeeee;
+    --bg1: #f4f4f4;
+    --bg2: #fafafa;
+    --bg3: #fdfdfd;
+    --bg4: #ffffff;
+
+    --text: #000;
+    --textContrast: #fff;
+    --secondaryText: #0008;
+    --secondaryTextContrast: #fff8;
+
+    --shadow: #0002;
+
+    --redl: #ff7fd4;
+    --red: #fe1e6e;
+    --redd: #630081;
+
+
+    --yellowl: #fff67d;
+    --yellow: #ffc51a;
+    --yellowd: #ac4204;
+
+    --bluel: #5ab5f1;
+    --blue: #2c37de;
+    --blued: #31108b;
+
+    --greenl: #80ee7c;
+    --green: #28db67;
+    --greend: #06634f;
+
+    background-color: var(--bg1);
+    color: var(--text);
+
+    @media (prefers-color-scheme: dark) {
+        --p10: hsl(220, 5%, 10%);
+        --p30: hsl(220, 5%, 17%);
+        --p40: hsl(220, 5%, 32%);
+        --p50: hsl(220, 5%, 47%);
+        --p70: hsl(220, 5%, 77%);
+        --p90: hsl(220, 5%, 90%);
+        --contrast: white;
+
+        --bg0: #000;
+        --bg1: #111;
+        --bg2: #222;
+        --bg3: #333;
+        --bg4: #444;
+
+        --text: #eee;
+        --textContrast: #111;
+        --secondaryText: #eee8;
+        --secondaryTextContrast: #1118;
+
+        --shadow: #ddd2;
+
+        --redl: #ff7fd4;
+        --red: #fe1e6e;
+        --redd: #630081;
+
+
+        --yellowl: #fff67d;
+        --yellow: #ffc51a;
+        --yellowd: #ac4204;
+
+        --bluel: #5ab5f1;
+        --blue: #2c37de;
+        --blued: #31108b;
+
+        --greenl: #80ee7c;
+        --green: #28db67;
+        --greend: #06634f;
+    }
+}
+
+
