@@ -19,31 +19,9 @@
 
 
 
-@mixin palette($hue, $sat) {
-    $p50: oklch(60% 70% ($hue + 45deg));
+@mixin palette($hue, $chrlight: 70%, $chrdark: 50%) {
+    $p50: oklch(60% $chrlight ($hue + 45deg));
 
-    --p10: #{hsl($hue, $sat, 97%)};
-    --p30: #{hsl($hue, $sat, 90%)};
-    --p40: #{hsl($hue, $sat, 75%)};
-    --p50: #{$p50};
-    --p70: #{hsl($hue, $sat, 30%)};
-    --p90: #{hsl($hue, $sat, 10%)};
-
-
-    --p10: #{oklab(from $p50 99% a b)};
-    --p30: #{oklab(from $p50 90% a b)};
-    --p40: #{oklab(from $p50 75% a b)};
-    --p50: #{oklab(from $p50 60% a b)};
-    --p70: #{oklab(from $p50 30% a b)};
-    --p90: #{oklab(from $p50 10% a b)};
-
-    --p10: #{color-mix(in oklab, $p50, #fffffa 90%)};
-    --p30: #{color-mix(in oklab, $p50, #fffffa 70%)};
-    --p40: #{color-mix(in oklab, $p50, #fffffa 45%)};
-    --p50: #{$p50};
-    --p70: #{color-mix(in oklab, $p50, #0a000a 25%)};
-    --p90: #{color-mix(in oklab, $p50, #0a000a 60%)};
-    
     --p10: #{color.scale($p50, $chroma: -60%, $lightness: 100%, $space: oklch)};
     --p30: #{color.scale($p50, $chroma: -30%, $lightness: 70%, $space: oklch)};
     --p40: #{color.scale($p50, $chroma: -10%, $lightness: 45%, $space: oklch)};
@@ -54,15 +32,8 @@
     --contrast: #{contrasting($p50)};
 
     @media (prefers-color-scheme: dark) {
-        $p50: oklch(50% 50% ($hue + 45deg));
+        $p50: oklch(50% $chrdark($hue + 45deg));
 
-        --p10: #{hsl($hue, $sat, 10%)};
-        --p30: #{hsl($hue, $sat, 17%)};
-        --p40: #{hsl($hue, $sat, 32%)};
-        --p50: #{$p50};
-        --p70: #{hsl($hue, $sat, 77%)};
-        --p90: #{hsl($hue, $sat, 90%)};
-        
         --p10: #{color.scale($p50, $chroma: -50%, $lightness: 80%, $space: oklch)};
         --p30: #{color.scale($p50, $chroma: -30%, $lightness: 40%, $space: oklch)};
         --p40: #{color.scale($p50, $chroma: -10%, $lightness: 20%, $space: oklch)};
@@ -73,24 +44,29 @@
         --contrast: #{contrasting($p50)};
     }
 }
+.pal-0 { @include palette(0deg); }
+.pal-1 { @include palette(45deg); }
+.pal-2 { @include palette(90deg); }
+.pal-3 { @include palette(140deg); }
+.pal-4 { @include palette(180deg); }
+.pal-5 { @include palette(235deg); }
+.pal-6 { @include palette(280deg); }
+.pal-7 { @include palette(310deg); }
+.pal--1 { @include palette(90deg, 20%, 15%); }
 
-.pal-0 { @include palette(0deg, 75%); }
-.pal-1 { @include palette(40deg, 90%); }
-.pal-2 { @include palette(90deg, 80%); }
-.pal-3 { @include palette(140deg, 70%); }
-.pal-4 { @include palette(180deg, 70%); }
-.pal-5 { @include palette(225deg, 60%); }
-.pal-6 { @include palette(280deg, 80%); }
-.pal-7 { @include palette(315deg, 100%); }
+.pal-gen {
+    --p50: oklch(from var(--pal-gen-color) 60% c h);
 
-.pal-0 { @include palette(0deg,70%); }
-.pal-1 { @include palette(45deg,90%); }
-.pal-2 { @include palette(90deg,70%); }
-.pal-3 { @include palette(140deg,60%); }
-.pal-4 { @include palette(180deg,70%); }
-.pal-5 { @include palette(235deg,70%); }
-.pal-6 { @include palette(280deg,70%); }
-.pal-7 { @include palette(310deg, 70%); }
+    --p10: color-mix(in oklch, var(--p50), white 80%);
+    --p30: color-mix(in oklch, var(--p50), white 40%);
+    --p40: color-mix(in oklch, var(--p50), white 20%);
+    --p70: color-mix(in oklch, var(--p50), black 35%);
+    --p90: color-mix(in oklch, var(--p50), black 70%);
+
+    @media (prefers-color-scheme: dark) {
+
+    }
+}
 
 :root {
     --p10: hsl(220, 5%, 97%);
