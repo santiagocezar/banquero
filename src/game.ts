@@ -19,7 +19,8 @@ export const icons = [
     "check",
     "directions-railway",
     "swap-horiz",
+    "real-estate-agent",
+    "sell",
 ]
-
 
 export { default as View } from './mono/View.svelte'

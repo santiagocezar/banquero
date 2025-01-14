@@ -7,9 +7,21 @@
         owned: OwnedProperty
         sameBlock: number
         onreturn: () => void
+        chargeRent: (price: number) => void
+        sell: (price: number) => void
+        buyHouses: (amount: number, price: number) => void
+        mortgage: (price: number) => void
     }
 
-    const { owned, onreturn: goBack, sameBlock }: Props = $props()
+    const {
+        owned,
+        onreturn: goBack,
+        sameBlock,
+        chargeRent,
+        sell,
+        buyHouses,
+        mortgage,
+    }: Props = $props()
 
     const prop = $derived(properties[owned.id])
 
@@ -19,10 +31,16 @@
     const houseDec = () => (houses = Math.max(0, houses - 1))
 
     const houseDiff = $derived(houses - owned.houses)
+    const rentPrice = $derived(rent(owned, sameBlock))
+
+    const onRentClick = () => chargeRent(rentPrice)
+    const onSellClick = () => sell(prop.price)
+    const onHouseConfirmClick = () => buyHouses(houseDiff, (prop as {housing: number}).housing)
+    const onMortageClick = () => mortgage(prop.price / 2)
 </script>
 
-<section style="--c: {prop.block}" use:contrast={prop.block}>
-    <header>
+<section class="pal-gen" style="--pal-gen-color: {prop.block}">
+    <header class="plastic-pal">
         <nav>
             <button onclick={goBack}>
                 <Icon use="ic-arrow-back" />
@@ -31,15 +49,17 @@
         </nav>
         <div class="value">
             <p>{prop.kind === "service" ? "Cuota" : "Alquiler"}</p>
-            <p class="big">${rent(owned, sameBlock)}</p>
+            <p class="big">${rentPrice}</p>
             {#if prop.kind === "service"}
                 <p>multiplicado el valor de los dados</p>
             {/if}
         </div>
-        <button class="action">
-            <Icon use="ic-payments" />
-            Cobrar alquiler
-        </button>
+        <div class="actions">
+            <button class="plastic" onclick={onRentClick}>
+                <Icon use="ic-payments" />
+                Cobrar alquiler
+            </button>
+        </div>
     </header>
     <main>
         {#if prop.kind == "lot"}
@@ -76,7 +96,7 @@
                                     (houseDiff < 0 ? 2 : 1)}
                             </p>
                         </div>
-                        <button>
+                        <button onclick={onHouseConfirmClick}>
                             <Icon use="ic-check" />
                         </button>
                     </div>
@@ -169,8 +189,14 @@
 
         <h3>Operaciones</h3>
         <div class="actions">
-            <button>Transferir</button>
-            <button>Hipotecar</button>
+            <button class="plastic-pal" onclick={onSellClick}>
+                <Icon use="ic-sell" />
+                Vender
+            </button>
+            <button class="plastic-pal" onclick={onMortageClick}
+                ><Icon use="ic-real-estate-agent" />
+                Hipotecar
+            </button>
         </div>
         <div class="legend">
             Valor de la hipoteca: ${prop.price / 2}
@@ -183,17 +209,13 @@
 
     section {
         & button {
-            background-color: var(--c);
-            color: var(--contrast);
+            background-color: var(--p50);
+            color: white;
         }
     }
     header {
-        background-color: var(--c);
-        color: var(--contrast);
-        & .action {
-            background-color: var(--contrast);
-            color: var(--c);
-        }
+        background-color: var(--p50);
+        color: white;
     }
 
     .confirm button {
@@ -284,15 +306,7 @@
     :global(.hotel) {
         color: var(--blue);
     }
-    .actions {
-        display: flex;
-        gap: 0.5rem;
 
-        button {
-            width: 0;
-            flex: 1;
-        }
-    }
     .legend {
         font-size: 0.85rem;
         text-align: center;

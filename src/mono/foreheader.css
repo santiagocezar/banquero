@@ -41,17 +41,26 @@ header {
         background-color: inherit;
         color: inherit;
     }
-    & .actions {
-        display: flex;
-        gap: 1rem;
-        padding: .5rem;
-
-        & > button {
-            width: 0;
-            flex: 1;
-        }
+    & .actions > button {
+        background-color: var(--p10);
+        color: var(--p90);
+        --light: white;
+        --dark: var(--p30);
+        --shadow: color-mix(in srgb, var(--p70), transparent 75%);
+        --border: var(--p70);
     }
 }
+.actions {
+    display: flex;
+    gap: 1rem;
+    padding: .5rem;
+
+    & > button {
+        width: 0;
+        flex: 1;
+    }
+}
+
 h3 {
     font-size: 1.25rem;
     font-weight: bold;

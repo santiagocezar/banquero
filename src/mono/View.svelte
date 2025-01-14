@@ -10,26 +10,22 @@
         BANK,
         properties,
         mono,
+        type Exchange,
     } from "."
     import Icon from "src/components/Icon.svelte"
 
-    // import MdHistory from '~icons/ic/round-history';
-    // import MdLeaderboard from '~icons/ic/round-leaderboard';
-    // import MdBusiness from '~icons/ic/round-business';
-
-    // import { Panel, Paneled } from 'components/panels';
-
-    // import { MPProperties } from './MPProperties';
-    // import { useAddPlayerPanel } from 'components/panels/AddPlayer';
-    // import { SendMoney } from './SendMoney';
-    // import { styled } from 'lib/theme';
-    // import { Leaderboard } from 'components/panels/Leaderboard';
-    // import { PlayerList } from './PlayerList';
-    // import { SelectionProvider } from './Selection';
-    // import { HEADER_HEIGHT } from 'components/Header';
+    /*
+    TODO:
+    - [ ] Recents menu
+    - [ ] Dynamic header text
+    - [ ] Add help tab
+    - [ ] Add history & standings (tablero) tab
+    - [ ] Mortgage and lift mortgage
+    - [ ] Mortgage taxes
+    */
 
     const { id, data } = useGame(mono, (data) => true)
-
+    /*
     data.players = [
         {
             name: "Santi",
@@ -51,33 +47,40 @@
                 mortgaged: false,
             })),
         },
-    ]
+    ]*/
 
-    let from: number | null = $state(0)
-    let to: number | null = $state(1)
-    let transferAmount: number = $state(0)
-    let gives: number[] = $state([])
-    let recieves: number[] = $state([])
-    let houses: number = $state(0)
+    type Mode =
+        | { type: "list" }
+        | { type: "adding" }
+        | { type: "player-info"; id: number }
+        | {
+              type: "exchange"
+              value: Exchange
+          }
 
-    // TODO: this right away when the player gets added
-    // function onPlayerAdded(id: number) {
-    // board.set(pid, fields => {
-    // fields.money = defaultMoney;
-    // });
-    // }
+    let mode: Mode = $state({ type: "list" })
 
     function onPlayerClick(id: number) {
         console.log(id)
-        if (id === from) {
-            from = null
-        } else if (id === to) {
-            to = null
-        } else if (from !== null) {
-            to = id
+        if (mode.type === "exchange") {
+            if (id === mode.value.pays) {
+                mode.value.pays = null
+            } else if (id === mode.value.charges) {
+                mode.value.charges = null
+            } else if (mode.value.pays !== null) {
+                mode.value.charges = id
+            } else {
+                mode.value.pays = id
+            }
+
+            // TODO: cancel when both are null maybe?
         } else {
-            from = id
+            mode = { type: "player-info", id }
         }
+    }
+
+    function onAddClick() {
+        mode = { type: "adding" }
     }
 
     function onPlayerDelete(id: number) {
@@ -103,14 +106,39 @@
             )
         )
     }
-    function changeSeller() {
-        to = null
+    function returnToList() {
+        mode = { type: "list" }
     }
-    function cancelExchange() {
-        from = to = null
+    function exchange(value: Exchange) {
+        mode = { type: "exchange", value }
     }
-    function exchange() {
-        // TODO
+    function confirmExchange(value: Exchange) {
+        const pays: Player | undefined = data.players[value.pays!]
+        const charges: Player | undefined = data.players[value.pays!]
+
+        if (pays) {
+            pays.money -= value.amount
+            // TODO: taxes
+        }
+        if (charges) pays.money += value.amount
+
+        const paysPropsById = new Map(pays.properties.map((p) => [p.id, p]))
+        const chargesPropsById = new Map(
+            charges.properties.map((p) => [p.id, p])
+        )
+
+        for (const p of value.buy) {
+            paysPropsById.set(p, chargesPropsById.get(p)!)
+            chargesPropsById.delete(p)
+        }
+        for (const p of value.sell) {
+            chargesPropsById.set(p, paysPropsById.get(p)!)
+            paysPropsById.delete(p)
+        }
+        pays.properties = [...paysPropsById.values()]
+        charges.properties = [...chargesPropsById.values()]
+
+        returnToList()
     }
     /*
     const transactionItems = useMemo(
@@ -128,59 +156,51 @@
             <MainView>
 -->
 <!-- <SendMoney /> -->
-<header>
-    <button onclick={() => history.back()} class="button back">
-        <Icon use="ic-arrow-back" />
-    </button>
-    <a href="/" class="logo">
-        <img src="/icon.svg" alt="Score" />
-        <span>trucomatic</span>
-    </a>
-    <button class="button" id="share">
-        <Icon use="ic-share" />
-    </button>
-</header>
-<main>
-    <PlayerList
-        bind:from
-        bind:to
-        players={data.players}
-        onclick={onPlayerClick}
-        ondelete={onPlayerDelete}
-    />
-    <ManagePlayer player={data.players[0]} />
-    <!--{#if from !== null && to !== null}
-        <Transfer
-            {from}
-            {to}
-            {gives}
-            {recieves}
-            {houses}
-            {changeSeller}
-            {cancelExchange}
+<div class="panels">
+    {#if mode.type == "player-info"}
+        <ManagePlayer
+            id={mode.id}
+            player={data.players[mode.id]}
             {exchange}
+            onreturn={returnToList}
+        />
+    {:else if mode.type == "exchange" && mode.value.pays !== null && mode.value.charges !== null}
+        <Transfer
+            cancelExchange={returnToList}
+            bind:exchange={mode.value}
+            {confirmExchange}
             players={data.players}
             bankProperties={[]}
         />
-    {:else}{/if}-->
-</main>
+    {:else}
+        <div class="list">
+            <header>
+                <button onclick={() => history.back()} class="button back">
+                    <Icon use="ic-arrow-back" />
+                </button>
+                <h1>Lista de jugadores</h1>
+                <button class="button" id="share">
+                    <Icon use="ic-share" />
+                </button>
+            </header>
+            <PlayerList
+                from={mode.type === "exchange" ? mode.value.pays : null}
+                to={mode.type === "exchange" ? mode.value.charges : null}
+                players={data.players}
+                onclick={onPlayerClick}
+                onclickadd={onAddClick}
+                ondelete={onPlayerDelete}
+            />
+        </div>
+    {/if}
+</div>
+
 <!--
             </MainView>
         )}
     >
         <Panel icon={(<MdHistory />)} name="Historial">
 -->
-<ul class="history">
-    {#each data.history as item (item.id)}
-        <li>
-            <div>
-                <span class="name">{item.action}</span>
-                <span class="pts">${item.money}</span>
-            </div>
-        </li>
-    {/each}
-    <p class="empty">Historial vacío.</p>
-</ul>
 
 <!--
         </Panel>
@@ -196,10 +216,9 @@
 -->
 
 <style>
-    main {
+    .panels {
         display: grid;
-        grid-template-columns: 2fr 1fr;
-        /*         grid-template-columns: 1fr; */
+        grid-template-columns: 1fr;
         height: 100%;
         gap: 0.5rem;
         overflow: hidden;

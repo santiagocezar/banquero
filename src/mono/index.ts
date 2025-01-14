@@ -86,5 +86,20 @@ export function rent(owns: OwnedProperty, sameBlock: number) {
             ? prop.rent[owns.houses]
             : prop.rent[0] * (sameBlock == prop.count ? 2 : 1)
         : prop.rent[sameBlock - 1]
+}
 
+export function transferTax(owns: OwnedProperty) {
+    const prop = properties[owns.id]
+
+    return owns.mortgaged ? prop.price / 20 : 0
+}
+
+export interface Exchange {
+    pays: number | null
+    charges: number | null
+    amount: number
+    mortgage: number[]
+    sell: number[]
+    buy: number[]
+    houses: number
 }

@@ -7,17 +7,12 @@
         from: number | null
         to: number | null
         players: Player[]
+        onclickadd: () => void
         onclick: (id: number) => void
         ondelete: (id: number) => void
     }
 
-    const {
-        from = $bindable(),
-        to = $bindable(),
-        players,
-        onclick,
-        ondelete,
-    }: Props = $props()
+    const { from, to, players, onclick, onclickadd, ondelete }: Props = $props()
 
     function delay(node: Element, delay: number): TransitionConfig {
         return {
@@ -61,11 +56,15 @@
 {/snippet}
 
 <div class="player-list">
-    <div class="bank-card" onclick={() => onclick(BANK)}>
-        <Icon use="ic-account-balance" />
-        <header>Banco</header>
+    <button
+        class="reset bank-card plastic-pal pal--1"
+        data-active={from === BANK || to === BANK}
+        onclick={() => onclick(BANK)}
+    >
         {@render status(from === BANK, to === BANK)}
-    </div>
+        <p class="name">Banco</p>
+        <Icon class="bank" use="ic-account-balance" />
+    </button>
     {#each players as player, i (player.name)}
         <div class="player-wrapper">
             <div class="properties">
@@ -77,17 +76,26 @@
                     <p>Sin propiedades</p>
                 {/if}
             </div>
-            <div
-                class="player-card pal-{player.color} plastic auto-pal"
+            <button
+                class="reset player-card pal-{player.color} plastic-pal"
                 data-active={from === i || to === i}
                 onclick={() => onclick(i)}
             >
                 {@render status(from === i, to === i)}
                 <p class="name">{player.name}</p>
-                <p class="money">$ {player.money}</p>
-            </div>
+                <p class="money">${player.money}</p>
+            </button>
         </div>
     {/each}
+    <div class="player-wrapper">
+        <div></div>
+        <button class="reset player-add plastic" onclick={onclickadd}>
+            <div class="status-icon" data-active={true}>
+                <Icon use="ic-add" />
+            </div>
+            <p class="name">Nuevo jugador</p>
+        </button>
+    </div>
 </div>
 
 <!--
@@ -109,8 +117,9 @@
         display: grid;
         padding: 1rem;
         grid-auto-flow: row;
+        grid-auto-rows: auto;
         grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
-        height: auto;
+        place-content: start;
         justify-content: start;
         gap: 0.5rem 1rem;
     }
@@ -161,49 +170,30 @@
             }
         }
     }
-
-    .player-card {
+    .player-card,
+    .player-add {
         display: flex;
         align-items: center;
         padding: 0.5rem;
+        user-select: none;
+        --height: 3.5rem;
+        text-align: left;
+    }
+    .player-card {
         background-color: var(--p50);
         color: var(--contrast);
-        user-select: none;
-        height: 3.5rem;
 
         z-index: 1;
 
         transition:
-            transform 0.4s,
-            color 0.2s,
-            filter 0.2s,
-            box-shadow 0.4s,
-            background-color 0.2s;
+            translate 0.4s,
+            box-shadow 0.4s;
 
-        & .name {
-            display: block;
-            width: 100%;
-            max-width: 100%;
-            padding: 0 0.5rem;
-            height: 2rem;
-            line-height: 2rem;
-            font-size: 1.5rem;
-            /*                 font-family: "Poppins"; */
-            font-weight: bold;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            translate: -2rem 0;
-            transition: translate 0.4s;
-        }
         & .money {
             justify-self: end;
             white-space: nowrap;
             font-size: 1.2rem;
-        }
-
-        &[data-active="true"] .name {
-            translate: 0;
+            font-variant: tabular-nums;
         }
 
         &[data-active="true"] {
@@ -211,7 +201,7 @@
             --elevation: 0.25rem;
             background-color: var(--p10);
             color: var(--p90);
-            transform: translateY(-0.25rem);
+            translate: 0 -0.25rem;
         }
     }
 
@@ -242,32 +232,46 @@
         }
     }
 
+    .name {
+        display: block;
+        width: 100%;
+        padding: 0 0.5rem;
+        height: 2rem;
+        line-height: 2rem;
+        font-size: 1.5rem;
+        font-weight: bold;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        translate: -2rem 0;
+        transition: translate 0.4s;
+    }
+    .player-add .name,
+    [data-active="true"] .name {
+        translate: 0;
+    }
+
     .bank-card {
-        display: grid;
-        grid-template-columns: min-content 1fr min-content;
+        display: flex;
         align-items: center;
+        padding: 0.5rem;
         grid-column: 1 / -1;
-        padding: 0.5rem 1rem;
-        border-radius: 1rem;
-        background-color: var(--p50);
-        color: var(--p90);
         user-select: none;
-        gap: 0.5rem;
+        text-align: left;
+        --height: 5rem;
+
+        background-image: linear-gradient(0deg, var(--p50), var(--p70));
+        --light: var(--p40);
+        --dark: var(--p70);
+        color: var(--p10);
+
         transition: transform 0.3s;
 
-        --p10: #efeffb;
-        --p30: #8e92bb;
-        --p40: #55598f;
-        --p50: #2f3150;
-        --p70: #080a15;
-        --p90: #efeffb;
-        --contrast: "white";
-
-        & header {
-            font-size: 1.5rem;
-            /*             font-family: Poppins; */
-            font-weight: bold;
-            white-space: nowrap;
+        & :global(.bank) {
+            width: 72px;
+            height: 72px;
+            translate: 0 3.125%;
+            opacity: 0.5;
         }
     }
 </style>

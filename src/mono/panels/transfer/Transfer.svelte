@@ -1,36 +1,31 @@
 <script lang="ts">
-    import { BANK, OwnedProperty, properties, type Player } from "$mono"
+    import {
+        BANK,
+        OwnedProperty,
+        properties,
+        type Exchange,
+        type Player,
+    } from "$mono"
     import SelectProperties from "./SelectProperties.svelte"
     import Icon from "src/components/Icon.svelte"
     import { SvelteSet } from "svelte/reactivity"
 
     interface Props {
-        from: number
-        to: number
         players: Player[]
-        gives: number[]
-        recieves: number[]
         bankProperties: number[]
         houses: number
-        changeSeller: () => void
         cancelExchange: () => void
-        exchange: (gives: number[], recieves: number[]) => void
+        confirmExchange: (value: Exchange) => void
+        exchange: Exchange
     }
 
     const {
-        from: fromID = $bindable(),
-        to: toID = $bindable(),
         players,
-        gives: givesInitial,
-        recieves: recievesInitial,
-        houses,
         bankProperties,
-        changeSeller,
         cancelExchange,
-        exchange,
+        confirmExchange,
+        exchange = $bindable(),
     }: Props = $props()
-
-    let value = $state(0)
 
     const bank: Player = $derived({
         name: "El banco",
@@ -42,28 +37,44 @@
             mortgaged: false,
         })),
     })
-    const from = $derived(players[fromID] ?? bank)
-    const to = $derived(players[toID] ?? bank)
+    const pays = $derived(
+        exchange.pays !== null ? (players[exchange.pays] ?? bank) : null
+    )
+    const charges = $derived(
+        exchange.charges !== null ? (players[exchange.charges] ?? bank) : null
+    )
 
-    let gives = $state(new SvelteSet(givesInitial))
-    let recieves = $state(new SvelteSet(recievesInitial))
+    let sell = $state(new SvelteSet(exchange.sell))
+    let buy = $state(new SvelteSet(exchange.buy))
 
     function askConfirm(ev: Event) {
         // TODO: actually ask
-        exchange(Array.from(gives), Array.from(recieves))
+        confirmExchange({
+            ...exchange,
+            sell: Array.from(sell),
+            buy: Array.from(buy),
+        })
         ev.preventDefault()
+    }
+
+    function switchCharging() {
+        exchange.charges = null
     }
 </script>
 
-<form action="#" onsubmit={askConfirm} class="pal-{from.color}">
-    <header class="plastic auto-pal">
+<form action="#" onsubmit={askConfirm} class="pal-{pays?.color}">
+    <header class="plastic-pal">
         <nav>
             <button onclick={cancelExchange}>
                 <Icon use="ic-arrow-back" />
             </button>
             <p>
-                <strong>{from.name}</strong>
-                <small>le transfiere</small>
+                {#if pays}
+                    <strong>{pays.name}</strong>
+                    <small>le paga</small>
+                {:else}
+                    <strong>—</strong>
+                {/if}
             </p>
         </nav>
         <div class="value">
@@ -74,52 +85,55 @@
                     type="number"
                     class="big"
                     inputMode="numeric"
-                    bind:value
+                    bind:value={exchange.amount}
                     autofocus={true}
                     onfocus={(e) => (e.target as HTMLInputElement).select()}
                 />
             </label>
         </div>
         <button
-            class="to pal-{to.color} plastic auto-pal"
-            onclick={changeSeller}
+            class="to pal-{charges?.color} plastic-pal"
+            onclick={switchCharging}
         >
-            <p>{toID === BANK ? "Al banco" : "a " + to.name}</p>
+            {#if charges}
+                <p>
+                    {exchange.charges === BANK
+                        ? "Al banco"
+                        : "a " + charges.name}
+                </p>
+            {:else}
+                <p>—</p>
+            {/if}
             <Icon aria-label="Cambiar" use="ic-swap-horiz" />
         </button>
     </header>
     <main>
-        <h3>
-            <span class="pal-{from.color}">{from.name}</span>
-            transfiere
-        </h3>
-        <SelectProperties player={from} bind:selected={gives} />
-        <h3>
-            <span class="pal-{to.color}">{to.name}</span>
-            transfiere
-        </h3>
-        <SelectProperties player={to} bind:selected={recieves} />
-        <button type="submit">
-            <Icon use="ic-payments" />
-            Aceptar
-        </button>
+        {#if charges}
+            <h3>
+                <span class="pal-{charges?.color}">{charges.name}</span>
+                entrega
+            </h3>
+            <SelectProperties player={charges} bind:selected={buy} />
+        {/if}
+        {#if pays}
+            <h3>
+                <span class="pal-{pays?.color}">{pays.name}</span>
+                entrega
+            </h3>
+            <SelectProperties player={pays} bind:selected={sell} />
+        {/if}
+        {#if pays && charges}
+            <button type="submit">
+                <Icon use="ic-payments" />
+                Aceptar
+            </button>
+        {/if}
     </main>
 </form>
 
 <style>
     @import "../../foreheader.css";
 
-    .pal--1 {
-        /* TODO: dark mode */
-
-        --p10: #efeffb;
-        --p30: #8e92bb;
-        --p40: #55598f;
-        --p50: #2f3150;
-        --p70: #080a15;
-        --p90: #efeffb;
-        --contrast: "white";
-    }
     header {
         --shadow-parent: var(--shadow);
 

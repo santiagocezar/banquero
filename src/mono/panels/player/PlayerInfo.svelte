@@ -7,6 +7,9 @@
     interface Props {
         player: Player
         onpropertyselected: (id: number) => void
+        onreturn: () => void
+        pay: () => void
+        charge: () => void
     }
 
     const {
@@ -21,13 +24,13 @@
         { id: "history", title: "Movimientos" },
     ]
 
-    const { player, onpropertyselected }: Props = $props()
+    const { player, onpropertyselected, onreturn, pay, charge }: Props = $props()
 </script>
 
 <section class="pal-{player.color}">
-    <header class="plastic auto-pal">
+    <header class="plastic-pal">
         <nav>
-            <button>
+            <button onclick={onreturn}>
                 <Icon use="ic-arrow-back" />
             </button>
             {player.name}
@@ -37,11 +40,11 @@
             <p class="big">${player.money}</p>
         </div>
         <div class="actions">
-            <button class="plastic">
+            <button onclick={() => pay()} class="plastic">
                 <Icon use="ic-upload" />
                 Pagar</button
             >
-            <button class="plastic">
+            <button onclick={() => charge()} class="plastic">
                 <Icon use="ic-download" />
                 Cobrar</button
             >
@@ -86,14 +89,6 @@
 
         & nav {
             font-size: 1.5rem;
-        }
-        & .actions > button {
-            background-color: var(--p10);
-            color: var(--p90);
-            --light: white;
-            --dark: var(--p30);
-            --shadow: color-mix(in srgb, var(--p70), transparent 75%);
-            --border: var(--p70);
         }
     }
     .tablist {

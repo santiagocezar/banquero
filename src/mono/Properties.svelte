@@ -35,11 +35,8 @@
         <span>Viviendas</span>
         <span>Alquiler</span>
     </div>
-    {#each owns as p}
-        <button
-            class="reset property-item"
-            onclick={() => selectProperty(p.id)}
-        >
+    {#each owns as p, i}
+        <button class="reset property-item" onclick={() => selectProperty(i)}>
             {@render propertyItem(
                 properties[p.id].block,
                 properties[p.id].name,
