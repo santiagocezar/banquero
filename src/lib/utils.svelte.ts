@@ -47,8 +47,9 @@ function component(C: number) {
         : ((c + 0.055) / 1.055) ** 2.4
 }
 
+let reference: HTMLElement
 if (typeof document !== "undefined") {
-    const reference = document.createElement('div')
+    reference = document.createElement('div')
     reference.style.display = 'none'
     document.body.appendChild(reference)
 }

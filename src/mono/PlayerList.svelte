@@ -67,16 +67,7 @@
         {@render status(from === BANK, to === BANK)}
     </div>
     {#each players as player, i (player.name)}
-        <div
-            class="player-card pal-{player.color} plastic auto-pal"
-            data-active={from === i || to === i}
-            onclick={() => onclick(i)}
-        >
-            <header>
-                {@render status(from === i, to === i)}
-                <p>{player.name}</p>
-            </header>
-            <p class="money">$ {player.money}</p>
+        <div class="player-wrapper">
             <div class="properties">
                 {#if player.properties.length}
                     {#each player.properties as property}
@@ -86,18 +77,14 @@
                     <p>Sin propiedades</p>
                 {/if}
             </div>
-            <div class="actions">
-                <div
-                    class="status-icon"
-                    data-active={from === i || to === i}
-                    onclick={(ev) => {
-                        onDelete(i)
-                        ev.stopPropagation()
-                    }}
-                    aria-label="Borrar"
-                >
-                    <Icon use="ic-delete" />
-                </div>
+            <div
+                class="player-card pal-{player.color} plastic auto-pal"
+                data-active={from === i || to === i}
+                onclick={() => onclick(i)}
+            >
+                {@render status(from === i, to === i)}
+                <p class="name">{player.name}</p>
+                <p class="money">$ {player.money}</p>
             </div>
         </div>
     {/each}
@@ -122,34 +109,70 @@
         display: grid;
         padding: 1rem;
         grid-auto-flow: row;
-        grid-template-columns: 1fr;
-        gap: 0.5rem;
-        /*'@md': {
-        gridTemplateColumns: '1fr 1fr',
-        gap: '1rem',
-    },
-    '@lg': {
-        gridTemplateColumns: '1fr 1fr 1fr',
-    },*/
+        grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+        height: auto;
+        justify-content: start;
+        gap: 0.5rem 1rem;
+    }
+
+    .player-wrapper {
+        display: grid;
+        grid-template-rows: 1rem 1fr;
+    }
+
+    .properties {
+        padding-left: 0.5rem;
+        display: flex;
+        height: 3rem;
+        align-items: center;
+
+        & > p {
+            color: var(---p70);
+            font-size: 0.75em;
+            font-style: italic;
+        }
+        & > div {
+            --height: 3rem;
+            --width: calc(var(--height) * 0.707);
+            --offset: 1rem;
+            --color: red;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            width: var(--width);
+            height: var(--height);
+            padding: 1px;
+            background-color: white;
+            box-shadow: 0 0 0 1px var(--p70);
+            margin-right: calc(var(--offset) - var(--width));
+
+            translate: 0 -0.125rem;
+
+            &:nth-child(3n) {
+                translate: 0 0.125rem;
+            }
+            &:nth-child(3n + 1) {
+                translate: 0 0;
+            }
+            &::before {
+                content: "";
+                background-color: var(--color);
+                height: 0.5rem;
+            }
+        }
     }
 
     .player-card {
-        overflow: hidden;
-        display: grid;
-        grid-template:
-            "name money" min-content
-            "properties status" 2rem
-            / 1fr min-content;
-        align-items: start;
+        display: flex;
+        align-items: center;
         padding: 0.5rem;
-        border-radius: 1rem;
         background-color: var(--p50);
-/*         background-image: linear-gradient(30deg, var(--p40), transparent); */
         color: var(--contrast);
         user-select: none;
-        flex-shrink: 0;
-        gap: 0.5rem;
-/*         box-shadow: 0 0.15rem 0.5rem var(--p30); */
+        height: 3.5rem;
+
+        z-index: 1;
+
         transition:
             transform 0.4s,
             color 0.2s,
@@ -157,86 +180,37 @@
             box-shadow 0.4s,
             background-color 0.2s;
 
-        & header {
-            display: flex;
-            align-items: center;
+        & .name {
+            display: block;
+            width: 100%;
             max-width: 100%;
+            padding: 0 0.5rem;
+            height: 2rem;
+            line-height: 2rem;
+            font-size: 1.5rem;
+            /*                 font-family: "Poppins"; */
+            font-weight: bold;
+            white-space: nowrap;
             overflow: hidden;
-
-            & p {
-                display: block;
-                width: 100%;
-                max-width: 100%;
-                padding: 0 0.5rem;
-                height: 2rem;
-                line-height: 2rem;
-                font-size: 1.5rem;
-                /*                 font-family: "Poppins"; */
-                font-weight: bold;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                translate: -2rem 0;
-                transition: translate 0.4s;
-            }
+            text-overflow: ellipsis;
+            translate: -2rem 0;
+            transition: translate 0.4s;
         }
-
-        &[data-active="true"] header p {
-            translate: 0;
-        }
-
         & .money {
             justify-self: end;
             white-space: nowrap;
             font-size: 1.2rem;
         }
-        & .properties {
-            display: flex;
-            align-items: center;
-            align-content: flex-start;
-            flex-wrap: wrap;
 
-            & > p {
-                color: var(---p70);
-                font-size: 0.75em;
-                font-style: italic;
-            }
-            & > div {
-                --color: red;
-                display: flex;
-                flex-direction: column;
-                align-items: stretch;
-                width: 1rem;
-                height: 1.5rem;
-                padding: 0.125rem;
-                background-color: var(--p10);
-                box-shadow: 0 0 0 1px var(--p70);
-                margin-top: -0.125rem;
-                margin-right: -0.5rem;
-                margin-bottom: -1.3rem;
-
-                &:nth-child(3n) {
-                    margin-top: 0.125rem;
-                }
-                &:nth-child(3n + 1) {
-                    margin-top: 0;
-                }
-                &::before {
-                    content: "";
-                    background-color: var(--color);
-                    height: 0.25rem;
-                }
-            }
-        }
-        & .actions {
-            justify-self: end;
+        &[data-active="true"] .name {
+            translate: 0;
         }
 
         &[data-active="true"] {
-/*             box-shadow: 0 0.4rem 1rem var(--p40); */
-            color: var(--contrast);
+            /*             box-shadow: 0 0.4rem 1rem var(--p40); */
             --elevation: 0.25rem;
-            background-color: var(--p50);
+            background-color: var(--p10);
+            color: var(--p90);
             transform: translateY(-0.25rem);
         }
     }
