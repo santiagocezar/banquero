@@ -1,5 +1,6 @@
 <script lang="ts">
     import * as mono from "$mono"
+    import handURL from "$lib/assets/hand.svg?url"
     import Icon from "../components/Icon.svelte"
     import type { TransitionConfig } from "svelte/transition"
 
@@ -13,7 +14,15 @@
         ondelete: (id: number) => void
     }
 
-    const { players, ownerships, from, to, onclick, onclickadd, ondelete }: Props = $props()
+    const {
+        players,
+        ownerships,
+        from,
+        to,
+        onclick,
+        onclickadd,
+        ondelete,
+    }: Props = $props()
 
     function delay(node: Element, delay: number): TransitionConfig {
         return {
@@ -60,7 +69,10 @@
     <div class="properties">
         {#if owned.length}
             {#each owned as property}
-                <div class="prop" style="--color: {mono.properties[property.id].color}">
+                <div
+                    class="prop"
+                    style="--color: {mono.properties[property.id].color}"
+                >
                     <div></div>
                 </div>
             {/each}
@@ -69,7 +81,6 @@
         {/if}
     </div>
 {/snippet}
-
 
 <div class="player-list">
     <button
@@ -104,6 +115,12 @@
             <p class="name">Nuevo jugador</p>
         </button>
     </div>
+    {#if players.length === 0}
+        <div class="help">
+            <div class="hand" style={`mask-image: url("${handURL}");`}></div>
+            <p>Empiece agregando un jugador y intente hacer transferencias</p>
+        </div>
+    {/if}
 </div>
 
 <!--
@@ -146,7 +163,7 @@
         max-width: 100%;
         padding-left: 0.5rem;
         padding-right: calc(0.5rem + var(--width));
-            
+
         & > p {
             color: var(---p70);
             font-size: 0.75em;
@@ -155,7 +172,7 @@
         & .prop {
             flex-grow: 1;
             flex-shrink: 1;
-            min-width: .47rem;
+            min-width: 0.47rem;
             max-width: calc(var(--width) / 2);
             position: relative;
 
@@ -167,7 +184,7 @@
             &:nth-child(3n + 1) {
                 translate: 0 0;
             }
-            
+
             & > div {
                 position: absolute;
                 width: var(--width);
@@ -175,7 +192,7 @@
                 padding: 1px;
                 background-color: white;
                 box-shadow: 0 0 0 1px var(--p70);
-                
+
                 &::before {
                     content: "";
                     display: block;
@@ -288,6 +305,32 @@
             height: 72px;
             translate: 0 3.125%;
             opacity: 0.5;
+        }
+    }
+    .help {
+        position: relative;
+        margin-top: 2rem;
+        margin-left: 2rem;
+        grid-column: 1 / -1;
+        width: fit-content;
+
+        & .hand {
+            --w: 6rem;
+            width: var(--w);
+            height: calc(105 / 66 * var(--w));
+            mask-size: contain;
+            background-color: currentColor;
+        }
+        p {
+            position: absolute;
+            top: 80%;
+            left: 50%;
+            border-radius: 0.5rem;
+            width: 20rem;
+            max-width: 50vw;
+            font-size: .8rem;
+            padding: .25rem .5rem;
+            background-color: var(--bg0);
         }
     }
 </style>

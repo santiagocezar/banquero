@@ -55,12 +55,6 @@
         0 var(--elevation) calc(var(--elevation) * 4) var(--shadow, #0004);
         border: 1px solid var(--border, #000);
     }
-    .plastic-pal {
-        --light: var(--p30);
-        --dark: var(--p70);
-        --border: var(--p90);
-        --shadow: color-mix(in srgb, var(--p50), transparent 60%);
-    }
 
     button:not(:is(.reset)) {
         display: flex;
@@ -74,8 +68,17 @@
         height: 3rem;
     }
 
+    .plastic-pal
+        --light: var(--p30);
+        --dark: var(--p70);
+        --border: var(--p90);
+        --shadow: color-mix(in srgb, var(--p50), transparent 60%);
+    }
+
     button.plastic-pal,
     button.plastic {
+        background-color: var(--p50);
+        color: var(--contrast);
         height: var(--height, 3rem);
         transition: height .2s, box-shadow .1s, margin-top .2s;
 

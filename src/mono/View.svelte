@@ -1,11 +1,14 @@
 <script lang="ts">
     import { useGame } from "../lib/bxx.svelte"
+    import * as mono from "."
+    import { sum } from "$lib/utils.svelte"
+
     import PlayerList from "./PlayerList.svelte"
     import Transfer from "./panels/transfer/Transfer.svelte"
     import ManagePlayer from "./panels/player/ManagePlayer.svelte"
-    import * as mono from "."
+    import AddPlayer from "./panels/add/AddPlayer.svelte"
+
     import Icon from "src/components/Icon.svelte"
-    import { sum } from "$lib/utils.svelte"
 
     /*
     TODO:
@@ -19,27 +22,7 @@
     */
 
     const { data } = useGame(mono.game, () => true)
-        
-    data.players = [
-        {
-            id: 0,
-            name: "Santi",
-            money: 1500,
-            color: 7,
-        },
-        {
-            id: 1,
-            name: "Flor",
-            money: 1500,
-            color: 3,
-        },
-    ];
-    
-    {[0, 4, 7, 1].forEach(id => { data.owners[id] = { id, houses: 1, owner: 0, mortgaged: false } })}
-    {[2, 3, 6].forEach(id => data.owners[id] = { id, houses: 1, owner: 1, mortgaged: false })}
 
-    console.log($state.snapshot(mono.filterOwner(data.owners, 0)))
-    
     type Mode =
         | { type: "list" }
         | { type: "adding" }
@@ -51,8 +34,10 @@
 
     let mode: Mode = $state({ type: "list" })
 
+    let maxID = $state(Math.max(0, ...data.players.map((p) => p.id)))
+
     const playerIndex = $derived(mono.indexPlayers(data.players))
-    
+
     function onPlayerClick(id: number) {
         console.log(id)
         if (mode.type === "exchange") {
@@ -91,10 +76,13 @@
         return (
             player.money +
             mono.filterOwner(data.owners, player.id).reduce(
-                sum((curr) => ((prop = mono.properties[curr.id]) =>
-                    (curr.mortgaged ? 0 : prop.price) +
-                    (prop.kind === "lot" ? curr.houses * prop.housing : 0)
-                )()),
+                sum((curr) =>
+                    ((prop = mono.properties[curr.id]) =>
+                        (curr.mortgaged ? 0 : prop.price) +
+                        (prop.kind === "lot"
+                            ? curr.houses * prop.housing
+                            : 0))()
+                ),
                 0
             )
         )
@@ -114,7 +102,7 @@
                     id,
                     houses: 0,
                     mortgaged: false,
-                    owner: b.id
+                    owner: b.id,
                 }
                 data.owners[id].owner = b.id
             }
@@ -126,7 +114,7 @@
 
         changeOwnership(charges, pays, value.buy)
         changeOwnership(pays, charges, value.sell)
-        
+
         if (pays) {
             pays.money -= value.amount
             // TODO: taxes
@@ -135,6 +123,15 @@
             charges.money += value.amount
         }
 
+        returnToList()
+    }
+    function addPlayer(name: string, color: number) {
+        data.players.push({
+            id: ++maxID,
+            name,
+            color,
+            money: data.defaultMoney,
+        })
         returnToList()
     }
     /*
@@ -154,43 +151,54 @@
 -->
 <!-- <SendMoney /> -->
 <div class="panels">
-    {#if mode.type == "player-info"}
-        <ManagePlayer
-            player={playerIndex.get(mode.id) ?? mono.BANK}
+    <div class="list">
+        <header>
+            <button onclick={() => history.back()} class="button back">
+                <Icon use="ic-arrow-back" />
+            </button>
+            <h1>Lista de jugadores</h1>
+            <button class="button" id="share">
+                <Icon use="ic-share" />
+            </button>
+        </header>
+        <PlayerList
+            players={data.players}
             ownerships={data.owners}
-            {exchange}
-            onreturn={returnToList}
+            from={mode.type === "exchange" ? mode.value.pays : null}
+            to={mode.type === "exchange" ? mode.value.charges : null}
+            onclick={onPlayerClick}
+            onclickadd={onAddClick}
+            ondelete={onPlayerDelete}
         />
-    {:else if mode.type == "exchange" && mode.value.pays !== null && mode.value.charges !== null}
-        <Transfer
-            players={playerIndex}
-            ownerships={data.owners}
-            cancelExchange={returnToList}
-            bind:exchange={mode.value}
-            {confirmExchange}
-        />
-    {:else}
-        <div class="list">
-            <header>
-                <button onclick={() => history.back()} class="button back">
-                    <Icon use="ic-arrow-back" />
-                </button>
-                <h1>Lista de jugadores</h1>
-                <button class="button" id="share">
-                    <Icon use="ic-share" />
-                </button>
-            </header>
-            <PlayerList
-                players={data.players}
+    </div>
+    <div
+        class="sidebar"
+        data-active={!(
+            mode.type === "list" ||
+            (mode.type === "exchange" &&
+                (mode.value.pays === null ||
+                mode.value.charges === null))
+        )}
+    >
+        {#if mode.type == "player-info"}
+            <ManagePlayer
+                player={playerIndex.get(mode.id) ?? mono.BANK}
                 ownerships={data.owners}
-                from={mode.type === "exchange" ? mode.value.pays : null}
-                to={mode.type === "exchange" ? mode.value.charges : null}
-                onclick={onPlayerClick}
-                onclickadd={onAddClick}
-                ondelete={onPlayerDelete}
+                {exchange}
+                onreturn={returnToList}
             />
-        </div>
-    {/if}
+        {:else if mode.type == "exchange"}
+            <Transfer
+                players={playerIndex}
+                ownerships={data.owners}
+                cancelExchange={returnToList}
+                bind:exchange={mode.value}
+                {confirmExchange}
+            />
+        {:else if mode.type == "adding"}
+            <AddPlayer onadd={addPlayer} />
+        {/if}
+    </div>
 </div>
 
 <!--
@@ -216,11 +224,39 @@
 <style>
     .panels {
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template: "sidebar" 1fr / 1fr;
         height: 100%;
         gap: 0.5rem;
         overflow: hidden;
         user-select: none;
+    }
+    .sidebar {
+        display: none;
+        grid-area: sidebar;
+        background-color: var(--bg2);
+        z-index: 10;
+        &[data-active="true"] {
+            display: block;
+        }
+    }
+    .list {
+        grid-area: sidebar;
+    }
+    @media screen and (min-width: 60rem) {
+        .panels {
+            grid-template: "list sidebar" 1fr / 1fr 30rem;
+        }
+        .list {
+            grid-area: list;
+        }
+        .sidebar {
+            border-radius: 0.5rem;
+            border: 1px solid var(--bg0);
+            box-shadow: 0 1px 4px var(--bg0);
+            margin: 1rem;
+            overflow: hidden;
+            display: block;
+        }
     }
     header {
         display: flex;

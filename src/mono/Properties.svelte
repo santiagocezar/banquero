@@ -19,7 +19,6 @@
 {#snippet propertyItem(
     color: string,
     name: string,
-    houses: number,
     value: number
 )}
     <div class="name">
@@ -28,23 +27,20 @@
             {name}
         </span>
     </div>
-    <div class="houses">{houses}</div>
     <div class="rent">${value}</div>
 {/snippet}
 
 <div class="properties">
     <div class="labels">
         <span>Nombre</span>
-        <span>Viviendas</span>
         <span>Alquiler</span>
     </div>
-    {#each mono.filterOwner(ownerships, owner) as p}
-        <button class="reset property-item" onclick={() => selectProperty(p.id)}>
+    {#each mono.filterOwnerIDs(ownerships, owner) as id}
+        <button class="reset property-item" onclick={() => selectProperty(id)}>
             {@render propertyItem(
-                mono.properties[p.id].color,
-                mono.properties[p.id].name,
-                p.houses,
-                mono.rent(ownerships, p.id)
+                mono.properties[id].color,
+                mono.properties[id].name,
+                mono.rent(ownerships, id)
             )}
         </button>
     {/each}

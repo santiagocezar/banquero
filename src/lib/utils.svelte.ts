@@ -1,6 +1,6 @@
 export function range(size: number, startAt = 0) {
     if (size <= 0) return []
-        return [...Array(Math.floor(size)).keys()].map((i) => i + startAt)
+    return [...Array(Math.floor(size)).keys()].map((i) => i + startAt)
 }
 
 export function delayEffect(fn: () => () => void, delayMs: number) {
@@ -85,4 +85,3 @@ export function sum<T>(fn: (current: T, i: number) => number) {
 export function count<T>(fn: (current: T, i: number) => boolean) {
     return sum<T>((current, i) => +fn(current, i))
 }
-

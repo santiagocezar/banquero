@@ -94,7 +94,7 @@ export function rent(owners: Ownerships, id: number) {
     const own = owners[id]
     const prop = properties[id]
     let sameBlock = prop.group.reduce(count(id => !!own && owners[id]?.owner === own.owner), 0)
-    
+
     return !own ? prop.rent[0] :
         prop.kind === "lot" ? own.houses > 0 ? prop.rent[own.houses]
             : prop.rent[0] * (sameBlock == prop.group.length ? 2 : 1)
@@ -113,6 +113,17 @@ export function indexPlayers(players: MonopolyGame['players']) {
 
 export function filterOwner(owners: Ownerships, id: number): Ownership[] {
     return owners.filter((o): o is NonNullable<typeof o> => o !== null && o.owner === id)
+}
+export function filterOwnerIDs(owners: Ownerships, playerID: number): number[] {
+    return owners.flatMap((o, id) => (
+        o === null
+            ? playerID == BANK.id
+                ? [id]
+                : []
+            : o.owner === playerID
+                ? [id]
+                : []
+    ))
 }
 
 export const BANK: Player = {

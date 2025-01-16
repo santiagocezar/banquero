@@ -1,11 +1,22 @@
 <script lang="ts">
     import { range } from "$lib/utils.svelte"
 
+    interface Props {
+        onadd: (name: string, color: number) => void
+    }
+
+    const { onadd: add }: Props = $props()
+
     let name = $state("")
     let color = $state(0)
+
+    function onSubmit(ev: Event) {
+        add(name, color)
+        ev.preventDefault()
+    }
 </script>
 
-<div class="add-team pal-{color}">
+<form onsubmit={onSubmit} class="add-team pal-{color}">
     <label>
         <p>Nombre</p>
         <input placeholder="Nombre" bind:value={name} type="text" />
@@ -15,7 +26,8 @@
             <input type="radio" value={i} class="pal-{i}" bind:group={color} />
         {/each}
     </div>
-</div>
+    <button class="plastic-pal"> Agregar </button>
+</form>
 
 <style lang="ts">
     .add-team {

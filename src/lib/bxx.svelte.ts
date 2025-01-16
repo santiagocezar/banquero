@@ -24,6 +24,8 @@ export function dataToUrlSafe(data: string): string {
 }
 
 export function loadSave<T>(game: Game<T>, id: string): T | undefined {
+    if (typeof localStorage === "undefined") return undefined
+
     const serialized = localStorage.getItem(id)
     if (serialized) {
         const data = JSON.parse(serialized)
@@ -55,22 +57,25 @@ export function useGame<T>(
     game: Game<T>,
     autosave: (data: T) => boolean
 ): { id: string; data: T } {
-    const url = new URL(location.href)
-    let id = url.hash.substring(1) || url.searchParams.get("id")
-    let data: T
-    if (!id || (data = loadSave(game, id)!) === undefined) {
-        let encoded = url.searchParams.get("data")
-        id = generateID(game)
+    let id: string | null = generateID(game)
+    let encoded: string | null = null
+    if (typeof location !== "undefined") {
+        const url = new URL(location.href)
+        id = url.hash.substring(1) || url.searchParams.get("id") || id
+        encoded = url.searchParams.get("data")
 
-        data = encoded === null ? game.initial() : importSave(game, encoded)
+        url.searchParams.delete("data")
+        url.searchParams.delete("id")
+        url.hash = "#" + id
+
+        history.replaceState(null, "", url)
     }
 
-    url.searchParams.delete("data")
-    url.searchParams.delete("id")
-    url.hash = "#" + id
-
-    history.replaceState(null, "", url)
-
+    let data = loadSave(game, id) ?? (
+        encoded === null
+            ? game.initial()
+            : importSave(game, encoded)
+    )
     addToRecents(game.identifier, id)
 
     const mutableData = $state(data)
@@ -134,7 +139,8 @@ export function deleteRecent(id: string): Recent[] {
 }
 
 function addToRecents(game: string, id: string) {
-    let recents = getRecents()!
+    let recents = getRecents()
+    if (!recents) return
 
     const recentIndex = recents.findIndex((v) => v.id == id)
 

@@ -23,27 +23,26 @@
         e.preventDefault()
         // selected.push(id)
     }
-    const owned = $derived(mono.filterOwner(ownerships, player.id))
+    const owned = $derived(mono.filterOwnerIDs(ownerships, player.id))
     const filtered = $derived(
         owned.reduce(
-            (arr, p) => (arr[+selected.has(p.id)].push(p), arr),
-            [[], []] as [mono.Ownership[], mono.Ownership[]]
+            (arr, id) => (arr[+selected.has(id)].push(id), arr),
+            [[], []] as [number[], number[]]
         )
     )
 </script>
 
-{#snippet checkItem(p: mono.Ownership, selected: boolean)}
+{#snippet checkItem(id: number, selected: boolean)}
     <button
         out:slide
         in:slide
-        onclick={selected ? deselect(p.id) : select(p.id)}
+        onclick={selected ? deselect(id) : select(id)}
         class={["reset", "property-item", { selected }]}
     >
         {@render propertyItem(
-            mono.properties[p.id].color,
-            mono.properties[p.id].name,
-            p.houses,
-            mono.properties[p.id].price
+            mono.properties[id].color,
+            mono.properties[id].name,
+            mono.properties[id].price
         )}
         <div class="checkbox">
             <Icon use="ic-check" />
@@ -54,16 +53,15 @@
 <div class="properties pal-{player.color}">
     <div class="labels">
         <span>Nombre</span>
-        <span>Viviendas</span>
         <span>Costo</span>
         <span>Check</span>
     </div>
     {#if owned.length}
-        {#each filtered[1] as p (p.id)}
-            {@render checkItem(p, true)}
+        {#each filtered[1] as id}
+            {@render checkItem(id, true)}
         {/each}
-        {#each filtered[0] as p (p.id)}
-            {@render checkItem(p, false)}
+        {#each filtered[0] as id}
+            {@render checkItem(id, false)}
         {/each}
     {:else}
         <p class="empty">No tiene propiedades</p>

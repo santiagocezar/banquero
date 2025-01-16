@@ -4,23 +4,24 @@ export const showHeader = false;
 export const iconPack = "material-symbols"
 export const iconPrefix = "ic"
 export const icons = [
-    "arrow-back",
-    "chevron-right",
-    "share",
-    "remove",
-    "add",
-    "delete",
-    "upload",
-    "download",
     "account-balance",
-    "payments",
-    "house",
-    "home-work",
+    "add",
+    "arrow-back",
     "check",
+    "chevron-right",
+    "delete",
     "directions-railway",
-    "swap-horiz",
+    "download",
+    "home",
+    "home-work",
+    "house",
+    "payments",
+    "remove",
     "real-estate-agent",
     "sell",
+    "share",
+    "swap-horiz",
+    "upload",
 ]
 
 export { default as View } from './mono/View.svelte'

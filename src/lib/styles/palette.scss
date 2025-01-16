@@ -29,7 +29,7 @@
     --p70: #{color.scale($p50, $lightness: -25%, $space: oklch)};
     --p90: #{color.scale($p50, $lightness: -60%, $space: oklch)};
 
-    --contrast: #{contrasting($p50)};
+    --contrast: white; // #{contrasting($p50)};
 
     @media (prefers-color-scheme: dark) {
         $p50: oklch(50% $chrdark($hue + 45deg));
@@ -41,7 +41,7 @@
         --p70: #{color.scale($p50, $lightness: -35%, $space: oklch)};
         --p90: #{color.scale($p50, $lightness: -70%, $space: oklch)};
         
-        --contrast: #{contrasting($p50)};
+        --contrast: white; // #{contrasting($p50)};
     }
 }
 .pal-0 { @include palette(0deg); }

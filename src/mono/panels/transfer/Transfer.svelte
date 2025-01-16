@@ -19,19 +19,32 @@
         confirmExchange,
         exchange = $bindable(),
     }: Props = $props()
-    
+
     const pays = $derived(
-        exchange.pays !== null ? (players.get(exchange.pays) ?? mono.BANK) : null
+        exchange.pays !== null
+            ? (players.get(exchange.pays) ?? mono.BANK)
+            : null
     )
     const charges = $derived(
-        exchange.charges !== null ? (players.get(exchange.charges) ?? mono.BANK) : null
+        exchange.charges !== null
+            ? (players.get(exchange.charges) ?? mono.BANK)
+            : null
     )
 
     let sell = $state(new SvelteSet(exchange.sell))
     let buy = $state(new SvelteSet(exchange.buy))
 
-    $inspect({sell, buy})
-    
+    $effect(() => {
+        let amount = 0
+        for (const p of buy.values()) {
+            amount += mono.properties[p].price
+        }
+        for (const p of sell.values()) {
+            amount -= mono.properties[p].price
+        }
+        exchange.amount = Math.max(amount, 0)
+    })
+
     function askConfirm(ev: Event) {
         // TODO: actually ask
         confirmExchange({
@@ -94,7 +107,11 @@
                 <Icon aria-label="Cambiar" use="ic-swap-horiz" />
             </button>
             <div class="actions">
-                <button disabled={!pays || !charges} type="submit" class="plastic-pal">
+                <button
+                    disabled={!pays || !charges}
+                    type="submit"
+                    class="plastic-pal"
+                >
                     <Icon use="ic-payments" />
                     Aceptar
                 </button>
@@ -107,7 +124,11 @@
                 <span class="pal-{charges?.color}">{charges.name}</span>
                 entrega
             </h3>
-            <SelectProperties player={charges} {ownerships} bind:selected={buy} />
+            <SelectProperties
+                player={charges}
+                {ownerships}
+                bind:selected={buy}
+            />
         {/if}
         {#if pays}
             <h3>
