@@ -2,7 +2,7 @@
     import Fosforos from "./Fosforos.svelte"
     import Icon from "./Icon.svelte"
     import { TrucoTeam } from "./truco"
-    import { range } from "../lib/utils"
+    import { range } from "../lib/utils.svelte"
     import { confetti } from "tsparticles-confetti"
 
     interface Props {

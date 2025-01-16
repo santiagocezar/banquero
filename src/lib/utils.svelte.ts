@@ -1,4 +1,7 @@
-export * from "./utils"
+export function range(size: number, startAt = 0) {
+    if (size <= 0) return []
+        return [...Array(Math.floor(size)).keys()].map((i) => i + startAt)
+}
 
 export function delayEffect(fn: () => () => void, delayMs: number) {
     let lastTimeout: any
@@ -75,3 +78,11 @@ export function contrast(node: HTMLElement | SVGElement, color: string) {
         update
     }
 }
+
+export function sum<T>(fn: (current: T, i: number) => number) {
+    return (acc: number, current: T, i: number) => acc + fn(current, i)
+}
+export function count<T>(fn: (current: T, i: number) => boolean) {
+    return sum<T>((current, i) => +fn(current, i))
+}
+
