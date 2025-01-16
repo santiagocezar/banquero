@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
-    "@astrojs/svelte": "^7.0.1",
+    "@astrojs/svelte": "^7.0.3",
     "@iconify-json/material-symbols": "^1.2.10",
     "astro": "^5.0.3",
     "fflate": "^0.8.2",
@@ -31,7 +31,7 @@
     "@melt-ui/pp": "^0.3.2",
     "@melt-ui/svelte": "^0.86.2",
     "@vite-pwa/astro": "^0.4.3",
-    "esbuild": "^0.24.0",
+    "esbuild": "^0.24.2",
     "prettier": "^3.4.2",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-svelte": "^3.3.2",
