@@ -87,10 +87,6 @@
             height: calc(var(--height, 3rem) - 2px);
 
             box-shadow: none;
-
-            & > * {
-                translate: 0 1px;
-            }
         }
     }
 }

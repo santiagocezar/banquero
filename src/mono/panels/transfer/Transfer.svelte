@@ -170,6 +170,7 @@
         display: grid;
         grid-template-columns: 1fr auto;
         background-color: var(--p50);
+        margin: 0 0.5rem;
 
         color: var(--contrast);
         --height: 4rem;

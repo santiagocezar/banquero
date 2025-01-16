@@ -328,8 +328,8 @@
             border-radius: 0.5rem;
             width: 20rem;
             max-width: 50vw;
-            font-size: .8rem;
-            padding: .25rem .5rem;
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
             background-color: var(--bg0);
         }
     }

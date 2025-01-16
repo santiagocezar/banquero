@@ -176,8 +176,7 @@
         data-active={!(
             mode.type === "list" ||
             (mode.type === "exchange" &&
-                (mode.value.pays === null ||
-                mode.value.charges === null))
+                (mode.value.pays === null || mode.value.charges === null))
         )}
     >
         {#if mode.type == "player-info"}
@@ -235,6 +234,7 @@
         grid-area: sidebar;
         background-color: var(--bg2);
         z-index: 10;
+        overflow: hidden;
         &[data-active="true"] {
             display: block;
         }
@@ -254,7 +254,6 @@
             border: 1px solid var(--bg0);
             box-shadow: 0 1px 4px var(--bg0);
             margin: 1rem;
-            overflow: hidden;
             display: block;
         }
     }

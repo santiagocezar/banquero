@@ -25,10 +25,10 @@
     }
     const owned = $derived(mono.filterOwnerIDs(ownerships, player.id))
     const filtered = $derived(
-        owned.reduce(
-            (arr, id) => (arr[+selected.has(id)].push(id), arr),
-            [[], []] as [number[], number[]]
-        )
+        owned.reduce((arr, id) => (arr[+selected.has(id)].push(id), arr), [
+            [],
+            [],
+        ] as [number[], number[]])
     )
 </script>
 
@@ -57,10 +57,10 @@
         <span>Check</span>
     </div>
     {#if owned.length}
-        {#each filtered[1] as id}
+        {#each filtered[1] as id (id)}
             {@render checkItem(id, true)}
         {/each}
-        {#each filtered[0] as id}
+        {#each filtered[0] as id (id)}
             {@render checkItem(id, false)}
         {/each}
     {:else}
