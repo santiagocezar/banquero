@@ -2,10 +2,11 @@
     import Properties from "$mono/Properties.svelte"
     import Icon from "src/components/Icon.svelte"
     import { createTabs, melt } from "@melt-ui/svelte"
-    import { Player, properties } from "$mono"
+    import * as mono from "$mono"
 
     interface Props {
-        player: Player
+        player: mono.Player
+        ownerships: mono.Ownerships
         onpropertyselected: (id: number) => void
         onreturn: () => void
         pay: () => void
@@ -24,7 +25,7 @@
         { id: "history", title: "Movimientos" },
     ]
 
-    const { player, onpropertyselected, onreturn, pay, charge }: Props = $props()
+    const { player, ownerships, onpropertyselected, onreturn, pay, charge }: Props = $props()
 </script>
 
 <section class="pal-{player.color}">
@@ -35,19 +36,24 @@
             </button>
             {player.name}
         </nav>
+        {#if player === mono.BANK}
+                <Icon class="bank" use="ic-account-balance" />
+        {:else}
         <div class="value">
             <p>Balance</p>
             <p class="big">${player.money}</p>
         </div>
+        {/if}
+                
         <div class="actions">
             <button onclick={() => pay()} class="plastic">
                 <Icon use="ic-upload" />
-                Pagar</button
-            >
+                Pagar
+            </button>
             <button onclick={() => charge()} class="plastic">
                 <Icon use="ic-download" />
-                Cobrar</button
-            >
+                Cobrar
+            </button>
         </div>
     </header>
     <main use:melt={$root}>
@@ -64,7 +70,7 @@
         </div>
 
         <div class="tabview" use:melt={$content("properties")}>
-            <Properties owns={player.properties} {onpropertyselected} />
+            <Properties {ownerships} owner={player.id} {onpropertyselected} />
         </div>
         <div class="tabview" use:melt={$content("history")}></div>
     </main>
@@ -89,6 +95,11 @@
 
         & nav {
             font-size: 1.5rem;
+        }
+        & :global(.bank) {
+            width: 5rem;
+            height: 5rem;
+            place-self: center;
         }
     }
     .tablist {

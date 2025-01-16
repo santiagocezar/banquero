@@ -1,15 +1,16 @@
 <script lang="ts">
-    import { type Player, type OwnedProperty, properties } from "$mono"
+    import * as mono from "$mono"
     import { propertyItem } from "$mono/Properties.svelte"
     import Icon from "src/components/Icon.svelte"
     import { slide } from "svelte/transition"
 
     interface Props {
-        player: Player
+        player: mono.Player
+        ownerships: mono.Ownerships
         selected: Set<number>
     }
 
-    let { player, selected = $bindable() }: Props = $props()
+    let { player, ownerships, selected = $bindable() }: Props = $props()
 
     const deselect = (id: number) => (e: Event) => {
         selected.delete(id)
@@ -22,15 +23,16 @@
         e.preventDefault()
         // selected.push(id)
     }
+    const owned = $derived(mono.filterOwner(ownerships, player.id))
     const filtered = $derived(
-        player.properties.reduce(
+        owned.reduce(
             (arr, p) => (arr[+selected.has(p.id)].push(p), arr),
-            [[], []] as [OwnedProperty[], OwnedProperty[]]
+            [[], []] as [mono.Ownership[], mono.Ownership[]]
         )
     )
 </script>
 
-{#snippet checkItem(p: OwnedProperty, selected: boolean)}
+{#snippet checkItem(p: mono.Ownership, selected: boolean)}
     <button
         out:slide
         in:slide
@@ -38,10 +40,10 @@
         class={["reset", "property-item", { selected }]}
     >
         {@render propertyItem(
-            properties[p.id].block,
-            properties[p.id].name,
+            mono.properties[p.id].color,
+            mono.properties[p.id].name,
             p.houses,
-            properties[p.id].price
+            mono.properties[p.id].price
         )}
         <div class="checkbox">
             <Icon use="ic-check" />
@@ -56,7 +58,7 @@
         <span>Costo</span>
         <span>Check</span>
     </div>
-    {#if player.properties.length}
+    {#if owned.length}
         {#each filtered[1] as p (p.id)}
             {@render checkItem(p, true)}
         {/each}

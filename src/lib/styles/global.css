@@ -50,11 +50,10 @@
         
         border-radius: 0.5rem;
         box-shadow:
-            0 1px 0 0 inset var(--light, #fff4),
-            0 -2px 0 0 inset var(--dark, #0004),
-            0 var(--elevation) calc(var(--elevation) * 4) var(--shadow, #0004);
+        0 1px 0 0 inset var(--light, #fff4),
+        0 -2px 0 0 inset var(--dark, #0004),
+        0 var(--elevation) calc(var(--elevation) * 4) var(--shadow, #0004);
         border: 1px solid var(--border, #000);
-
     }
     .plastic-pal {
         --light: var(--p30);

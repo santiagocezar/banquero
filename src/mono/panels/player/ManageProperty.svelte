@@ -1,11 +1,12 @@
 <script lang="ts">
     import Icon from "src/components/Icon.svelte"
-    import { OwnedProperty, properties, rent } from "$mono"
+    import * as mono from "$mono"
     import { contrast, range } from "$lib/utils.svelte"
+    import { slide } from "svelte/transition"
 
     interface Props {
-        owned: OwnedProperty
-        sameBlock: number
+        id: number
+        ownerships: mono.Ownerships
         onreturn: () => void
         chargeRent: (price: number) => void
         sell: (price: number) => void
@@ -14,32 +15,95 @@
     }
 
     const {
-        owned,
+        id,
+        ownerships,
         onreturn: goBack,
-        sameBlock,
         chargeRent,
         sell,
         buyHouses,
         mortgage,
     }: Props = $props()
 
-    const prop = $derived(properties[owned.id])
+    const prop = $derived(mono.properties[id])
 
-    let houses = $state(owned.houses)
+    let houseCount = $state(ownerships[id]?.houses ?? 0)
 
-    const houseInc = () => (houses = Math.min(5, houses + 1))
-    const houseDec = () => (houses = Math.max(0, houses - 1))
-
-    const houseDiff = $derived(houses - owned.houses)
-    const rentPrice = $derived(rent(owned, sameBlock))
+    const rentPrice = $derived(mono.rent(ownerships, id))
+    
+    const houseInc = () => (houseCount = Math.min(5, houseCount + 1))
+    const houseDec = () => (houseCount = Math.max(0, houseCount - 1))
 
     const onRentClick = () => chargeRent(rentPrice)
     const onSellClick = () => sell(prop.price)
-    const onHouseConfirmClick = () => buyHouses(houseDiff, (prop as {housing: number}).housing)
+    const onHouseConfirmClick = () => buyHouses(houseCount - (ownerships[id]?.houses ?? 0), (prop as {housing: number}).housing)
     const onMortageClick = () => mortgage(prop.price / 2)
 </script>
 
-<section class="pal-gen" style="--pal-gen-color: {prop.block}">
+{#snippet houses(count: number, price: number, diff: number)}
+    <h3>Viviendas</h3>
+    <div class="housing">
+        <div class="amount">
+            <Icon use="ic-house" />
+            × {count}
+            {#if diff != 0}
+                <strong>
+                {diff < 0 ? "-" : "+"}
+                {Math.abs(diff)}
+                </strong>
+            {/if}
+        </div>
+        <div class="actions plastic-pal">
+            <button onclick={houseDec}><Icon use="ic-remove" /></button>
+            <button class="plastic-pal" onclick={houseInc}><Icon use="ic-add" /></button>
+        </div>
+        <div class="legend">
+            Compra: ${price} · Venta: ${price / 2}
+        </div>
+        {#if diff != 0}
+            <div
+            class="confirm"
+                out:slide={{duration: 100}}
+                in:slide={{duration: 100}}
+                >
+                <div>
+                    <p>
+                        {diff < 0 ? "Vender" : "Comprar"}
+                        {Math.abs(diff)} casa{Math.abs(
+                            diff
+                        ) == 1
+                            ? ""
+                            : "s"}
+                    </p>
+                    <p>
+                        ${(price * Math.abs(diff)) /
+                            (diff < 0 ? 2 : 1)}
+                    </p>
+                </div>
+                <button class="plastic-pal" onclick={onHouseConfirmClick}>
+                    <Icon use="ic-check" />
+                </button>
+            </div>
+        {/if}
+    </div>
+{/snippet}
+
+{#snippet row(text: string, value: number, icon?: string)}
+    <tr>
+        <td>
+            <div
+                class={{ selected: value === rentPrice }}
+            >
+                {#if icon}
+                    <Icon use={icon} />
+                {/if}
+                {text}
+            </div>
+        </td>
+        <td>${value}</td>
+    </tr>
+{/snippet}
+
+<section class="pal-gen" style="--pal-gen-color: {prop.color}">
     <header class="plastic-pal">
         <nav>
             <button onclick={goBack}>
@@ -63,90 +127,18 @@
     </header>
     <main>
         {#if prop.kind == "lot"}
-            <h3>Viviendas</h3>
-            <div class="housing">
-                <div class="amount">
-                    <Icon use="ic-house" />
-                    × {owned.houses}
-                    {#if houseDiff != 0}
-                        {houseDiff < 0 ? "-" : "+"}
-                        {Math.abs(houseDiff)}
-                    {/if}
-                </div>
-                <div class="actions">
-                    <button onclick={houseDec}><Icon use="ic-remove" /></button>
-                    <button onclick={houseInc}><Icon use="ic-add" /></button>
-                </div>
-                <div class="legend">
-                    Compra: ${prop.housing} · Venta: ${prop.housing / 2}
-                </div>
-                {#if houseDiff != 0}
-                    <div class="confirm">
-                        <div>
-                            <p>
-                                {houseDiff < 0 ? "Vender" : "Comprar"}
-                                {Math.abs(houseDiff)} casa{Math.abs(
-                                    houseDiff
-                                ) == 1
-                                    ? ""
-                                    : "s"}
-                            </p>
-                            <p>
-                                ${(prop.housing * Math.abs(houseDiff)) /
-                                    (houseDiff < 0 ? 2 : 1)}
-                            </p>
-                        </div>
-                        <button onclick={onHouseConfirmClick}>
-                            <Icon use="ic-check" />
-                        </button>
-                    </div>
-                {/if}
-            </div>
+            {#if ownerships[id] !== null}
+                {@render houses(houseCount, prop.housing, houseCount - ownerships[id].houses)}
+            {/if}
             <h3>Valores</h3>
             <table>
                 <tbody>
-                    <tr>
-                        <td
-                            class={{
-                                selected:
-                                    owned.houses === 0 &&
-                                    prop.count !== sameBlock,
-                            }}>Alquiler base</td
-                        >
-                        <td>${prop.rent![0]}</td>
-                    </tr>
-                    <tr>
-                        <td
-                            class={{
-                                selected:
-                                    owned.houses === 0 &&
-                                    prop.count === sameBlock,
-                            }}>Con el grupo completo</td
-                        >
-                        <td>${prop.rent![0] * 2}</td>
-                    </tr>
+                    {@render row("Alquiler base", prop.rent[0])}
+                    {@render row("Con el grupo completo", prop.rent[0] * 2)}
                     {#each range(4) as i}
-                        <tr>
-                            <td>
-                                <div
-                                    class={{ selected: i + 1 === owned.houses }}
-                                >
-                                    <Icon class="house" use="ic-house" />
-                                    Con {i + 1} casas
-                                </div>
-                            </td>
-                            <td>${prop.rent![i + 1]}</td>
-                        </tr>
+                        {@render row(`Con ${i + 1} casas`, prop.rent[i + 1], "ic-house")}
                     {/each}
-                    <tr>
-                        <td>
-                            <div>
-                                <Icon class="hotel" use="ic-home-work" />
-                                Con hotel
-                            </div>
-                        </td>
-                        <td>${prop.rent![5]}</td>
-                    </tr>
+                    {@render row("Con hotel", prop.rent[5], "ic-home-work")}
                 </tbody>
             </table>
         {:else if prop.kind == "station"}
@@ -154,16 +146,7 @@
             <table>
                 <tbody>
                     {#each prop.rent as val, i}
-                        <tr>
-                            <td>
-                                <div class={{ selected: i == sameBlock - 1 }}>
-                                    <Icon use="ic-directions-railway" />
-                                    Con {i + 1}
-                                    {i == 0 ? "estación" : "estaciones"}
-                                </div>
-                            </td>
-                            <td>${val}</td>
-                        </tr>
+                        {@render row(`Con ${i + 1} ${i == 0 ? "estación" : "estaciones"}`, val, "ic-directions-railway")}
                     {/each}
                 </tbody>
             </table>
@@ -171,18 +154,8 @@
             <h3>Valores</h3>
             <table>
                 <tbody>
-                    <tr>
-                        <td class={{ selected: sameBlock === 1 }}>
-                            Solo este servicio
-                        </td>
-                        <td>${prop.rent[0]}</td>
-                    </tr>
-                    <tr>
-                        <td class={{ selected: sameBlock === 2 }}>
-                            Ambos servicios
-                        </td>
-                        <td>${prop.rent[1]}</td>
-                    </tr>
+                    {@render row("Solo este servicio", prop.rent[0])}
+                    {@render row("Ambos servicios", prop.rent[1])}
                 </tbody>
             </table>
         {/if}
@@ -227,8 +200,7 @@
         align-items: center;
         border-radius: 0.5rem;
         padding: 0.5rem;
-        background-color: var(--c);
-        color: var(--contrast);
+        background-color: color-mix(in srgb, var(--p50), transparent 75%);
 
         & > div {
             padding-left: 0.25rem;
@@ -242,6 +214,9 @@
                 font-size: 1rem;
                 font-weight: bold;
             }
+        }
+        & button {
+            background-color: var(--p50); /* FIXME: seems redundant */
         }
     }
     main {
@@ -271,7 +246,19 @@
             gap: 0.5rem;
         }
         .actions {
+            gap: 0;
+            padding: 0;
+            background-color: var(--p70);
+            --dark: var(--p80);
+            
             button {
+                &:last-child {
+                    border-right: inherit;
+                    background-color: var(--p50);
+                }
+
+                background: none;
+                color: inherit;
                 width: auto;
             }
         }
@@ -285,6 +272,12 @@
     }
     tr {
         height: 2rem;
+        :global(.icon[data-icon="ic-house"]) {
+            color: var(--red);
+        }
+        :global(.icon[data-icon="ic-home-work"]) {
+            color: var(--blue);
+        }
     }
     td {
         vertical-align: middle;
@@ -299,12 +292,6 @@
             align-items: center;
             gap: 0.5rem;
         }
-    }
-    :global(.house) {
-        color: var(--red);
-    }
-    :global(.hotel) {
-        color: var(--blue);
     }
 
     .legend {

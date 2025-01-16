@@ -7,6 +7,6 @@
     const { use, ...rest }: Props = $props()
 </script>
 
-<svg width="24" height="24" viewBox="0 0 24 24" {...rest}>
+<svg class="icon" width="24" height="24" viewBox="0 0 24 24" data-icon={use} {...rest}>
     <use href="#{use}" />
 </svg>

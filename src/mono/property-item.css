@@ -16,6 +16,10 @@
             text-align: left;
         }
     }
+    & .empty {
+        grid-column: 1 / -1;
+        text-align: center;
+    }
 }
 
 .property-item {
@@ -30,7 +34,7 @@
     &:hover {
         background-color: var(--p10);
     }
-
+    
     & > :global(.name) {
         display: flex;
         height: 2.5rem;

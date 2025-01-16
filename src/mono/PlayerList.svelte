@@ -1,18 +1,19 @@
 <script lang="ts">
-    import { BANK, properties, type Player } from "."
+    import * as mono from "$mono"
     import Icon from "../components/Icon.svelte"
     import type { TransitionConfig } from "svelte/transition"
 
     interface Props {
+        players: mono.Player[]
+        ownerships: mono.Ownerships
         from: number | null
         to: number | null
-        players: Player[]
         onclickadd: () => void
         onclick: (id: number) => void
         ondelete: (id: number) => void
     }
 
-    const { from, to, players, onclick, onclickadd, ondelete }: Props = $props()
+    const { players, ownerships, from, to, onclick, onclickadd, ondelete }: Props = $props()
 
     function delay(node: Element, delay: number): TransitionConfig {
         return {
@@ -55,33 +56,40 @@
     </div>
 {/snippet}
 
+{#snippet properties(owned: mono.Ownership[])}
+    <div class="properties">
+        {#if owned.length}
+            {#each owned as property}
+                <div class="prop" style="--color: {mono.properties[property.id].color}">
+                    <div></div>
+                </div>
+            {/each}
+        {:else}
+            <p>Sin propiedades</p>
+        {/if}
+    </div>
+{/snippet}
+
+
 <div class="player-list">
     <button
         class="reset bank-card plastic-pal pal--1"
-        data-active={from === BANK || to === BANK}
-        onclick={() => onclick(BANK)}
+        data-active={from === mono.BANK.id || to === mono.BANK.id}
+        onclick={() => onclick(mono.BANK.id)}
     >
-        {@render status(from === BANK, to === BANK)}
+        {@render status(from === mono.BANK.id, to === mono.BANK.id)}
         <p class="name">Banco</p>
         <Icon class="bank" use="ic-account-balance" />
     </button>
-    {#each players as player, i (player.name)}
+    {#each players as player (player.id)}
         <div class="player-wrapper">
-            <div class="properties">
-                {#if player.properties.length}
-                    {#each player.properties as property}
-                        <div style="--color: {properties[property.id].block}" />
-                    {/each}
-                {:else}
-                    <p>Sin propiedades</p>
-                {/if}
-            </div>
+            {@render properties(mono.filterOwner(ownerships, player.id))}
             <button
                 class="reset player-card pal-{player.color} plastic-pal"
-                data-active={from === i || to === i}
-                onclick={() => onclick(i)}
+                data-active={from === player.id || to === player.id}
+                onclick={() => onclick(player.id)}
             >
-                {@render status(from === i, to === i)}
+                {@render status(from === player.id, to === player.id)}
                 <p class="name">{player.name}</p>
                 <p class="money">${player.money}</p>
             </button>
@@ -130,30 +138,26 @@
     }
 
     .properties {
-        padding-left: 0.5rem;
+        --height: 3rem;
+        --width: calc(var(--height) * 0.707);
+        --color: red;
         display: flex;
-        height: 3rem;
-        align-items: center;
-
+        height: var(--height);
+        max-width: 100%;
+        padding-left: 0.5rem;
+        padding-right: calc(0.5rem + var(--width));
+            
         & > p {
             color: var(---p70);
             font-size: 0.75em;
             font-style: italic;
         }
-        & > div {
-            --height: 3rem;
-            --width: calc(var(--height) * 0.707);
-            --offset: 1rem;
-            --color: red;
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            width: var(--width);
-            height: var(--height);
-            padding: 1px;
-            background-color: white;
-            box-shadow: 0 0 0 1px var(--p70);
-            margin-right: calc(var(--offset) - var(--width));
+        & .prop {
+            flex-grow: 1;
+            flex-shrink: 1;
+            min-width: .47rem;
+            max-width: calc(var(--width) / 2);
+            position: relative;
 
             translate: 0 -0.125rem;
 
@@ -163,10 +167,22 @@
             &:nth-child(3n + 1) {
                 translate: 0 0;
             }
-            &::before {
-                content: "";
-                background-color: var(--color);
-                height: 0.5rem;
+            
+            & > div {
+                position: absolute;
+                width: var(--width);
+                height: var(--height);
+                padding: 1px;
+                background-color: white;
+                box-shadow: 0 0 0 1px var(--p70);
+                
+                &::before {
+                    content: "";
+                    display: block;
+                    background-color: var(--color);
+                    height: 0.5rem;
+                    width: 100%;
+                }
             }
         }
     }

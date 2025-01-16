@@ -4,7 +4,6 @@
     {
       "name": "Plaza de los dinosaurios",
       "price": 60,
-      "block": "#955438",
       "rent": [
         2,
         10,
@@ -15,13 +14,16 @@
       ],
       "housing": 50,
       "id": 0,
-      "count": 2,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#955438",
+      "group": [
+        0,
+        1
+      ]
     },
     {
       "name": "Valle de la Luna",
       "price": 60,
-      "block": "#955438",
       "rent": [
         4,
         20,
@@ -32,13 +34,16 @@
       ],
       "housing": 50,
       "id": 1,
-      "count": 2,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#955438",
+      "group": [
+        0,
+        1
+      ]
     },
     {
       "name": "Ferrocarril Gral. Mitre",
       "price": 200,
-      "block": "#000",
       "rent": [
         25,
         50,
@@ -46,13 +51,18 @@
         200
       ],
       "id": 2,
-      "count": 4,
-      "kind": "station"
+      "kind": "station",
+      "color": "#000",
+      "group": [
+        2,
+        10,
+        17,
+        25
+      ]
     },
     {
       "name": "Cabildo de Bs. As.",
       "price": 100,
-      "block": "#aae0fa",
       "rent": [
         6,
         30,
@@ -63,13 +73,17 @@
       ],
       "housing": 50,
       "id": 3,
-      "count": 3,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#aae0fa",
+      "group": [
+        3,
+        4,
+        5
+      ]
     },
     {
       "name": "Casa histórica de Tucumán",
       "price": 100,
-      "block": "#aae0fa",
       "rent": [
         6,
         30,
@@ -80,13 +94,17 @@
       ],
       "housing": 50,
       "id": 4,
-      "count": 3,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#aae0fa",
+      "group": [
+        3,
+        4,
+        5
+      ]
     },
     {
       "name": "Monumento a la bandera",
       "price": 120,
-      "block": "#aae0fa",
       "rent": [
         8,
         40,
@@ -97,13 +115,17 @@
       ],
       "housing": 50,
       "id": 5,
-      "count": 3,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#aae0fa",
+      "group": [
+        3,
+        4,
+        5
+      ]
     },
     {
       "name": "Puente del inca",
       "price": 140,
-      "block": "#d93a96",
       "rent": [
         10,
         50,
@@ -114,25 +136,32 @@
       ],
       "housing": 100,
       "id": 6,
-      "count": 3,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#d93a96",
+      "group": [
+        6,
+        8,
+        9
+      ]
     },
     {
       "name": "Servicio de electricidad",
       "price": 150,
-      "block": "#aaa",
       "id": 7,
-      "count": 2,
       "rent": [
         4,
         10
       ],
-      "kind": "service"
+      "kind": "service",
+      "color": "#aaa",
+      "group": [
+        7,
+        20
+      ]
     },
     {
       "name": "Aconcagua",
       "price": 140,
-      "block": "#d93a96",
       "rent": [
         10,
         50,
@@ -143,13 +172,17 @@
       ],
       "housing": 100,
       "id": 8,
-      "count": 3,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#d93a96",
+      "group": [
+        6,
+        8,
+        9
+      ]
     },
     {
       "name": "Cristo Redentor (Mendoza)",
       "price": 160,
-      "block": "#d93a96",
       "rent": [
         12,
         60,
@@ -160,13 +193,17 @@
       ],
       "housing": 100,
       "id": 9,
-      "count": 3,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#d93a96",
+      "group": [
+        6,
+        8,
+        9
+      ]
     },
     {
       "name": "Ferrocarril Gral. Belgrano",
       "price": 200,
-      "block": "#000",
       "rent": [
         25,
         50,
@@ -174,13 +211,18 @@
         200
       ],
       "id": 10,
-      "count": 4,
-      "kind": "station"
+      "kind": "station",
+      "color": "#000",
+      "group": [
+        2,
+        10,
+        17,
+        25
+      ]
     },
     {
       "name": "Obelisco de Bs. Aires",
       "price": 180,
-      "block": "#f7941d",
       "rent": [
         14,
         70,
@@ -191,13 +233,17 @@
       ],
       "housing": 100,
       "id": 11,
-      "count": 3,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#f7941d",
+      "group": [
+        11,
+        12,
+        13
+      ]
     },
     {
       "name": "Calle Caminito",
       "price": 180,
-      "block": "#f7941d",
       "rent": [
         14,
         70,
@@ -208,13 +254,17 @@
       ],
       "housing": 100,
       "id": 12,
-      "count": 3,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#f7941d",
+      "group": [
+        11,
+        12,
+        13
+      ]
     },
     {
       "name": "Plaza de Mayo",
       "price": 200,
-      "block": "#f7941d",
       "rent": [
         16,
         80,
@@ -225,13 +275,17 @@
       ],
       "housing": 100,
       "id": 13,
-      "count": 3,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#f7941d",
+      "group": [
+        11,
+        12,
+        13
+      ]
     },
     {
       "name": "Basilica de Lujan",
       "price": 220,
-      "block": "#ed1b24",
       "rent": [
         18,
         90,
@@ -242,13 +296,17 @@
       ],
       "housing": 150,
       "id": 14,
-      "count": 3,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#ed1b24",
+      "group": [
+        14,
+        15,
+        16
+      ]
     },
     {
       "name": "Villa Carlos Paz",
       "price": 220,
-      "block": "#ed1b24",
       "rent": [
         18,
         90,
@@ -259,13 +317,17 @@
       ],
       "housing": 150,
       "id": 15,
-      "count": 3,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#ed1b24",
+      "group": [
+        14,
+        15,
+        16
+      ]
     },
     {
       "name": "Mar del Plata",
       "price": 240,
-      "block": "#ed1b24",
       "rent": [
         20,
         100,
@@ -276,13 +338,17 @@
       ],
       "housing": 150,
       "id": 16,
-      "count": 3,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#ed1b24",
+      "group": [
+        14,
+        15,
+        16
+      ]
     },
     {
       "name": "Ferrocarril Gral. Sarmiento",
       "price": 200,
-      "block": "#000",
       "rent": [
         25,
         50,
@@ -290,13 +356,18 @@
         200
       ],
       "id": 17,
-      "count": 4,
-      "kind": "station"
+      "kind": "station",
+      "color": "#000",
+      "group": [
+        2,
+        10,
+        17,
+        25
+      ]
     },
     {
       "name": "Cerro 7 Colores",
       "price": 260,
-      "block": "#fef200",
       "rent": [
         22,
         110,
@@ -307,13 +378,17 @@
       ],
       "housing": 150,
       "id": 18,
-      "count": 3,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#fef200",
+      "group": [
+        18,
+        19,
+        21
+      ]
     },
     {
       "name": "Cataratas del Iguazú",
       "price": 260,
-      "block": "#fef200",
       "rent": [
         22,
         110,
@@ -324,25 +399,32 @@
       ],
       "housing": 150,
       "id": 19,
-      "count": 3,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#fef200",
+      "group": [
+        18,
+        19,
+        21
+      ]
     },
     {
       "name": "Servicio de agua potable",
       "price": 150,
-      "block": "#aaa",
       "id": 20,
-      "count": 2,
       "rent": [
         4,
         10
       ],
-      "kind": "service"
+      "kind": "service",
+      "color": "#aaa",
+      "group": [
+        7,
+        20
+      ]
     },
     {
       "name": "Tren de las Nubes",
       "price": 280,
-      "block": "#fef200",
       "rent": [
         24,
         120,
@@ -353,13 +435,17 @@
       ],
       "housing": 150,
       "id": 21,
-      "count": 3,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#fef200",
+      "group": [
+        18,
+        19,
+        21
+      ]
     },
     {
       "name": "Pigüineria Punta Tombo",
       "price": 300,
-      "block": "#1fb25a",
       "rent": [
         26,
         130,
@@ -370,13 +456,17 @@
       ],
       "housing": 200,
       "id": 22,
-      "count": 3,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#1fb25a",
+      "group": [
+        22,
+        23,
+        24
+      ]
     },
     {
       "name": "Faro del Fin del Mundo",
       "price": 300,
-      "block": "#1fb25a",
       "rent": [
         26,
         130,
@@ -387,13 +477,17 @@
       ],
       "housing": 200,
       "id": 23,
-      "count": 3,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#1fb25a",
+      "group": [
+        22,
+        23,
+        24
+      ]
     },
     {
       "name": "Peninsula Valdez",
       "price": 320,
-      "block": "#1fb25a",
       "rent": [
         28,
         150,
@@ -404,13 +498,17 @@
       ],
       "housing": 200,
       "id": 24,
-      "count": 3,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#1fb25a",
+      "group": [
+        22,
+        23,
+        24
+      ]
     },
     {
       "name": "Ferrocarril Gral. Roca",
       "price": 200,
-      "block": "#000",
       "rent": [
         25,
         50,
@@ -418,13 +516,18 @@
         200
       ],
       "id": 25,
-      "count": 4,
-      "kind": "station"
+      "kind": "station",
+      "color": "#000",
+      "group": [
+        2,
+        10,
+        17,
+        25
+      ]
     },
     {
       "name": "Glaciar Perito Moreno",
       "price": 350,
-      "block": "#0072bb",
       "rent": [
         35,
         175,
@@ -435,13 +538,16 @@
       ],
       "housing": 200,
       "id": 26,
-      "count": 2,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#0072bb",
+      "group": [
+        26,
+        27
+      ]
     },
     {
       "name": "Hotel Llao-Llao",
       "price": 400,
-      "block": "#0072bb",
       "rent": [
         50,
         200,
@@ -452,8 +558,12 @@
       ],
       "housing": 200,
       "id": 27,
-      "count": 2,
-      "kind": "lot"
+      "kind": "lot",
+      "color": "#0072bb",
+      "group": [
+        26,
+        27
+      ]
     }
   ]
 }
