@@ -70,7 +70,7 @@
         </div>
 
         <div class="tabview" use:melt={$content("properties")}>
-            <Properties {ownerships} owner={player.id} {onpropertyselected} />
+            <Properties {ownerships} owner={player.id} {onpropertyselected} displayPrice={player === mono.BANK} />
         </div>
         <div class="tabview" use:melt={$content("history")}></div>
     </main>

@@ -13,12 +13,14 @@
     /*
     TODO:
     - [ ] Recents menu
-    - [ ] Dynamic header text
+    - [x] Dynamic header text
     - [ ] Add help tab
     - [ ] Add history & standings (tablero) tab
     - [ ] Mortgage and lift mortgage
     - [ ] Mortgage taxes
-    - [ ] Check if the Enter key works on transfer
+    - [x] Buy and sell houses
+    - [x] Check if the Enter key works on transfer
+    - [ ] Fix transfer gradient somehow
     */
 
     const { data } = useGame(mono.game, () => true)
@@ -41,6 +43,8 @@
     function onPlayerClick(id: number) {
         console.log(id)
         if (mode.type === "exchange") {
+            if (mode.value.houses !== 0 || mode.value.mortgage.length > 0) return
+            
             if (id === mode.value.pays) {
                 mode.value.pays = null
             } else if (id === mode.value.charges) {
@@ -108,9 +112,17 @@
             }
         }
     }
+    
+    function getPlayer(id: null): null;
+    function getPlayer(id: number): mono.Player;
+    function getPlayer(id: number | null): mono.Player | null;
+    function getPlayer(id: number | null): mono.Player | null {
+        return id === null ? null : (playerIndex.get(id) ?? mono.BANK)
+    }
+    
     function confirmExchange(value: mono.Exchange) {
-        const pays = playerIndex.get(value.pays!) ?? mono.BANK
-        const charges = playerIndex.get(value.charges!) ?? mono.BANK
+        const pays = getPlayer(value.pays!)
+        const charges = getPlayer(value.charges!)
 
         changeOwnership(charges, pays, value.buy)
         changeOwnership(pays, charges, value.sell)
@@ -121,6 +133,10 @@
         }
         if (charges) {
             charges.money += value.amount
+        }
+        const ownership = data.owners[value.housesFor]
+        if (value.houses !== 0 && ownership) {
+            ownership.houses = Math.max(0, Math.min(5, ownership.houses + value.houses))
         }
 
         returnToList()
@@ -134,6 +150,7 @@
         })
         returnToList()
     }
+        
     /*
     const transactionItems = useMemo(
         () =>
@@ -153,10 +170,16 @@
 <div class="panels">
     <div class="list">
         <header>
-            <button onclick={() => history.back()} class="button back">
-                <Icon use="ic-arrow-back" />
+            {#if mode.type == "exchange"}
+            <button onclick={returnToList} class="button back">
+                <Icon use="ic-close" />
             </button>
-            <h1>Lista de jugadores</h1>
+            {:else}
+            <button onclick={() => history.back()} class="button back">
+                <Icon use="ic-home" />
+            </button>
+            {/if}
+            <h1>{mode.type === "exchange" ? "Seleccione 2 jugadores" : "Lista de jugadores"}</h1>
             <button class="button" id="share">
                 <Icon use="ic-share" />
             </button>
@@ -259,8 +282,21 @@
     }
     header {
         display: flex;
-        justify-content: space-between;
         padding: 0.5rem;
         align-items: center;
+        position: relative;
+        --p50: initial;
+        
+        
+        & button {
+            background-color: transparent;
+            color: inherit;
+        }
+        & h1 {
+            font-size: 1.4rem;
+            font-weight: bold;
+            flex-grow: 1;
+            text-align: left;
+        }
     }
 </style>

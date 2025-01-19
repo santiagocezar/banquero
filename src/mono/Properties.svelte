@@ -8,10 +8,11 @@
     interface Props {
         ownerships: mono.Ownerships
         owner: number
+        displayPrice: boolean
         onpropertyselected: (id: number) => void
     }
 
-    const { ownerships, owner, onpropertyselected: selectProperty }: Props = $props()
+    const { ownerships, owner, onpropertyselected: selectProperty, displayPrice }: Props = $props()
     
     
 </script>
@@ -33,14 +34,14 @@
 <div class="properties">
     <div class="labels">
         <span>Nombre</span>
-        <span>Alquiler</span>
+        <span>{displayPrice ? "Costo" : "Alquiler"}</span>
     </div>
     {#each mono.filterOwnerIDs(ownerships, owner) as id}
         <button class="reset property-item" onclick={() => selectProperty(id)}>
             {@render propertyItem(
                 mono.properties[id].color,
                 mono.properties[id].name,
-                mono.rent(ownerships, id)
+                displayPrice ? mono.properties[id].price : mono.rent(ownerships, id)
             )}
         </button>
     {/each}

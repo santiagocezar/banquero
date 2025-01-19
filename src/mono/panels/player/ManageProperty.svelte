@@ -10,7 +10,7 @@
         onreturn: () => void
         chargeRent: (price: number) => void
         sell: (price: number) => void
-        buyHouses: (amount: number, price: number) => void
+        buyHouses: (amount: number, price: number, housesFor: number) => void
         mortgage: (price: number) => void
     }
 
@@ -35,7 +35,7 @@
 
     const onRentClick = () => chargeRent(rentPrice)
     const onSellClick = () => sell(prop.price)
-    const onHouseConfirmClick = () => buyHouses(houseCount - (ownerships[id]?.houses ?? 0), (prop as {housing: number}).housing)
+    const onHouseConfirmClick = () => buyHouses(houseCount - (ownerships[id]?.houses ?? 0), (prop as {housing: number}).housing, id)
     const onMortageClick = () => mortgage(prop.price / 2)
 </script>
 

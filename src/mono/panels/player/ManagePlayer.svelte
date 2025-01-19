@@ -47,19 +47,21 @@
                 charges: player.id,
                 amount: rent,
             })}
-        buyHouses={(amount, price) =>
+        buyHouses={(amount, price, housesFor) =>
             amount < 0
                 ? filled({
                       charges: player.id,
                       pays: mono.BANK.id,
-                      amount: price * amount / 2,
+                      amount: -price * amount / 2,
                       houses: -amount,
+                      housesFor
                   })
                 : filled({
                       charges: mono.BANK.id,
                       pays: player.id,
                       amount: price * amount,
                       houses: amount,
+                      housesFor
                   })}
         mortgage={(price) =>
             filled({

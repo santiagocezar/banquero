@@ -68,6 +68,7 @@ export interface Exchange {
     sell: number[]
     buy: number[]
     houses: number
+    housesFor: number
 }
 
 export const game: Game<MonopolyGame> = {

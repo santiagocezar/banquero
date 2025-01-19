@@ -1,5 +1,6 @@
 <script lang="ts">
     import * as mono from "$mono"
+    import { propertyItem } from "$mono/Properties.svelte"
     import SelectProperties from "./SelectProperties.svelte"
     import Icon from "src/components/Icon.svelte"
     import { SvelteSet } from "svelte/reactivity"
@@ -19,6 +20,9 @@
         confirmExchange,
         exchange = $bindable(),
     }: Props = $props()
+    
+    const initialAmount = exchange.amount
+    console.log(initialAmount)
 
     const pays = $derived(
         exchange.pays !== null
@@ -30,12 +34,13 @@
             ? (players.get(exchange.charges) ?? mono.BANK)
             : null
     )
-
+    const forced = $derived(exchange.houses != 0 || exchange.mortgage.length > 0)
+    
     let sell = $state(new SvelteSet(exchange.sell))
     let buy = $state(new SvelteSet(exchange.buy))
 
     $effect(() => {
-        let amount = 0
+        let amount = initialAmount
         for (const p of buy.values()) {
             amount += mono.properties[p].price
         }
@@ -55,26 +60,27 @@
         ev.preventDefault()
     }
 
+    function switchPaying() {
+        exchange.pays = null
+    }
     function switchCharging() {
         exchange.charges = null
     }
 </script>
 
-<section class="pal-{pays?.color}">
-    <header class="plastic-pal">
+<section>
+    <header class="plastic">
         <nav>
             <button type="button" onclick={cancelExchange}>
-                <Icon use="ic-arrow-back" />
+                <Icon use="ic-close" />
             </button>
             <p>
-                {#if pays}
-                    <strong>{pays.name}</strong>
-                    <small>le paga</small>
-                {:else}
-                    <strong>—</strong>
-                {/if}
+                Transferir
             </p>
         </nav>
+        <div class="set-left pal-{pays?.color}">
+            <div class="gradient pal-{charges?.color}"></div>
+        </div>
         <form action="#" onsubmit={askConfirm}>
             <div class="value">
                 <label class="big">
@@ -86,31 +92,36 @@
                         inputMode="numeric"
                         bind:value={exchange.amount}
                         autofocus={true}
+                        disabled={forced}
                         onfocus={(e) => (e.target as HTMLInputElement).select()}
                     />
                 </label>
             </div>
-            <button
-                type="button"
-                class="to pal-{charges?.color} plastic-pal"
-                onclick={switchCharging}
-            >
-                {#if charges}
-                    <p>
-                        {charges === mono.BANK
-                            ? "Al banco"
-                            : "a " + charges.name}
-                    </p>
-                {:else}
-                    <p>—</p>
-                {/if}
-                <Icon aria-label="Cambiar" use="ic-swap-horiz" />
-            </button>
+            <div class="actions">
+                <button
+                    type="button"
+                    class="player pal-{pays?.color} plastic-pal"
+                    onclick={switchPaying}
+                    disabled={forced}
+                >
+                    <p>{pays?.name ?? "—"}</p>
+                    <Icon aria-label="Cambiar" use="ic-swap-horiz" />
+                </button>
+                <button
+                    type="button"
+                    class="player pal-{charges?.color} plastic-pal"
+                    onclick={switchCharging}
+                    disabled={forced}
+                >
+                    <p>{charges?.name ?? "—"}</p>
+                    <Icon aria-label="Cambiar" use="ic-swap-horiz" />
+                </button>
+            </div>
             <div class="actions">
                 <button
                     disabled={!pays || !charges}
                     type="submit"
-                    class="plastic-pal"
+                    class="plastic"
                 >
                     <Icon use="ic-payments" />
                     Aceptar
@@ -119,29 +130,47 @@
         </form>
     </header>
     <main>
-        {#if charges}
+        {#if exchange.houses != 0}
             <h3>
-                <span class="pal-{charges?.color}">{charges.name}</span>
+                <span class="pal-{charges!.color}">{charges?.name}</span>
                 entrega
             </h3>
-            <SelectProperties
-                player={charges}
-                {ownerships}
-                bind:selected={buy}
-            />
-        {/if}
-        {#if pays}
-            <h3>
-                <span class="pal-{pays?.color}">{pays.name}</span>
-                entrega
-            </h3>
-            <SelectProperties player={pays} {ownerships} bind:selected={sell} />
+            <p class="extra">{Math.abs(exchange.houses)} casa{Math.abs(exchange.houses) === 1 ? "" : "s"} para</p>
+            <div class="properties">
+            <div class="property-item">
+                {@render propertyItem(
+                    mono.properties[exchange.housesFor].color,
+                    mono.properties[exchange.housesFor].name, 
+                    mono.properties[exchange.housesFor].price
+                )}
+            </div>
+            </div>
+        {:else}
+            {#if charges}
+                <h3>
+                    <span class="pal-{charges?.color}">{charges.name}</span>
+                    entrega
+                </h3>
+                <SelectProperties
+                    player={charges}
+                    {ownerships}
+                    bind:selected={buy}
+                />
+            {/if}
+            {#if pays}
+                <h3>
+                    <span class="pal-{pays?.color}">{pays.name}</span>
+                    entrega
+                </h3>
+                <SelectProperties player={pays} {ownerships} bind:selected={sell} />
+            {/if}
         {/if}
     </main>
 </section>
 
 <style>
     @import "../../foreheader.css";
+    @import "../../property-item.css";
 
     form {
         display: contents;
@@ -149,13 +178,13 @@
     header {
         --shadow-parent: var(--shadow);
 
-        background-color: var(--p50);
-        color: var(--contrast);
+        position: relative;
+        background-image: linear-gradient(to top, transparent, var(--bg0) 75%);
+        overflow: hidden;
         padding: 0.5rem;
 
         & nav {
             font-size: 1.5rem;
-            font-weight: normal;
         }
         & .value {
             width: 100%;
@@ -166,14 +195,13 @@
         }
     }
 
-    .to {
+    .player {
         display: grid;
         grid-template-columns: 1fr auto;
         background-color: var(--p50);
-        margin: 0 0.5rem;
 
         color: var(--contrast);
-        --height: 4rem;
+        --height: 3.5rem;
         --shadow: var(--shadow-parent);
 
         & p {
@@ -194,10 +222,42 @@
         & input {
             width: 100%;
             background: none;
+            border-top: 0.125rem solid transparent;
             border-bottom: 0.125rem solid currentColor;
+            
+            &:disabled {
+                border-color: transparent;
+            }
         }
+    }
+    .extra {
+        font-size: 1.5rem;
+        margin-bottom: .25em;
+    }
+    .properties {
+        margin: 0 -1rem;
     }
     span[class^="pal-"] {
         color: var(--p50);
+    }
+    @property --p50 {
+        syntax: '<color>';
+        initial-value: transparent;
+        inherits: true;
+    }
+
+    .set-left {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        --left-color: var(--p50, transparent);
+        transition: --p50 .5s;
+    }
+    .gradient {
+        width: 100%;
+        height: 100%;
+        --right-color: var(--p50, transparent);
+        background-image: linear-gradient(in oklch to right, var(--left-color), var(--right-color));
+        transition: --p50 .5s;
     }
 </style>

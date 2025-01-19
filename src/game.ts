@@ -9,6 +9,7 @@ export const icons = [
     "arrow-back",
     "check",
     "chevron-right",
+    "close",
     "delete",
     "directions-railway",
     "download",

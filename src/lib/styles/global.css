@@ -81,12 +81,18 @@
         color: var(--contrast);
         height: var(--height, 3rem);
         transition: height .2s, box-shadow .1s, margin-top .2s;
-
+        
+        &:disabled,
         &:active {
             margin-top: 2px;
             height: calc(var(--height, 3rem) - 2px);
-
+            
             box-shadow: none;
+        }
+        &:disabled {
+            & > * {
+                opacity: .5;
+            }
         }
     }
 }
