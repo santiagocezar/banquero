@@ -1,8 +1,8 @@
 <script lang="ts">
     import Fosforos from "./Fosforos.svelte"
-    import Icon from "./Icon.svelte"
+    import Icon from "src/components/Icon.svelte"
     import { TrucoTeam } from "./truco"
-    import { range } from "../lib/utils.svelte"
+    import { range } from "$lib/utils.svelte"
     import { confetti } from "tsparticles-confetti"
 
     interface Props {
@@ -90,7 +90,7 @@
             justify-content: space-between;
             background-image: linear-gradient(
                 to bottom,
-                var(--p50),
+                var(--p30),
                 transparent
             );
             padding: 1rem;

@@ -1,17 +1,31 @@
 ---
-import Recents from "../components/Recents.svelte"
+import Base from "../layouts/Base.astro"
 import IconSet from "../components/IconSet.astro"
 
-import Base from "../layouts/Base.astro"
+import meta from "$game/meta"
+import favicon from "$game/assets/favicon.svg?url"
+import logo from "$game/assets/icon.svg?url"
+
+import Home from "$home"
 ---
 
-<Base title="Score">
+<Base
+    title={meta.name}
+    description={meta.description}
+    icon={logo}
+    favicon={favicon}
+>
+    <IconSet
+        pack={meta.icons.pack}
+        prefix={meta.icons.prefix}
+        names={meta.icons.use}
+    />
     <a href="/" class="logo">
-        <img transition:name="logo" src="/icon.svg" alt="Score" />
-        <span transition:name="type">trucomatic</span>
+        <img transition:name="logo" src={logo} alt={meta.name} />
+        <span transition:name="type">{meta.name}</span>
     </a>
     <a class="new" href="/game">Nueva partida</a>
-    <Recents client:load />
+    <Home client:load />
     <footer class="donate">
         <p>
             <a

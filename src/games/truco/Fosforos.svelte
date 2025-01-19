@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { range, delayEffect, sizeObserver } from "../lib/utils.svelte"
+    import { range, delayEffect, sizeObserver } from "$lib/utils.svelte"
     import Box, { BOX_SIZE, BOX_MARGIN } from "./Box.svelte"
 
     interface Props {

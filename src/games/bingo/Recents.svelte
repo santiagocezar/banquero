@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { deleteRecent, getRecents } from "../lib/bxx.svelte"
-    import RecentItem from "./RecentItem.svelte"
+    import { deleteRecent, getRecents } from "$lib/bxx.svelte"
+    import Icon from "src/components/Icon.svelte"
 
     let recents = $state(getRecents())
 
@@ -13,9 +13,29 @@
     {#if recents === null}
         <div class="loading"></div>
     {:else if recents.length}
+        <a class="continue" href="/game#{recents[0].id}">
+            Continuar partida
+            <Icon use="ic-chevron-right" />
+        </a>
+        <div class="nope">
+            <img
+                src="/dude.webp"
+                alt="an sketch of a dude in a hoodie pointing up"
+            />
+        </div>
         <h2>Partidas recientes</h2>
         {#each recents as recent (recent.id)}
-            <RecentItem {onDelete} {recent} />
+            <div class="recent">
+                <a href="/game#{recent.id}">
+                    {recent.date.toLocaleString(undefined, {
+                        dateStyle: "medium",
+                        timeStyle: "short",
+                    })}
+                </a>
+                <button onclick={() => onDelete(recent.id)}>
+                    <Icon use="ic-delete" />
+                </button>
+            </div>
         {/each}
     {:else}
         <div class="nope">
@@ -32,6 +52,19 @@
 </div>
 
 <style lang="less">
+    .continue {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        background-color: var(--bg0);
+        margin: 0 1rem;
+        padding: 1rem;
+        font-size: 1.5rem;
+        border-radius: 2rem;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
     .nope {
         flex-direction: column;
         justify-content: center;
@@ -53,13 +86,29 @@
         flex-grow: 1;
         display: flex;
         flex-direction: column;
-        padding: 1rem;
         gap: 1rem;
 
         h2 {
             text-align: center;
             font-weight: bold;
             font-size: 1.5rem;
+        }
+    }
+
+    .recent {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        background-color: var(--bg0);
+        border-radius: 1rem;
+
+        button {
+            margin: 0.5rem;
+            background-color: var(--red);
+        }
+        a {
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
         }
     }
 

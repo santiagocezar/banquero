@@ -1,4 +1,4 @@
-import { type Game } from '../lib/bxx.svelte';
+import { type Game } from '$lib/bxx.svelte';
 import { z } from "zod";
 import { properties as untypedProperties } from "./hasbro_argentina_group.json"
 import { count } from '$lib/utils.svelte';

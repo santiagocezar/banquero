@@ -4,9 +4,9 @@
         loadSave,
         storeSave,
         type Recent,
-    } from "../lib/bxx.svelte";
+    } from "$lib/bxx.svelte";
     import { truco } from "./truco";
-    import Icon from "./Icon.svelte";
+    import Icon from "src/components/Icon.svelte";
 
     interface Props {
         onDelete: (id: string) => void;
