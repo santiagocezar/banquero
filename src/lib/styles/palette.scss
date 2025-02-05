@@ -44,14 +44,14 @@
         --contrast: white; // #{contrasting($p50)};
     }
 }
-.pal-0 { @include palette(0deg); }
+.pal-0 { @include palette(10deg); }
 .pal-1 { @include palette(45deg); }
-.pal-2 { @include palette(90deg); }
-.pal-3 { @include palette(140deg); }
-.pal-4 { @include palette(180deg); }
-.pal-5 { @include palette(235deg); }
-.pal-6 { @include palette(280deg); }
-.pal-7 { @include palette(310deg); }
+.pal-2 { @include palette(65deg); }
+.pal-3 { @include palette(110deg); }
+.pal-4 { @include palette(140deg); }
+.pal-5 { @include palette(225deg); }
+.pal-6 { @include palette(260deg); }
+.pal-7 { @include palette(300deg); }
 .pal--1 { @include palette(90deg, 20%, 15%); }
 
 .pal-gen {

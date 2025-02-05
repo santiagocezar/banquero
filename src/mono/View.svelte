@@ -21,7 +21,7 @@
     - [ ] Mortgage taxes
     - [x] Buy and sell houses
     - [x] Check if the Enter key works on transfer
-    - [ ] Fix transfer gradient somehow
+    - [x] Fix transfer gradient somehow
     */
 
     const { data } = useGame(mono.game, () => true)
@@ -54,16 +54,9 @@
 
     const playerIndex = $derived(mono.indexPlayers(data.players))
 
-    function onPlayerDelete(id: number) {
-        // TODO: Restore properties
-        // if (deletingPlayer !== null) {
-        //     board.remove(deletingPlayer);
-        //     if (from === deletingPlayer)
-        //         setFrom(null);
-        //     if (to === deletingPlayer)
-        //         setTo(null);
-        //     setDeletingPlayer(null);
-        // }
+    function onPlayerRemove(id: number) {
+        data.players = mono.removePlayer(data.players, id)
+        data.owners = mono.removeOwnershipsForPlayer(data.owners, id)
     }
     function calculatePlayerValue(player: mono.Player) {
         return (
@@ -166,6 +159,7 @@
         player={playerIndex.get(props.id)!}
         ownerships={data.owners}
         {onPropertyClick}
+        onRemoveClick={() => onPlayerRemove(props.id)}
         pay={() => startExchange({
             pays: props.id,
         })}
@@ -259,7 +253,6 @@
             to={mode.type === "exchange" ? mode.charges : null}
             onClick={onPlayerClick}
             onAddClick={onAddClick}
-            onDelete={onPlayerDelete}
         />
     </div>
     <div

@@ -8,6 +8,7 @@
         player: mono.Player
         ownerships: mono.Ownerships
         onPropertyClick: (id: number) => void
+        onRemoveClick: () => void
         onReturn: () => void
         pay: () => void
         charge: () => void
@@ -25,7 +26,15 @@
         { id: "history", title: "Movimientos" },
     ]
 
-    const { player, ownerships, onPropertyClick, onReturn, pay, charge }: Props = $props()
+    const {
+        player,
+        ownerships,
+        onPropertyClick,
+        onRemoveClick,
+        onReturn,
+        pay,
+        charge
+    }: Props = $props()
 </script>
 
 <section class="pal-{player.color}">
@@ -34,7 +43,10 @@
             <button onclick={onReturn}>
                 <Icon use="ic-arrow-back" />
             </button>
-            {player.name}
+            <h2>{player.name}</h2>
+            <button onclick={onRemoveClick}>
+                <Icon use="ic-delete" />
+            </button>
         </nav>
         {#if player === mono.BANK}
                 <Icon class="bank" use="ic-account-balance" />

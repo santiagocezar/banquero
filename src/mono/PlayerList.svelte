@@ -11,48 +11,16 @@
         to: number | null
         onAddClick: () => void
         onClick: (id: number) => void
-        onDelete: (id: number) => void
     }
 
-    const {
-        players,
-        ownerships,
-        from,
-        to,
-        onClick,
-        onAddClick,
-        onDelete,
-    }: Props = $props()
+    const { players, ownerships, from, to, onClick, onAddClick }: Props =
+        $props()
 
     function delay(_node: Element, delay: number): TransitionConfig {
         return {
             duration: delay,
         }
     }
-
-    let deletingPlayer: number | null = $state(null)
-
-    // const deletingPlayerInfo = useMemo(() => {
-    //     if (deletingPlayer != null) {
-    //         const { name = '', palette = 0 } = board.get(deletingPlayer) ?? {};
-    //         return { name, palette: palettes[palette] };
-    //     } else {
-    //         return { name: '', palette: palettes[0] };
-    //     }
-    // }, [deletingPlayer]);
-
-    function doDelete() {
-        onDelete(deletingPlayer!)
-        deletingPlayer = null
-    }
-
-    function deletingDialogOpenChange() {
-        deletingPlayer = null
-    }
-/*
-    function onDelete(id: number) {
-        deletingPlayer = id
-    }*/
 </script>
 
 {#snippet status(from: boolean, to: boolean)}
@@ -68,16 +36,15 @@
 {#snippet properties(owned: number[])}
     <div class="properties">
         {#if owned.length}
-            {#each owned as property}
+            {#each owned as property, i}
                 <div
                     class="prop"
-                    style="--color: {mono.properties[property].color}"
+                    style="--color: {mono.properties[property].color};
+                        --i: {i / (owned.length - 1)}"
                 >
                     <div></div>
                 </div>
             {/each}
-        {:else}
-            <p>Sin propiedades</p>
         {/if}
     </div>
 {/snippet}
@@ -160,7 +127,16 @@
         grid-column: 1 / -1;
     }
 
-
+    @keyframes slidein {
+        0% {
+            opacity: 0;
+            translate: 0 calc(1.2rem + var(--offset));
+        }
+        100% {
+            opacity: 1;
+            translate: 0 var(--offset);
+        }
+    }
     .properties {
         --height: 3rem;
         --width: calc(var(--height) * 0.707);
@@ -183,13 +159,16 @@
             max-width: calc(var(--width) / 2);
             position: relative;
 
-            translate: 0 -0.125rem;
+            animation: 0.3s ease-out calc(var(--i) * var(--i) * 0.5s) both
+                slidein;
+
+            --offset: -0.125rem;
 
             &:nth-child(3n) {
-                translate: 0 0.125rem;
+                --offset: 0.125rem;
             }
             &:nth-child(3n + 1) {
-                translate: 0 0;
+                --offset: 0rem;
             }
 
             & > div {
@@ -226,7 +205,7 @@
             box-shadow 0.4s,
             border-color 0.4s,
             background-color 0.4s;
-        
+
         &[data-active="true"] {
             /*             box-shadow: 0 0.4rem 1rem var(--p40); */
             --elevation: 0.25rem;
@@ -238,9 +217,7 @@
     .bank-card {
         --height: 5rem;
 
-        background-image: linear-gradient(0deg, var(--p50), var(--p70));
-        --light: var(--p40);
-        --dark: var(--p70);
+        background-image: linear-gradient(0deg, var(--p70), var(--p50));
         color: var(--p10);
 
         & :global(.bank) {
@@ -252,9 +229,10 @@
     }
     .player-card {
         background-color: var(--p50);
-        box-shadow: var(--plastic-box-shadow), 0 0 2rem .5rem inset var(--p50);
+        box-shadow:
+            var(--plastic-box-shadow),
+            0 0 2rem 0.5rem inset var(--p50);
         color: var(--contrast);
-
 
         & .money {
             justify-self: end;
@@ -262,7 +240,6 @@
             font-size: 1.2rem;
             font-variant: tabular-nums;
         }
-
     }
 
     .status-icon {

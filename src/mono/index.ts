@@ -108,7 +108,7 @@ export function filterOwner(owners: Ownerships, id: number): Ownership[] {
 }
 
 /**
- * Get the property ID for those owned by certain player, 
+ * Get the property ID for those owned by certain player,
  * or owned by no one if BANK.id is passed.
  * @param owners Full ownership data
  * @param id ID of owner to use as filter
@@ -147,10 +147,10 @@ export interface ExParty {
     id: number
     /**
      * Properties sold.
-     * 
+     *
      * This way the value is always valid, since it's linked to the player that
      * actually owns those properties.
-     * 
+     *
      * If it stored the properties A purchases from party B, when B is changed
      * to C, A would still reference the properties owned by B, which C does
      * not have, therefore is invalid.
@@ -161,8 +161,8 @@ export interface ExParty {
 export interface Exchange {
     pays: ExParty
     charges: ExParty
-    
-    /** Amount of money exchanged between parties */    
+
+    /** Amount of money exchanged between parties */
     amount: number
     /** Properties to mortage */
     mortgage: number[]
@@ -180,13 +180,13 @@ export function indexPlayers(players: Player[]) {
 
 export function getPlayer(players: Map<number, Player>, id: number): Player | null {
     if (id === BANK.id) { return BANK }
-    
+
     return players.get(id) ?? null
 }
 
 export function findPlayerIndex(players: Player[], id: number): number | null {
     if (id === BANK.id) { return null }
-    
+
     return players.findIndex(player => player.id === id)
 }
 
@@ -215,9 +215,9 @@ export function applyExchangeToPlayers(prevPlayers: Player[], ex: Exchange): Pla
     const players = prevPlayers.slice()
     const paysIndex = findPlayerIndex(players, ex.pays.id)
     const chargesIndex = findPlayerIndex(players, ex.charges.id)
-    
-    console.log({players, paysIndex, chargesIndex})
-    
+
+    console.log({ players, paysIndex, chargesIndex })
+
     if (paysIndex !== null) {
         players[paysIndex] = addMoney(players[paysIndex], -ex.amount)
     }
@@ -260,11 +260,25 @@ export function applyExchangeToOwnerships(prevOwnerships: Ownerships, ex: Exchan
     )
     sell(ex.pays, ex.charges)
     sell(ex.charges, ex.pays)
-    
+
     mortgaged(ex.mortgage, true)
     mortgaged(ex.liftMortgage, false)
-    
+
     ownerships[ex.buildingsFor] = buildHouses(ownerships[ex.buildingsFor], ex.buildings)
-    
+
     return ownerships
+}
+
+export function removePlayer(prevPlayers: Player[], id: number): Player[] {
+    return prevPlayers.filter((player) => (
+        player.id !== id
+    ))
+}
+
+export function removeOwnershipsForPlayer(prevOwnerships: Ownerships, id: number): Ownerships {
+    return prevOwnerships.map((ownership) => (
+        ownership !== null && ownership.owner === id
+            ? null
+            : ownership
+    ))
 }

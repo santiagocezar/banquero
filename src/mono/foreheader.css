@@ -24,6 +24,9 @@ header {
         line-height: 1;
         align-items: center;
         font-weight: bold;
+        & h2 {
+            flex-grow: 1;
+        }
         & button {
             background-color: inherit;
             color: inherit;
