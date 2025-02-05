@@ -76,15 +76,14 @@ export function useGame<T>(
             ? game.initial()
             : importSave(game, encoded)
     )
+
     addToRecents(game.identifier, id)
 
     const mutableData = $state(data)
 
     $effect(() => {
-        const data = JSON.stringify(mutableData)
         if (autosave(mutableData)) {
-            localStorage.setItem(id, data)
-            console.log("saved!")
+            storeSave(id, mutableData)
         }
     })
 
@@ -96,6 +95,7 @@ export async function shareGameData(id: string) {
     const data = localStorage.getItem(id)!
     const encoded = dataToUrlSafe(data)
 
+    url.hash = ""
     url.searchParams.delete("id")
     url.searchParams.set("data", encoded)
     await navigator.share({
@@ -139,6 +139,8 @@ export function deleteRecent(id: string): Recent[] {
 }
 
 function addToRecents(game: string, id: string) {
+    console.trace("adding " + id)
+
     let recents = getRecents()
     if (!recents) return
 

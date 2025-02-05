@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { range } from "../lib/utils.svelte"
+    import { range } from "$lib/utils.svelte"
 
     interface Props {
         placeholder: string

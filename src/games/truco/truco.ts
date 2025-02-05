@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { type Game } from "../lib/bxx.svelte"
+import { type Game } from "$lib/bxx.svelte"
 
 export const TrucoTeam = z.object({
     name: z.string(),
@@ -32,15 +32,15 @@ export const truco: Game<TrucoGame> = {
             old.teams === null
                 ? null
                 : {
-                      nosotros: {
-                          ...old.teams.nosotros,
-                          score: 0,
-                      },
-                      ellos: {
-                          ...old.teams.ellos,
-                          score: 0,
-                      },
-                  },
+                    nosotros: {
+                        ...old.teams.nosotros,
+                        score: 0,
+                    },
+                    ellos: {
+                        ...old.teams.ellos,
+                        score: 0,
+                    },
+                },
         goal: old.goal,
     }),
 }

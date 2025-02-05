@@ -2,20 +2,30 @@
 import Base from "../layouts/Base.astro"
 import IconSet from "../components/IconSet.astro"
 import Icon from "../components/Icon.astro"
-import { View, name, showHeader, iconPack, iconPrefix, icons } from "../game"
+
+import meta from "$game/meta.js"
+
+import favicon from "$game/assets/favicon.svg?url"
+import logo from "$game/assets/icon.svg?url"
+
+import View from "$view"
 ---
 
-<Base title={name}>
-    <IconSet pack={iconPack} prefix={iconPrefix} names={icons} />
+<Base title={meta.name} description={meta.description} icon={logo} favicon={favicon}>
+    <IconSet
+        pack={meta.icons.pack}
+        prefix={meta.icons.prefix}
+        names={meta.icons.use}
+    />
     {
-        showHeader && (
+        meta.headerInGame && (
             <header id="header">
                 <button onclick="history.back()" class="button back">
                     <Icon use="ic-arrow-back" />
                 </button>
                 <a href="/" class="logo">
-                    <img transition:name="logo" src="/icon.svg" alt="Score" />
-                    <span transition:name="type">trucomatic</span>
+                    <img transition:name="logo" src={logo} alt={meta.name} />
+                    <span transition:name="type">{meta.name}</span>
                 </a>
                 <button class="button" id="share">
                     <Icon use="ic-share" />
@@ -23,7 +33,7 @@ import { View, name, showHeader, iconPack, iconPrefix, icons } from "../game"
             </header>
         )
     }
-    <View client:load />
+    <View client:only />
 </Base>
 
 <style lang="less">
@@ -76,7 +86,7 @@ import { View, name, showHeader, iconPack, iconPrefix, icons } from "../game"
 </style>
 
 <script>
-    import { shareGameData } from "../lib/bxx.svelte"
+    import { shareGameData } from "$lib/bxx.svelte"
 
     const shareBtn = document.getElementById("share")
     if (shareBtn instanceof HTMLButtonElement) {

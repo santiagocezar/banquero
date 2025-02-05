@@ -1,5 +1,6 @@
-export const name = "Monopolio"
-export const showHeader = false;
+export const name = "bingomatic"
+export const showHeader = true;
+export { default as logo } from './bingo/icon.svg?url'
 
 export const iconPack = "material-symbols"
 export const iconPrefix = "ic"
@@ -25,4 +26,4 @@ export const icons = [
     "upload",
 ]
 
-export { default as View } from './mono/View.svelte'
+export { default as View } from './bingo/View.svelte'

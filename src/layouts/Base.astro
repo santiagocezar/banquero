@@ -10,19 +10,17 @@ import Reload from "../components/Reload.svelte"
 
 interface Props {
     title: string
+    description: string
+    icon: string
+    favicon: string
 }
 ---
 
 <html lang="es">
     <head>
         <meta charset="utf-8" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="apple-touch-icon" href="/apple180.png" sizes="180x180" />
-        <!-- <link rel="mask-icon" href="/mask-icon.svg" color="#FFFFFF" /> -->
-        <meta
-            name="description"
-            content="El contador del truco por excelencia."
-        />
+        <link rel="icon" type="image/svg+xml" href={Astro.props.favicon} />
+        <meta name="description" content={Astro.props.description} />
         <meta
             transition:persist
             id="theme-color"
@@ -37,12 +35,12 @@ interface Props {
             href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Poppins:wght@700;900&display=swap"
             rel="stylesheet"
         />
-        <title>Trucomatic</title>
+        <title>{Astro.props.title}</title>
         <script
             async
             src="https://analytics.umami.is/script.js"
             data-website-id="2caa0867-f528-4c96-bccc-0ebe3ceec902"></script>
-        <ClientRouter />
+        <!-- <ClientRouter /> -->
         {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
     </head>
     <body>
@@ -53,7 +51,7 @@ interface Props {
         />
         <Reload client:only />
         <slot />
-    </body><script src="../lib/theme-color.ts"></script>
+    </body><script src="$lib/theme-color.ts"></script>
 </html>
 
 <style>

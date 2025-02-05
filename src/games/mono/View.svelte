@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { useGame } from "../lib/bxx.svelte"
+    import { useGame } from "$lib/bxx.svelte"
     import * as mono from "."
     import { sum } from "$lib/utils.svelte"
 
