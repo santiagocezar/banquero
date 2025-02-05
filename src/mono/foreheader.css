@@ -24,6 +24,10 @@ header {
         line-height: 1;
         align-items: center;
         font-weight: bold;
+        & button {
+            background-color: inherit;
+            color: inherit;
+        }
     }
     & .value {
         text-align: center;
@@ -37,13 +41,9 @@ header {
             line-height: 1;
         }
     }
-    & button {
-        background-color: inherit;
-        color: inherit;
-    }
-    & .actions > button {
+    & .actions button {
         background-color: var(--p10);
-        color: var(--p90);
+        --text: var(--p90);
         --light: white;
         --dark: var(--p30);
         --shadow: color-mix(in srgb, var(--p70), transparent 75%);

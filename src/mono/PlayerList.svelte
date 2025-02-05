@@ -9,9 +9,9 @@
         ownerships: mono.Ownerships
         from: number | null
         to: number | null
-        onclickadd: () => void
-        onclick: (id: number) => void
-        ondelete: (id: number) => void
+        onAddClick: () => void
+        onClick: (id: number) => void
+        onDelete: (id: number) => void
     }
 
     const {
@@ -19,12 +19,12 @@
         ownerships,
         from,
         to,
-        onclick,
-        onclickadd,
-        ondelete,
+        onClick,
+        onAddClick,
+        onDelete,
     }: Props = $props()
 
-    function delay(node: Element, delay: number): TransitionConfig {
+    function delay(_node: Element, delay: number): TransitionConfig {
         return {
             duration: delay,
         }
@@ -42,17 +42,17 @@
     // }, [deletingPlayer]);
 
     function doDelete() {
-        ondelete(deletingPlayer!)
+        onDelete(deletingPlayer!)
         deletingPlayer = null
     }
 
     function deletingDialogOpenChange() {
         deletingPlayer = null
     }
-
+/*
     function onDelete(id: number) {
         deletingPlayer = id
-    }
+    }*/
 </script>
 
 {#snippet status(from: boolean, to: boolean)}
@@ -65,13 +65,13 @@
     </div>
 {/snippet}
 
-{#snippet properties(owned: mono.Ownership[])}
+{#snippet properties(owned: number[])}
     <div class="properties">
         {#if owned.length}
             {#each owned as property}
                 <div
                     class="prop"
-                    style="--color: {mono.properties[property.id].color}"
+                    style="--color: {mono.properties[property].color}"
                 >
                     <div></div>
                 </div>
@@ -83,22 +83,25 @@
 {/snippet}
 
 <div class="player-list">
-    <button
-        class="reset bank-card plastic-pal pal--1"
-        data-active={from === mono.BANK.id || to === mono.BANK.id}
-        onclick={() => onclick(mono.BANK.id)}
-    >
-        {@render status(from === mono.BANK.id, to === mono.BANK.id)}
-        <p class="name">Banco</p>
-        <Icon class="bank" use="ic-account-balance" />
-    </button>
+    <div class="player-wrapper">
+        {@render properties(mono.filterOwnerIDs(ownerships, mono.BANK.id))}
+        <button
+            class="reset bank-card plastic pal--1"
+            data-active={from === mono.BANK.id || to === mono.BANK.id}
+            onclick={() => onClick(mono.BANK.id)}
+        >
+            {@render status(from === mono.BANK.id, to === mono.BANK.id)}
+            <p class="name">Banco</p>
+            <Icon class="bank" use="ic-account-balance" />
+        </button>
+    </div>
     {#each players as player (player.id)}
         <div class="player-wrapper">
-            {@render properties(mono.filterOwner(ownerships, player.id))}
+            {@render properties(mono.filterOwnerIDs(ownerships, player.id))}
             <button
-                class="reset player-card pal-{player.color} plastic-pal"
+                class="reset player-card pal-{player.color} plastic"
                 data-active={from === player.id || to === player.id}
-                onclick={() => onclick(player.id)}
+                onclick={() => onClick(player.id)}
             >
                 {@render status(from === player.id, to === player.id)}
                 <p class="name">{player.name}</p>
@@ -108,7 +111,7 @@
     {/each}
     <div class="player-wrapper">
         <div></div>
-        <button class="reset player-add plastic" onclick={onclickadd}>
+        <button class="reset player-add plastic" onclick={onAddClick}>
             <div class="status-icon" data-active={true}>
                 <Icon use="ic-add" />
             </div>
@@ -153,6 +156,10 @@
         display: grid;
         grid-template-rows: 1rem 1fr;
     }
+    .player-wrapper:has(.bank-card) {
+        grid-column: 1 / -1;
+    }
+
 
     .properties {
         --height: 3rem;
@@ -203,6 +210,7 @@
             }
         }
     }
+    .bank-card,
     .player-card,
     .player-add {
         display: flex;
@@ -211,16 +219,42 @@
         user-select: none;
         --height: 3.5rem;
         text-align: left;
-    }
-    .player-card {
-        background-color: var(--p50);
-        color: var(--contrast);
-
         z-index: 1;
 
         transition:
             translate 0.4s,
-            box-shadow 0.4s;
+            box-shadow 0.4s,
+            border-color 0.4s,
+            background-color 0.4s;
+        
+        &[data-active="true"] {
+            /*             box-shadow: 0 0.4rem 1rem var(--p40); */
+            --elevation: 0.25rem;
+            background-color: var(--p40);
+            border-color: var(--p10);
+            translate: 0 -0.25rem;
+        }
+    }
+    .bank-card {
+        --height: 5rem;
+
+        background-image: linear-gradient(0deg, var(--p50), var(--p70));
+        --light: var(--p40);
+        --dark: var(--p70);
+        color: var(--p10);
+
+        & :global(.bank) {
+            width: 72px;
+            height: 72px;
+            translate: 0 3.125%;
+            opacity: 0.5;
+        }
+    }
+    .player-card {
+        background-color: var(--p50);
+        box-shadow: var(--plastic-box-shadow), 0 0 2rem .5rem inset var(--p50);
+        color: var(--contrast);
+
 
         & .money {
             justify-self: end;
@@ -229,13 +263,6 @@
             font-variant: tabular-nums;
         }
 
-        &[data-active="true"] {
-            /*             box-shadow: 0 0.4rem 1rem var(--p40); */
-            --elevation: 0.25rem;
-            background-color: var(--p10);
-            color: var(--p90);
-            translate: 0 -0.25rem;
-        }
     }
 
     .status-icon {
@@ -282,30 +309,6 @@
     .player-add .name,
     [data-active="true"] .name {
         translate: 0;
-    }
-
-    .bank-card {
-        display: flex;
-        align-items: center;
-        padding: 0.5rem;
-        grid-column: 1 / -1;
-        user-select: none;
-        text-align: left;
-        --height: 5rem;
-
-        background-image: linear-gradient(0deg, var(--p50), var(--p70));
-        --light: var(--p40);
-        --dark: var(--p70);
-        color: var(--p10);
-
-        transition: transform 0.3s;
-
-        & :global(.bank) {
-            width: 72px;
-            height: 72px;
-            translate: 0 3.125%;
-            opacity: 0.5;
-        }
     }
     .help {
         position: relative;

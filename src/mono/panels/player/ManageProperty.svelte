@@ -7,17 +7,17 @@
     interface Props {
         id: number
         ownerships: mono.Ownerships
-        onreturn: () => void
-        chargeRent: (price: number) => void
-        sell: (price: number) => void
-        buyHouses: (amount: number, price: number, housesFor: number) => void
-        mortgage: (price: number) => void
+        onReturn: (player: number) => void
+        sell: (owner: number, price: number) => void
+        chargeRent: (owner: number, price: number) => void
+        buyHouses: (owner: number, amount: number, price: number, housesFor: number) => void
+        mortgage: (owner: number, price: number) => void
     }
 
     const {
         id,
         ownerships,
-        onreturn: goBack,
+        onReturn,
         chargeRent,
         sell,
         buyHouses,
@@ -34,9 +34,11 @@
     const houseDec = () => (houseCount = Math.max(0, houseCount - 1))
 
     const onRentClick = () => chargeRent(rentPrice)
-    const onSellClick = () => sell(prop.price)
+    const onSellClick = () => sell(mono.getOwner(ownerships, id), prop.price)
     const onHouseConfirmClick = () => buyHouses(houseCount - (ownerships[id]?.houses ?? 0), (prop as {housing: number}).housing, id)
     const onMortageClick = () => mortgage(prop.price / 2)
+    
+    const goBack = () => onReturn(mono.getOwner(ownerships, id))
 </script>
 
 {#snippet houses(count: number, price: number, diff: number)}

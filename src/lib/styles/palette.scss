@@ -69,13 +69,7 @@
 }
 
 :root {
-    --p10: hsl(220, 5%, 97%);
-    --p30: hsl(220, 5%, 90%);
-    --p40: hsl(220, 5%, 75%);
-    --p50: hsl(220, 5%, 60%);
-    --p70: hsl(220, 5%, 30%);
-    --p90: hsl(220, 5%, 10%);
-    --contrast: white;
+    @include palette(10deg, 5%, 5%);
 
     --bg0: #eeeeee;
     --bg1: #f4f4f4;
@@ -111,14 +105,6 @@
     color: var(--text);
 
     @media (prefers-color-scheme: dark) {
-        --p10: hsl(220, 5%, 10%);
-        --p30: hsl(220, 5%, 17%);
-        --p40: hsl(220, 5%, 32%);
-        --p50: hsl(220, 5%, 47%);
-        --p70: hsl(220, 5%, 77%);
-        --p90: hsl(220, 5%, 90%);
-        --contrast: white;
-
         --bg0: #000;
         --bg1: #111;
         --bg2: #222;

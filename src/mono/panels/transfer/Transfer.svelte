@@ -1,86 +1,99 @@
 <script lang="ts">
     import * as mono from "$mono"
+    import { sideEffect } from "$lib/utils.svelte"
     import { propertyItem } from "$mono/Properties.svelte"
     import SelectProperties from "./SelectProperties.svelte"
     import Icon from "src/components/Icon.svelte"
     import { SvelteSet } from "svelte/reactivity"
 
     interface Props {
-        players: Map<number, mono.Player>
         ownerships: mono.Ownerships
-        cancelExchange: () => void
-        confirmExchange: (value: mono.Exchange) => void
-        exchange: mono.Exchange
+        pays: mono.Player | null
+        charges: mono.Player | null
+        defaultAmount: number,
+        defaultSell: number | null,
+        onSwitchClick: (who: "pays" | "charges") => void
+        onCancel: () => void
+        onSubmit: (value: mono.Exchange) => void
     }
 
     const {
-        players,
         ownerships,
-        cancelExchange,
-        confirmExchange,
-        exchange = $bindable(),
+        pays,
+        charges,
+        defaultAmount,
+        defaultSell,
+        onSwitchClick,
+        onCancel,
+        onSubmit,
     }: Props = $props()
     
-    const initialAmount = exchange.amount
-    console.log(initialAmount)
-
-    const pays = $derived(
-        exchange.pays !== null
-            ? (players.get(exchange.pays) ?? mono.BANK)
-            : null
-    )
-    const charges = $derived(
-        exchange.charges !== null
-            ? (players.get(exchange.charges) ?? mono.BANK)
-            : null
-    )
-    const forced = $derived(exchange.houses != 0 || exchange.mortgage.length > 0)
+    let amount = $state(defaultAmount)
+    let payerSells = $state(new SvelteSet([]))
+    let chargerSells = $state(new SvelteSet(defaultSell === null ? [] : [defaultSell]))
     
-    let sell = $state(new SvelteSet(exchange.sell))
-    let buy = $state(new SvelteSet(exchange.buy))
-
+    sideEffect(() => pays, () => payerSells.clear())
+    sideEffect(() => charges, () => chargerSells.clear())
+    
+    // const forced = $derived(exchange.houses != 0 || exchange.mortgage.length > 0)
+    const forced = false
+    
     $effect(() => {
-        let amount = initialAmount
-        for (const p of buy.values()) {
-            amount += mono.properties[p].price
+        let newAmount = defaultAmount
+        for (const p of chargerSells.values()) {
+            newAmount += mono.properties[p].price
         }
-        for (const p of sell.values()) {
-            amount -= mono.properties[p].price
+        for (const p of payerSells.values()) {
+            newAmount -= mono.properties[p].price
         }
-        exchange.amount = Math.max(amount, 0)
+        amount = Math.max(newAmount, 0)
     })
 
+    $inspect(amount)
+    
     function askConfirm(ev: Event) {
+        if (pays === null || charges === null) {
+            return
+        }
+        
         // TODO: actually ask
-        confirmExchange({
-            ...exchange,
-            sell: Array.from(sell),
-            buy: Array.from(buy),
+        onSubmit({
+            pays: {
+                id: pays.id,
+                sells: Array.from(payerSells)
+            },
+            charges: {
+                id: charges.id,
+                sells: Array.from(chargerSells)
+            },
+            amount,
+            buildings: 0,
+            buildingsFor: 0,
+            liftMortgage: [],
+            mortgage: [],
         })
         ev.preventDefault()
     }
 
     function switchPaying() {
-        exchange.pays = null
+        onSwitchClick("pays")
     }
     function switchCharging() {
-        exchange.charges = null
+        onSwitchClick("charges")
     }
 </script>
 
 <section>
-    <header class="plastic">
+    <header class="plastic set-left pal-{pays?.color}">
         <nav>
-            <button type="button" onclick={cancelExchange}>
+            <button type="button" onclick={onCancel}>
                 <Icon use="ic-close" />
             </button>
             <p>
                 Transferir
             </p>
         </nav>
-        <div class="set-left pal-{pays?.color}">
-            <div class="gradient pal-{charges?.color}"></div>
-        </div>
+        <div class="gradient pal-{charges?.color}"></div>
         <form action="#" onsubmit={askConfirm}>
             <div class="value">
                 <label class="big">
@@ -90,30 +103,30 @@
                         type="number"
                         class="big"
                         inputMode="numeric"
-                        bind:value={exchange.amount}
+                        bind:value={amount}
                         autofocus={true}
                         disabled={forced}
                         onfocus={(e) => (e.target as HTMLInputElement).select()}
                     />
                 </label>
             </div>
-            <div class="actions">
+            <div class="even-row">
                 <button
                     type="button"
-                    class="player pal-{pays?.color} plastic-pal"
+                    class="player pal-{pays?.color} plastic"
                     onclick={switchPaying}
                     disabled={forced}
                 >
-                    <p>{pays?.name ?? "—"}</p>
+                    <p>{pays?.name ?? "···"}</p>
                     <Icon aria-label="Cambiar" use="ic-swap-horiz" />
                 </button>
                 <button
                     type="button"
-                    class="player pal-{charges?.color} plastic-pal"
+                    class="player pal-{charges?.color} plastic"
                     onclick={switchCharging}
                     disabled={forced}
                 >
-                    <p>{charges?.name ?? "—"}</p>
+                    <p>{charges?.name ?? "···"}</p>
                     <Icon aria-label="Cambiar" use="ic-swap-horiz" />
                 </button>
             </div>
@@ -130,7 +143,7 @@
         </form>
     </header>
     <main>
-        {#if exchange.houses != 0}
+    <!--    {#if exchange.houses != 0}
             <h3>
                 <span class="pal-{charges!.color}">{charges?.name}</span>
                 entrega
@@ -145,7 +158,7 @@
                 )}
             </div>
             </div>
-        {:else}
+        {:else}-->
             {#if charges}
                 <h3>
                     <span class="pal-{charges?.color}">{charges.name}</span>
@@ -154,7 +167,7 @@
                 <SelectProperties
                     player={charges}
                     {ownerships}
-                    bind:selected={buy}
+                    bind:selected={chargerSells}
                 />
             {/if}
             {#if pays}
@@ -162,9 +175,13 @@
                     <span class="pal-{pays?.color}">{pays.name}</span>
                     entrega
                 </h3>
-                <SelectProperties player={pays} {ownerships} bind:selected={sell} />
+                <SelectProperties 
+                    player={pays}
+                    {ownerships} 
+                    bind:selected={payerSells}
+                />
             {/if}
-        {/if}
+<!--         {/if} -->
     </main>
 </section>
 
@@ -179,10 +196,15 @@
         --shadow-parent: var(--shadow);
 
         position: relative;
-        background-image: linear-gradient(to top, transparent, var(--bg0) 75%);
+        background-image: linear-gradient(to bottom, var(--p90) 25%, transparent 100%);
+        background-color: transparent !important;
         overflow: hidden;
         padding: 0.5rem;
 
+        & .even-row {
+            padding: .5rem;
+            gap: .5rem;
+        }
         & nav {
             font-size: 1.5rem;
         }
@@ -247,17 +269,17 @@
     }
 
     .set-left {
-        position: absolute;
-        inset: 0;
-        z-index: -1;
         --left-color: var(--p50, transparent);
         transition: --p50 .5s;
     }
     .gradient {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
         width: 100%;
         height: 100%;
         --right-color: var(--p50, transparent);
-        background-image: linear-gradient(in oklch to right, var(--left-color), var(--right-color));
+        background-image: radial-gradient(in oklch circle at 70%, var(--right-color) 25%, var(--left-color) 100%);
         transition: --p50 .5s;
     }
 </style>

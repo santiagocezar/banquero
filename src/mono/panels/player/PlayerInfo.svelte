@@ -7,8 +7,8 @@
     interface Props {
         player: mono.Player
         ownerships: mono.Ownerships
-        onpropertyselected: (id: number) => void
-        onreturn: () => void
+        onPropertyClick: (id: number) => void
+        onReturn: () => void
         pay: () => void
         charge: () => void
     }
@@ -25,13 +25,13 @@
         { id: "history", title: "Movimientos" },
     ]
 
-    const { player, ownerships, onpropertyselected, onreturn, pay, charge }: Props = $props()
+    const { player, ownerships, onPropertyClick, onReturn, pay, charge }: Props = $props()
 </script>
 
 <section class="pal-{player.color}">
-    <header class="plastic-pal">
+    <header class="plastic">
         <nav>
-            <button onclick={onreturn}>
+            <button onclick={onReturn}>
                 <Icon use="ic-arrow-back" />
             </button>
             {player.name}
@@ -70,7 +70,7 @@
         </div>
 
         <div class="tabview" use:melt={$content("properties")}>
-            <Properties {ownerships} owner={player.id} {onpropertyselected} displayPrice={player === mono.BANK} />
+            <Properties {ownerships} owner={player.id} onpropertyselected={onPropertyClick} displayPrice={player === mono.BANK} />
         </div>
         <div class="tabview" use:melt={$content("history")}></div>
     </main>

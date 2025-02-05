@@ -20,79 +20,81 @@
     }
 }
 
-@layer global {
-    .even-row {
-        display: flex;
-        gap: inherit;
-        > * {
-            width: 0;
-            flex-basis: 0;
-            flex-grow: 1;
-        }
-    }
-    .truco-background {
-        display: flex;
-        overflow: hidden;
-        flex-direction: column;
-        border-radius: 2rem;
-        background-color: var(--p30);
-        transition: background-color 0.5s ease;
-        border: 1px solid var(--p50);
+.even-row {
+    display: flex;
+    gap: inherit;
+    > * {
+        width: 0;
+        flex-basis: 0;
         flex-grow: 1;
-        animation: slide-left 0.4s ease-out;
-        &:first-child {
-            animation: slide-right 0.4s ease-out;
-        }
     }
-    .plastic-pal,
-    .plastic {
-        --elevation: 1px;
-        
-        border-radius: 0.5rem;
-        box-shadow:
-        0 1px 0 0 inset var(--light, #fff4),
-        0 -2px 0 0 inset var(--dark, #0004),
-        0 var(--elevation) calc(var(--elevation) * 4) var(--shadow, #0004);
-        border: 1px solid var(--border, #000);
-    }
+}
+.truco-background {
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    border-radius: 2rem;
+    background-color: var(--p30);
+    transition: background-color 0.5s ease;
+    border: 1px solid var(--p50);
+    flex-grow: 1;
+    animation: slide-left 0.4s ease-out;
+}
+.truco-background:first-child {
+    animation: slide-right 0.4s ease-out;
+}
 
-    button:not(:is(.reset)) {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: var(--blue);
-        color: white;
-        padding: 0 1rem;
-        border-radius: 0.5rem;
-        gap: 0.5rem;
-        height: 3rem;
-    }
+.plastic {
+    --text: var(--contrast);
+    --light: var(--p10);
+    --dark: var(--p40);
+    /* --light: var(--p30); */
+    /* --dark: var(--p70); */
+    --border: var(--p90);
+    --shadow: color-mix(in srgb, var(--p50), transparent 60%);
+    
+    --elevation: 1px;
+    --plastic-bevel-top-box-shadow: 0 1px 0 0 inset var(--light);
+    --plastic-bevel-bottom-box-shadow: 0 -2px 2px 0px inset var(--dark);
+    --plastic-drop-box-shadow: 0 var(--elevation) calc(var(--elevation) * 4) var(--shadow);
+    --plastic-box-shadow: 
+        var(--plastic-bevel-top-box-shadow),
+        var(--plastic-bevel-bottom-box-shadow),
+        var(--plastic-drop-box-shadow);
+    background-color: var(--p50);
+    color: var(--text);
+    border-radius: 0.5rem;
+    box-shadow: var(--plastic-box-shadow);
+    border: 1px solid var(--border);
+}
 
-    .plastic-pal
-        --light: var(--p30);
-        --dark: var(--p70);
-        --border: var(--p90);
-        --shadow: color-mix(in srgb, var(--p50), transparent 60%);
-    }
+button:not(:is(.reset)) {
+    --text: white;
 
-    button.plastic-pal,
-    button.plastic {
-        background-color: var(--p50);
-        color: var(--contrast);
-        height: var(--height, 3rem);
-        transition: height .2s, box-shadow .1s, margin-top .2s;
-        
-        &:disabled,
-        &:active {
-            margin-top: 2px;
-            height: calc(var(--height, 3rem) - 2px);
-            
-            box-shadow: none;
-        }
-        &:disabled {
-            & > * {
-                opacity: .5;
-            }
-        }
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--blue);
+    color: var(--text);
+    padding: 0 1rem;
+    border-radius: 0.5rem;
+    gap: 0.5rem;
+    height: 3rem;
+}
+
+button.plastic {
+    height: var(--height, 3rem);
+    transition: height .2s, box-shadow .1s, margin-top .2s;
+}
+button:disabled {
+    color: color-mix(in srgb, var(--text), transparent 50%);
+}
+
+
+button:disabled,
+button:active {
+    margin-top: 2px;
+    height: calc(var(--height, 3rem) - 2px);
+    
+    box-shadow: none;
 }
