@@ -1,6 +1,6 @@
 <script lang="ts">
     import { useRegisterSW } from "virtual:pwa-register/svelte"
-    import Icon from "src/components/Icon.svelte"
+    import Icon from "$lib/components/Icon.svelte"
 
     const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
         onRegistered(swr) {

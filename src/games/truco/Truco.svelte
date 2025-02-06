@@ -1,8 +1,8 @@
 <script lang="ts">
     import AddTeam from "./AddTeam.svelte"
     import Team from "./Team.svelte"
-    import FancyDialog from "src/components/FancyDialog.svelte"
-    import Icon from "src/components/Icon.svelte"
+    import FancyDialog from "$lib/components/FancyDialog.svelte"
+    import Icon from "$lib/components/Icon.svelte"
     import { TrucoTeam } from "./truco"
     import {
         generateID,

@@ -1,6 +1,6 @@
 <script lang="ts">
     import Fosforos from "./Fosforos.svelte"
-    import Icon from "src/components/Icon.svelte"
+    import Icon from "$lib/components/Icon.svelte"
     import { TrucoTeam } from "./truco"
     import { range } from "$lib/utils.svelte"
     import { confetti } from "tsparticles-confetti"

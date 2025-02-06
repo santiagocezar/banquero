@@ -1,9 +1,9 @@
 <script lang="ts">
-    import FancyDialog from "src/components/FancyDialog.svelte"
+    import FancyDialog from "$lib/components/FancyDialog.svelte"
     import { useGame } from "$lib/bxx.svelte"
     import * as bingo from "./index.ts"
 
-    import Icon from "src/components/Icon.svelte"
+    import Icon from "$lib/components/Icon.svelte"
     import { SvelteSet } from "svelte/reactivity"
     import { fly, scale } from "svelte/transition"
     import { bounceOut } from "svelte/easing"

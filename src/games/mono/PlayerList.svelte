@@ -1,7 +1,7 @@
 <script lang="ts">
-    import * as mono from "$mono"
-    import handURL from "$lib/assets/hand.svg?url"
-    import Icon from "../components/Icon.svelte"
+    import * as mono from "$game"
+    import handURL from "$game/assets/hand.svg?url"
+    import Icon from "$lib/components/Icon.svelte"
     import type { TransitionConfig } from "svelte/transition"
 
     interface Props {

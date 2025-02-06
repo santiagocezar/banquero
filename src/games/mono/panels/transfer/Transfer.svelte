@@ -1,9 +1,9 @@
 <script lang="ts">
-    import * as mono from "$mono"
+    import * as mono from "$game"
     import { sideEffect } from "$lib/utils.svelte"
-    import { propertyItem } from "$mono/Properties.svelte"
+    import { propertyItem } from "$game/Properties.svelte"
     import SelectProperties from "./SelectProperties.svelte"
-    import Icon from "src/components/Icon.svelte"
+    import Icon from "$lib/components/Icon.svelte"
     import { SvelteSet } from "svelte/reactivity"
 
     interface Props {

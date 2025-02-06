@@ -7,7 +7,7 @@
     import Transfer from "./panels/transfer/Transfer.svelte"
     import AddPlayer from "./panels/add/AddPlayer.svelte"
 
-    import Icon from "src/components/Icon.svelte"
+    import Icon from "$lib/components/Icon.svelte"
     import PlayerInfo from "./panels/player/PlayerInfo.svelte"
     import ManageProperty from "./panels/player/ManageProperty.svelte"
 

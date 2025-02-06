@@ -1,8 +1,8 @@
 <script lang="ts">
-    import Properties from "$mono/Properties.svelte"
-    import Icon from "src/components/Icon.svelte"
+    import Properties from "$game/Properties.svelte"
+    import Icon from "$lib/components/Icon.svelte"
     import { createTabs, melt } from "@melt-ui/svelte"
-    import * as mono from "$mono"
+    import * as mono from "$game"
 
     interface Props {
         player: mono.Player

@@ -1,6 +1,6 @@
 <script lang="ts">
-    import Icon from "src/components/Icon.svelte"
-    import * as mono from "$mono"
+    import Icon from "$lib/components/Icon.svelte"
+    import * as mono from "$game"
     import { contrast, range } from "$lib/utils.svelte"
     import { slide } from "svelte/transition"
 

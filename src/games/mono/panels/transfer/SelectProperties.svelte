@@ -1,7 +1,7 @@
 <script lang="ts">
-    import * as mono from "$mono"
-    import { propertyItem } from "$mono/Properties.svelte"
-    import Icon from "src/components/Icon.svelte"
+    import * as mono from "$game"
+    import { propertyItem } from "$game/Properties.svelte"
+    import Icon from "$lib/components/Icon.svelte"
     import { slide } from "svelte/transition"
 
     interface Props {

@@ -6,7 +6,7 @@
         type Recent,
     } from "$lib/bxx.svelte";
     import { truco } from "./truco";
-    import Icon from "src/components/Icon.svelte";
+    import Icon from "$lib/components/Icon.svelte";
 
     interface Props {
         onDelete: (id: string) => void;
