@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-    import * as mono from "$game"
+    import * as mono from "$games/mono"
 
     interface Props {
         ownerships: mono.Ownerships

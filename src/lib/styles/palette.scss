@@ -23,10 +23,13 @@
     $p50: oklch(60% $chrlight ($hue + 45deg));
 
     --p10: #{color.scale($p50, $chroma: -60%, $lightness: 100%, $space: oklch)};
+    --p20: #{color.scale($p50, $chroma: -45%, $lightness: 85%, $space: oklch)};
     --p30: #{color.scale($p50, $chroma: -30%, $lightness: 70%, $space: oklch)};
     --p40: #{color.scale($p50, $chroma: -10%, $lightness: 45%, $space: oklch)};
     --p50: #{$p50};
+    --p60: #{color.scale($p50, $lightness: -15%, $space: oklch)};
     --p70: #{color.scale($p50, $lightness: -25%, $space: oklch)};
+    --p80: #{color.scale($p50, $lightness: -45%, $space: oklch)};
     --p90: #{color.scale($p50, $lightness: -60%, $space: oklch)};
 
     --contrast: white; // #{contrasting($p50)};
@@ -35,10 +38,13 @@
         $p50: oklch(50% $chrdark($hue + 45deg));
 
         --p10: #{color.scale($p50, $chroma: -50%, $lightness: 80%, $space: oklch)};
+        --p20: #{color.scale($p50, $chroma: -40%, $lightness: 60%, $space: oklch)};
         --p30: #{color.scale($p50, $chroma: -30%, $lightness: 40%, $space: oklch)};
         --p40: #{color.scale($p50, $chroma: -10%, $lightness: 20%, $space: oklch)};
         --p50: #{$p50};
+        --p60: #{color.scale($p50, $lightness: -25%, $space: oklch)};
         --p70: #{color.scale($p50, $lightness: -35%, $space: oklch)};
+        --p80: #{color.scale($p50, $lightness: -55%, $space: oklch)};
         --p90: #{color.scale($p50, $lightness: -70%, $space: oklch)};
         
         --contrast: white; // #{contrasting($p50)};
@@ -55,13 +61,16 @@
 .pal--1 { @include palette(90deg, 20%, 15%); }
 
 .pal-gen {
+    
+    --p10: oklch(from var(--pal-gen-color) calc(l + ((1 - l) * 0.80)) calc(c - (c * 0.50)) h);
+    --p20: oklch(from var(--pal-gen-color) calc(l + ((1 - l) * 0.60)) calc(c - (c * 0.40)) h);
+    --p30: oklch(from var(--pal-gen-color) calc(l + ((1 - l) * 0.40)) calc(c - (c * 0.30)) h);
+    --p40: oklch(from var(--pal-gen-color) calc(l + ((1 - l) * 0.20)) calc(c - (c * 0.10)) h);
     --p50: oklch(from var(--pal-gen-color) 60% c h);
-
-    --p10: color-mix(in oklch, var(--p50), white 80%);
-    --p30: color-mix(in oklch, var(--p50), white 40%);
-    --p40: color-mix(in oklch, var(--p50), white 20%);
-    --p70: color-mix(in oklch, var(--p50), black 35%);
-    --p90: color-mix(in oklch, var(--p50), black 70%);
+    --p60: oklch(from var(--pal-gen-color) calc(l - (l * 0.25)) c h);
+    --p70: oklch(from var(--pal-gen-color) calc(l - (l * 0.35)) c h);
+    --p80: oklch(from var(--pal-gen-color) calc(l - (l * 0.55)) c h);
+    --p90: oklch(from var(--pal-gen-color) calc(l - (l * 0.70)) c h);
 
     @media (prefers-color-scheme: dark) {
 

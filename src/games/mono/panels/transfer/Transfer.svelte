@@ -1,7 +1,7 @@
 <script lang="ts">
-    import * as mono from "$game"
+    import * as mono from "$games/mono"
     import { sideEffect } from "$lib/utils.svelte"
-    import { propertyItem } from "$game/Properties.svelte"
+    import { propertyItem } from "$games/mono/Properties.svelte"
     import SelectProperties from "./SelectProperties.svelte"
     import Icon from "$lib/components/Icon.svelte"
     import { SvelteSet } from "svelte/reactivity"
@@ -86,7 +86,7 @@
 <section>
     <header class="plastic set-left pal-{pays?.color}">
         <nav>
-            <button type="button" onclick={onCancel}>
+            <button type="button" onclick={onCancel} class="flat">
                 <Icon use="ic-close" />
             </button>
             <p>
@@ -134,7 +134,6 @@
                 <button
                     disabled={!pays || !charges}
                     type="submit"
-                    class="plastic"
                 >
                     <Icon use="ic-payments" />
                     Aceptar

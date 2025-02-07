@@ -1,7 +1,8 @@
 .properties {
     display: grid;
-    grid-template-columns: 1fr auto auto;
-    gap: 0 1rem;
+    grid-template-columns: 1fr auto;
+    padding: 0 0.5rem;
+    gap: .5rem 1rem;
 
     & .labels {
         font-size: 0.8rem;
@@ -26,8 +27,8 @@
     display: grid;
     grid-column: 1 / -1;
     grid-template-columns: subgrid;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+    padding: 0.125rem 1rem 0.25rem 0.125rem;
+    border-radius: 0;
     align-items: center;
     background-color: var(--bg1);
 
@@ -43,9 +44,10 @@
 
         & :global(div) {
             background-color: var(--c);
-            width: 0.25rem;
+            box-shadow: inset 0 2px .5rem color-mix(in oklch, var(--c), black 25%);
+            width: .75rem;
             height: 100%;
-            border-radius: 0.125rem;
+            border-radius: 0rem;
             flex-shrink: 0;
         }
         & :global(span) {

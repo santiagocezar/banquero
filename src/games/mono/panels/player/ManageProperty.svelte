@@ -1,6 +1,6 @@
 <script lang="ts">
     import Icon from "$lib/components/Icon.svelte"
-    import * as mono from "$game"
+    import * as mono from "$games/mono"
     import { contrast, range } from "$lib/utils.svelte"
     import { slide } from "svelte/transition"
 
@@ -54,16 +54,16 @@
                 </strong>
             {/if}
         </div>
-        <div class="actions plastic-pal">
+        <div class="actions">
             <button onclick={houseDec}><Icon use="ic-remove" /></button>
-            <button class="plastic-pal" onclick={houseInc}><Icon use="ic-add" /></button>
+            <button class="plastic" onclick={houseInc}><Icon use="ic-add" /></button>
         </div>
         <div class="legend">
             Compra: ${price} · Venta: ${price / 2}
         </div>
         {#if diff != 0}
             <div
-            class="confirm"
+            class="confirm plastic-light"
                 out:slide={{duration: 100}}
                 in:slide={{duration: 100}}
                 >
@@ -81,7 +81,7 @@
                             (diff < 0 ? 2 : 1)}
                     </p>
                 </div>
-                <button class="plastic-pal" onclick={onHouseConfirmClick}>
+                <button class="plastic" onclick={onHouseConfirmClick}>
                     <Icon use="ic-check" />
                 </button>
             </div>
@@ -108,7 +108,7 @@
 <section class="pal-gen" style="--pal-gen-color: {prop.color}">
     <header class="plastic-pal">
         <nav>
-            <button onclick={goBack}>
+            <button onclick={goBack} class="flat">
                 <Icon use="ic-arrow-back" />
             </button>
             {prop.name}
@@ -121,7 +121,7 @@
             {/if}
         </div>
         <div class="actions">
-            <button class="plastic" onclick={onRentClick}>
+            <button onclick={onRentClick}>
                 <Icon use="ic-payments" />
                 Cobrar alquiler
             </button>
@@ -130,7 +130,7 @@
     <main>
         {#if prop.kind == "lot"}
             {#if ownerships[id] !== null}
-                {@render houses(houseCount, prop.housing, houseCount - ownerships[id].houses)}
+                {@render houses(ownerships[id].houses, prop.housing, houseCount - ownerships[id].houses)}
             {/if}
             <h3>Valores</h3>
             <table>
@@ -182,27 +182,15 @@
 <style>
     @import "../../foreheader.css";
 
-    section {
-        & button {
-            background-color: var(--p50);
-            color: white;
-        }
-    }
     header {
         background-color: var(--p50);
         color: white;
     }
 
-    .confirm button {
-        background-color: var(--contrast);
-        color: var(--c);
-    }
     .confirm {
         display: flex;
         align-items: center;
-        border-radius: 0.5rem;
         padding: 0.5rem;
-        background-color: color-mix(in srgb, var(--p50), transparent 75%);
 
         & > div {
             padding-left: 0.25rem;
@@ -216,9 +204,6 @@
                 font-size: 1rem;
                 font-weight: bold;
             }
-        }
-        & button {
-            background-color: var(--p50); /* FIXME: seems redundant */
         }
     }
     main {
@@ -248,19 +233,9 @@
             gap: 0.5rem;
         }
         .actions {
-            gap: 0;
             padding: 0;
-            background-color: var(--p70);
-            --dark: var(--p80);
             
             button {
-                &:last-child {
-                    border-right: inherit;
-                    background-color: var(--p50);
-                }
-
-                background: none;
-                color: inherit;
                 width: auto;
             }
         }

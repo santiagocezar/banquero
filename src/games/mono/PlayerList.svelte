@@ -1,6 +1,6 @@
 <script lang="ts">
-    import * as mono from "$game"
-    import handURL from "$game/assets/hand.svg?url"
+    import * as mono from "$games/mono"
+    import handURL from "$games/mono/assets/hand.svg?url"
     import Icon from "$lib/components/Icon.svelte"
     import type { TransitionConfig } from "svelte/transition"
 
@@ -66,7 +66,7 @@
         <div class="player-wrapper">
             {@render properties(mono.filterOwnerIDs(ownerships, player.id))}
             <button
-                class="reset player-card pal-{player.color} plastic"
+                class="player-card pal-{player.color} plastic"
                 data-active={from === player.id || to === player.id}
                 onclick={() => onClick(player.id)}
             >
@@ -78,7 +78,7 @@
     {/each}
     <div class="player-wrapper">
         <div></div>
-        <button class="reset player-add plastic" onclick={onAddClick}>
+        <button class="player-add plastic" onclick={onAddClick}>
             <div class="status-icon" data-active={true}>
                 <Icon use="ic-add" />
             </div>
@@ -170,6 +170,12 @@
             &:nth-child(3n + 1) {
                 --offset: 0rem;
             }
+            &:nth-child(5n + 4) {
+                --offset: 0rem;
+            }
+            &:nth-child(7n + 3) {
+                --offset: 0.125rem;
+            }
 
             & > div {
                 position: absolute;
@@ -192,11 +198,12 @@
     .bank-card,
     .player-card,
     .player-add {
+        --height: 3.5rem;
         display: flex;
         align-items: center;
         padding: 0.5rem;
+        gap: 0;
         user-select: none;
-        --height: 3.5rem;
         text-align: left;
         z-index: 1;
 
@@ -228,7 +235,6 @@
         }
     }
     .player-card {
-        background-color: var(--p50);
         box-shadow:
             var(--plastic-box-shadow),
             0 0 2rem 0.5rem inset var(--p50);

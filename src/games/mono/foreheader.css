@@ -44,14 +44,6 @@ header {
             line-height: 1;
         }
     }
-    & .actions button {
-        background-color: var(--p10);
-        --text: var(--p90);
-        --light: white;
-        --dark: var(--p30);
-        --shadow: color-mix(in srgb, var(--p70), transparent 75%);
-        --border: var(--p70);
-    }
 }
 .actions {
     display: flex;
