@@ -1,6 +1,8 @@
+import { replaceState } from "$app/navigation"
 import { nanoid } from "nanoid"
 import * as fflate from "fflate"
 import * as base64 from "js-base64"
+import { tick } from "svelte"
 
 export interface Game<T> {
     identifier: string
@@ -68,7 +70,7 @@ export function useGame<T>(
         url.searchParams.delete("id")
         url.hash = "#" + id
 
-        history.replaceState(null, "", url)
+        tick().then(() => replaceState(url, {}))
     }
 
     let data = loadSave(game, id) ?? (

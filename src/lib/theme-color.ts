@@ -9,11 +9,13 @@ function setThemeColor() {
     }
 }
 
-matchMedia("(prefers-color-scheme: dark)").addEventListener(
-    "change",
-    (event) => {
-        setThemeColor()
-    }
-)
-
-setThemeColor()
+if (typeof window !== "undefined") {
+    matchMedia("(prefers-color-scheme: dark)").addEventListener(
+        "change",
+        (event) => {
+            setThemeColor()
+        }
+    )
+    
+    setThemeColor()
+}

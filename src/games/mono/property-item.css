@@ -2,7 +2,7 @@
     display: grid;
     grid-template-columns: 1fr auto;
     padding: 0 0.5rem;
-    gap: .5rem 1rem;
+    gap: 0 1rem;
 
     & .labels {
         font-size: 0.8rem;
@@ -28,6 +28,7 @@
     grid-column: 1 / -1;
     grid-template-columns: subgrid;
     padding: 0.125rem 1rem 0.25rem 0.125rem;
+    margin-bottom: .5rem;
     border-radius: 0;
     align-items: center;
     background-color: var(--bg1);

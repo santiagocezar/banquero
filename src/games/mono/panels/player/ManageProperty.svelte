@@ -33,10 +33,10 @@
     const houseInc = () => (houseCount = Math.min(5, houseCount + 1))
     const houseDec = () => (houseCount = Math.max(0, houseCount - 1))
 
-    const onRentClick = () => chargeRent(rentPrice)
+    const onRentClick = () => chargeRent(mono.getOwner(ownerships, id), rentPrice)
     const onSellClick = () => sell(mono.getOwner(ownerships, id), prop.price)
-    const onHouseConfirmClick = () => buyHouses(houseCount - (ownerships[id]?.houses ?? 0), (prop as {housing: number}).housing, id)
-    const onMortageClick = () => mortgage(prop.price / 2)
+    const onHouseConfirmClick = () => buyHouses(mono.getOwner(ownerships, id), houseCount - (ownerships[id]?.houses ?? 0), (prop as {housing: number}).housing, id)
+    const onMortageClick = () => mortgage(mono.getOwner(ownerships, id), prop.price / 2)
     
     const goBack = () => onReturn(mono.getOwner(ownerships, id))
 </script>

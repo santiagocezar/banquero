@@ -10,6 +10,7 @@
     import Icon from "$lib/components/Icon.svelte"
     import PlayerInfo from "./panels/player/PlayerInfo.svelte"
     import ManageProperty from "./panels/player/ManageProperty.svelte"
+    import ConfirmTransfer from "./panels/transfer/ConfirmTransfer.svelte"
 
     /*
     TODO:
@@ -125,7 +126,7 @@
         }
     }
     
-    function confirmExchange(value: mono.Exchange) {
+    function doExchange(value: mono.Exchange) {
         console.log(value)
         console.log('before:', $state.snapshot(data.players))
         const after = mono.applyExchangeToPlayers(data.players, value)
@@ -184,29 +185,36 @@
             charges,
             defaultAmount: rent,
         })}
-        buyHouses={(amount, price, housesFor) =>
-            {} /*amount < 0
-                ? filled({
-                    charges: player.id,
-                    pays: mono.BANK.id,
-                    amount: -price * amount / 2,
-                    houses: -amount,
-                    housesFor
-                })
-                : filled({
-                    charges: mono.BANK.id,
-                    pays: player.id,
-                    amount: price * amount,
-                    houses: amount,
-                    housesFor
-                })*/}
-        mortgage={(price) => {}/*
-            filled({
-                charges: player.id,
-                pays: mono.BANK.id,
-                amount: price,
-                mortgage: [prop.id],
-            })*/}
+        buyHouses={(owner, amount, price, housesFor) => askForExchange({
+            pays: {
+                id: amount > 0 ? owner : mono.BANK.id,
+                sells: []
+            },
+            charges: {
+                id: amount > 0 ? mono.BANK.id : owner,
+                sells: []
+            },
+            amount: price * (amount > 0 ? amount : -amount / 2),
+            buildings: amount,
+            buildingsFor: housesFor,
+            liftMortgage: [],
+            mortgage: []
+        })}
+        mortgage={(owner, price) => askForExchange({
+            pays: {
+                id: mono.BANK.id,
+                sells: []
+            },
+            charges: {
+                id: owner,
+                sells: []
+            },
+            amount: price,
+            buildings: 0,
+            buildingsFor: 0,
+            liftMortgage: [],
+            mortgage: [props.id]
+        })}
     />
 {/snippet}
 
@@ -219,7 +227,16 @@
         defaultSell={props.defaultSell}
         onSwitchClick={(who) => mode = { ...props, [who]: null } }
         onCancel={returnToList}
-        onSubmit={confirmExchange}
+        onSubmit={askForExchange}
+    />
+{/snippet}
+
+{#snippet confirmExchange(props: ModeSet<"confirm-exchange">)}
+    <ConfirmTransfer
+        pays={playerIndex.get(props.value.pays.id)!}
+        charges={playerIndex.get(props.value.charges.id)!}
+        value={props.value}
+        onConfirm={() => doExchange(props.value)}
     />
 {/snippet}
 <!--
@@ -233,16 +250,16 @@
     <div class="list">
         <header>
             {#if mode.type == "exchange"}
-            <button onclick={returnToList} class="button back">
+            <button onclick={returnToList} class="flat">
                 <Icon use="ic-close" />
             </button>
             {:else}
-            <button onclick={() => history.back()} class="button back">
+            <button onclick={() => history.back()} class="flat">
                 <Icon use="ic-home" />
             </button>
             {/if}
             <h1>{mode.type === "exchange" ? "Seleccione 2 jugadores" : "Lista de jugadores"}</h1>
-            <button class="button" id="share">
+            <button class="flat" id="share">
                 <Icon use="ic-share" />
             </button>
         </header>
@@ -269,6 +286,8 @@
             {@render manageProperty(mode)}
         {:else if mode.type == "exchange"}
             {@render exchange(mode)}
+        {:else if mode.type == "confirm-exchange"}
+            {@render confirmExchange(mode)}
         {:else if mode.type == "adding"}
             <AddPlayer onadd={addPlayer} />
         {/if}

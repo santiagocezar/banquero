@@ -44,7 +44,7 @@
             mono.properties[id].name,
             mono.properties[id].price
         )}
-        <div class="checkbox">
+        <div class={["checkbox plastic", { "plastic-light": !selected }]}>
             <Icon use="ic-check" />
         </div>
     </button>
@@ -73,8 +73,7 @@
 
     .properties {
         display: grid;
-        grid-template-columns: 1fr auto auto auto;
-        gap: 0 1rem;
+        grid-template-columns: 1fr auto auto;
         margin: 0 -1rem;
     }
     .checkbox {
@@ -83,17 +82,17 @@
         place-items: center;
         width: 2rem;
         height: 2rem;
-        border-radius: 0.5rem;
-        border: 1px solid var(--p70);
-        color: var(--p10);
+        /* border-radius: 0.5rem; */
+        /* border: 1px solid var(--p70); */
+        /* color: var(--p10); */
 
         & :global(svg) {
             visibility: hidden;
         }
     }
     .selected .checkbox {
-        border: 1px solid var(--p50);
-        background-color: var(--p50);
+        /* border: 1px solid var(--p50);
+        background-color: var(--p50); */
 
         & :global(svg) {
             visibility: visible;
