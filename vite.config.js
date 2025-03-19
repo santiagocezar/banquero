@@ -1,6 +1,7 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 import { gameBase, meta } from './auto-game';
+import Icons from 'unplugin-icons/vite'
 
 const _PWA_CONFIG = {
 	includeAssets: ["*.svg", "*.png", "*.webp"],
@@ -49,5 +50,11 @@ const _PWA_CONFIG = {
 }
 
 export default defineConfig({
-	plugins: [sveltekit()]
+	plugins: [
+		sveltekit(),
+		Icons({
+			compiler: "svelte",
+			scale: 1.5,
+		})
+	]
 });

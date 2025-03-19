@@ -4,6 +4,7 @@
 
 <script lang="ts">
     import * as mono from "$games/mono"
+    import PropertyCard from "./PropertyCard.svelte"
 
     interface Props {
         ownerships: mono.Ownerships

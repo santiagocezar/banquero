@@ -143,7 +143,7 @@
                     // margin: -.25rem;
 
                     button {
-                        background-color: var(--p50);
+                        background-color: var(--c50);
                         color: var(--contrast);
                         font-size: 2rem;
                         padding: 1rem;
@@ -222,7 +222,7 @@
         h1 {
             font: bold 1.5rem "Poppins";
             span {
-                color: var(--p50);
+                color: var(--c50);
             }
             margin-bottom: 0.5em;
         }

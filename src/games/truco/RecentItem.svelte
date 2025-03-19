@@ -126,11 +126,11 @@
         .border {
             position: absolute;
             inset: 0;
-            background-color: var(--p50);
+            background-color: var(--c50);
 
             .border-gradient {
                 height: 100%;
-                background: linear-gradient(to bottom, transparent, var(--p50));
+                background: linear-gradient(to bottom, transparent, var(--c50));
             }
         }
 
@@ -138,11 +138,11 @@
             position: absolute;
             inset: 1px;
             border-radius: calc(2rem - 1px);
-            background-color: var(--p30);
+            background-color: var(--c30);
 
             .background-gradient {
                 height: 100%;
-                background: linear-gradient(to bottom, transparent, var(--p30));
+                background: linear-gradient(to bottom, transparent, var(--c30));
                 border-radius: calc(2rem - 1px);
             }
         }

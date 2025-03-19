@@ -52,12 +52,12 @@
             text-align: center;
             /*
         border-radius: 1rem 1rem 0 0;
-        background-color: var(--p40);
+        background-color: var(--c40);
         */
-            border-bottom: 1px solid var(--p50);
+            border-bottom: 1px solid var(--c50);
 
             &::placeholder {
-                color: var(--p70);
+                color: var(--c70);
             }
         }
     }
@@ -78,9 +78,9 @@
             appearance: none;
 
             border: none;
-            background-color: var(--p50);
+            background-color: var(--c50);
             margin: -0.25rem;
-            border: 1px solid var(--p70);
+            border: 1px solid var(--c70);
             box-sizing: content-box;
             border-radius: 100%;
 
@@ -98,7 +98,7 @@
                     10% 40%
                 );
                 /* border-radius: 100%; */
-                background-color: var(--p90);
+                background-color: var(--c90);
                 transition: transform 0.2s ease;
                 transform: scale(0);
             }

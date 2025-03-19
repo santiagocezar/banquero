@@ -1,9 +1,17 @@
 <script lang="ts">
-    import Properties from "$games/mono/Properties.svelte"
+    import Properties from "$games/mono/PropertyList.svelte"
     import Icon from "$lib/components/Icon.svelte"
-    import { createTabs, melt } from "@melt-ui/svelte"
+    import { Tabs } from "melt/builders";
     import * as mono from "$games/mono"
+    import { crossfade } from "svelte/transition"
+    import { cubicInOut } from "svelte/easing"
+    import PropertyFlow from "$games/mono/PropertyFlow.svelte"
 
+    import IconMoneySend from "~icons/hugeicons/money-send-02"
+    import IconMoneyReceive from "~icons/hugeicons/money-receive-flow-02"
+    import IconLegalDocument from "~icons/hugeicons/legal-document-02"
+    import IconMovements from "~icons/hugeicons/arrow-data-transfer-horizontal"
+    
     interface Props {
         player: mono.Player
         ownerships: mono.Ownerships
@@ -14,17 +22,13 @@
         charge: () => void
     }
 
-    const {
-        elements: { root, list, content, trigger },
-        states: { value },
-    } = createTabs({
-        defaultValue: "properties",
-    })
-
-    const tabs = [
-        { id: "properties", title: "Propiedades" },
-        { id: "history", title: "Movimientos" },
+    
+    const tablist = [
+        {id: "Propiedades", Icon: IconLegalDocument},
+        {id: "Movimientos", Icon: IconMovements},
     ]
+    
+    const tabs = new Tabs({ value: tablist[0].id })
 
     const {
         player,
@@ -35,83 +39,158 @@
         pay,
         charge
     }: Props = $props()
+
+    // TODO: capital acumulado
+
+    const [send, receive] = crossfade({
+        duration: 250,
+        easing: cubicInOut,
+    });
 </script>
 
-<section class="pal-{player.color}">
-    <header class="plastic">
+<section class="pal-{player.color} surface-colors">
+    <header>
         <nav>
             <button onclick={onReturn} class="flat">
                 <Icon use="ic-arrow-back" />
             </button>
             <h2>{player.name}</h2>
-            <button onclick={onRemoveClick} class="flat">
-                <Icon use="ic-delete" />
-            </button>
         </nav>
-        {#if player === mono.BANK}
-                <Icon class="bank" use="ic-account-balance" />
-        {:else}
+    </header>
+    <div class="account plastic">
         <div class="value">
-            <p>Balance</p>
-            <p class="big">${player.money}</p>
+            {#if player === mono.BANK}
+                <p><Icon class="bank" use="ic-account-balance" /></p>
+                <p class="big">Banco</p>
+            {:else}
+                <p class="label">Balance en cuenta</p>
+                <p class="big">$ {player.money.toLocaleString(undefined, {
+                    useGrouping: "always"
+                })}</p>
+            {/if}
         </div>
-        {/if}
-                
+
         <div class="actions">
             <button onclick={() => pay()}>
-                <Icon use="ic-upload" />
-                Pagar
+                <IconMoneySend />
+                Enviar
             </button>
             <button onclick={() => charge()}>
-                <Icon use="ic-download" />
+                <IconMoneyReceive />
                 Cobrar
             </button>
         </div>
-    </header>
-    <main use:melt={$root}>
-        <div
-            use:melt={$list}
-            class="tablist"
-            aria-label="Información del jugador"
-        >
-            {#each tabs as tab}
-                <button use:melt={$trigger(tab.id)}>
-                    {tab.title}
-                </button>
-            {/each}
-        </div>
 
-        <div class="tabview" use:melt={$content("properties")}>
+        <button onclick={onRemoveClick} class="delete flat">
+            <Icon use="ic-delete" />
+        </button>
+    </div>
+    <div
+        {...tabs.triggerList}
+        class="tablist"
+        aria-label="Información del jugador"
+    >
+        {#each tablist as {Icon, id}}
+            <button class="flat" {...tabs.getTrigger(id)}>
+                <Icon />
+                {id}
+                {#if tabs.value === id}
+                    <div in:receive={{ key: "trigger" }} out:send={{ key: "trigger" }} class="underline"></div>
+                {/if}
+            </button>
+        {/each}
+    </div>
+    <main {...tabs.getContent(tablist[0].id)}>
+        {#if player.id === mono.BANK.id}
             <Properties {ownerships} owner={player.id} onpropertyselected={onPropertyClick} displayPrice={player === mono.BANK} />
-        </div>
-        <div class="tabview" use:melt={$content("history")}></div>
+        {:else}
+            <PropertyFlow {ownerships} owner={player.id} onpropertyselected={onPropertyClick} displayPrice={player === mono.BANK} />
+        {/if}
     </main>
+    <main {...tabs.getContent(tablist[1].id)}></main>
 </section>
 
 <style>
-    @import "../../foreheader.css";
-
-    main {
+    section {
         display: grid;
-        grid-template-rows: auto 1fr;
-        overflow: hidden;
+        background-color: var(--bg3);
+        height: 100%;
+        max-height: 100%;
+        grid-template-rows: auto auto auto 1fr;
+    }
+    nav {
+        display: flex;
+    }
+    main {
+        overflow: auto;
+        height: 100%;
         max-height: 100%;
     }
     header {
-        background-color: var(--p50);
-        color: var(--contrast);
-        padding: 0.5rem;
-
-        --border: var(--p90);
-        --bevel: var(--p70);
-
+        height: 3rem;
+        
         & nav {
-            font-size: 1.5rem;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            padding-right: .5rem;
         }
-        & :global(.bank) {
-            width: 5rem;
-            height: 5rem;
-            place-self: center;
+        & h2 {
+            justify-self: end;
+            align-self: center;
+            align-items: center;
+            display: flex;
+            background-color: var(--bg0);
+            padding: 0 .5rem 0 .25rem;
+            border-radius: 2rem;
+            height: 2rem;
+
+            &::before {
+                content: "";
+                width: 1.5rem;
+                height: 1.5rem;
+                background-color: var(--c60);
+                border-radius: 1.5rem;
+                margin-right: .5rem;
+            }
+        }
+    }
+    .account {
+        margin: 1rem;
+        display: grid;
+        grid-template-rows: 1fr auto;
+        padding: 1rem;
+        height: 12rem;
+        background-image: linear-gradient(-10deg in oklch, var(--c60), var(--bg));
+        position: relative;
+    }
+    .delete {
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: var(--c60);
+    }
+    .label {
+        color: var(--c60);
+        font-size: .94rem;
+    }
+    .big {
+        font-weight: bold;
+        font-size: 2.5rem;
+        line-height: 1.2;
+    }
+    .actions {
+        display: flex;
+        justify-content: end;
+        gap: 1rem;
+        
+        & button {
+            /* width: 5rem;
+            height: 3.5rem;
+            padding: 0;
+            flex-direction: column;
+            font-size: small;
+            gap: 0; */
+            font-weight: bold;
         }
     }
     .tablist {
@@ -119,20 +198,21 @@
         gap: 1rem;
         padding: 1rem;
         & button {
-            width: 0;
-            flex: 1;
+            flex: 1 1 0;
+            position: relative;
 
-            &[data-state="active"] {
-                --bg: var(--p50);
-                --text: var(--contrast);
-                --light: var(--p10);
-                --dark: var(--p40);
-                --border: var(--p90);
+            &[aria-selected="true"] {
+                color: var(--k60);
             }
         }
     }
-    .tabview {
-        overflow: auto;
-        height: 100%;
+    .tablist .underline {
+        position: absolute;
+        bottom: 0;
+        left: 1rem;
+        right: 1rem;
+        height: .25rem;
+        background-color: var(--k60);
+        border-radius: .25rem;
     }
 </style>

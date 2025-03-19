@@ -11,6 +11,7 @@
     import PlayerInfo from "./panels/player/PlayerInfo.svelte"
     import ManageProperty from "./panels/player/ManageProperty.svelte"
     import ConfirmTransfer from "./panels/transfer/ConfirmTransfer.svelte"
+    import { useMonoServer } from "./ws.svelte"
 
     /*
     TODO:
@@ -25,8 +26,6 @@
     - [x] Fix transfer gradient somehow
     */
 
-    const { data } = useGame(mono.game, () => true)
-    
     interface DefaultExchange {
         pays: number | null,
         charges: number | null,
@@ -46,8 +45,10 @@
               type: "confirm-exchange"
               value: mono.Exchange
           }
-          
+
     type ModeSet<Type extends Mode["type"]> = Extract<Mode, { type: Type }>
+    
+    const { data } = useGame(mono.game, () => true)      
 
     let mode: Mode = $state({ type: "list" })
 
@@ -55,10 +56,43 @@
 
     const playerIndex = $derived(mono.indexPlayers(data.players))
 
+    const syncData = useMonoServer(data)
+
+    /*** FUNCTIONS THAT CHANGE THE GAME STATE ***/
+
     function onPlayerRemove(id: number) {
         data.players = mono.removePlayer(data.players, id)
         data.owners = mono.removeOwnershipsForPlayer(data.owners, id)
+        syncData()
     }
+
+    function doExchange(value: mono.Exchange) {
+        console.log(value)
+        console.log('before:', $state.snapshot(data.players))
+        const after = mono.applyExchangeToPlayers(data.players, value)
+        console.log('after:', $state.snapshot(after))
+        data.players = after
+        data.owners = mono.applyExchangeToOwnerships(data.owners, value)
+        
+        syncData()
+        returnToList()
+    }
+
+    function addPlayer(name: string, color: number) {
+        data.players.push({
+            id: ++maxID,
+            name,
+            color,
+            money: data.defaultMoney,
+        })
+        
+        syncData()
+        returnToList()
+    }
+        
+
+    /*** those that don't ***/
+
     function calculatePlayerValue(player: mono.Player) {
         return (
             player.money +
@@ -126,26 +160,6 @@
         }
     }
     
-    function doExchange(value: mono.Exchange) {
-        console.log(value)
-        console.log('before:', $state.snapshot(data.players))
-        const after = mono.applyExchangeToPlayers(data.players, value)
-        console.log('after:', $state.snapshot(after))
-        data.players = after
-        data.owners = mono.applyExchangeToOwnerships(data.owners, value)
-        
-        returnToList()
-    }
-    function addPlayer(name: string, color: number) {
-        data.players.push({
-            id: ++maxID,
-            name,
-            color,
-            money: data.defaultMoney,
-        })
-        returnToList()
-    }
-        
     /*
     const transactionItems = useMemo(
         () =>
@@ -185,35 +199,27 @@
             charges,
             defaultAmount: rent,
         })}
-        buyHouses={(owner, amount, price, housesFor) => askForExchange({
+        buyHouses={(owner, amount, price) => askForExchange({
             pays: {
                 id: amount > 0 ? owner : mono.BANK.id,
-                sells: []
+                ownerships: [{
+                    id: props.id, 
+                    builds: amount,
+                }]
             },
-            charges: {
-                id: amount > 0 ? mono.BANK.id : owner,
-                sells: []
-            },
+            charges: { id: amount > 0 ? mono.BANK.id : owner },
             amount: price * (amount > 0 ? amount : -amount / 2),
-            buildings: amount,
-            buildingsFor: housesFor,
-            liftMortgage: [],
-            mortgage: []
         })}
         mortgage={(owner, price) => askForExchange({
             pays: {
                 id: mono.BANK.id,
-                sells: []
+                ownerships: [{
+                    id: props.id,
+                    mortgage: "loan"
+                }]
             },
-            charges: {
-                id: owner,
-                sells: []
-            },
+            charges: { id: owner },
             amount: price,
-            buildings: 0,
-            buildingsFor: 0,
-            liftMortgage: [],
-            mortgage: [props.id]
         })}
     />
 {/snippet}
@@ -227,7 +233,7 @@
         defaultSell={props.defaultSell}
         onSwitchClick={(who) => mode = { ...props, [who]: null } }
         onCancel={returnToList}
-        onSubmit={askForExchange}
+        onSubmit={doExchange}
     />
 {/snippet}
 
@@ -277,20 +283,22 @@
         data-active={!(
             mode.type === "list" ||
             (mode.type === "exchange" &&
-                (mode.pays === null || mode.charges === null))
+            (mode.pays === null || mode.charges === null))
         )}
     >
-        {#if mode.type == "player-info"}
-            {@render playerInfo(mode)}
-        {:else if mode.type == "manage-property"}
-            {@render manageProperty(mode)}
-        {:else if mode.type == "exchange"}
-            {@render exchange(mode)}
-        {:else if mode.type == "confirm-exchange"}
-            {@render confirmExchange(mode)}
-        {:else if mode.type == "adding"}
-            <AddPlayer onadd={addPlayer} />
-        {/if}
+        {#key mode.type}
+            {#if mode.type == "player-info"}
+                {@render playerInfo(mode)}
+            {:else if mode.type == "manage-property"}
+                {@render manageProperty(mode)}
+            {:else if mode.type == "exchange"}
+                {@render exchange(mode)}
+            {:else if mode.type == "confirm-exchange"}
+                {@render confirmExchange(mode)}
+            {:else if mode.type == "adding"}
+                <AddPlayer onadd={addPlayer} />
+            {/if}
+        {/key}
     </div>
 </div>
 
@@ -356,7 +364,7 @@
         padding: 0.5rem;
         align-items: center;
         position: relative;
-        --p50: initial;
+        --c50: initial;
         
         
         & button {

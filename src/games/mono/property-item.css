@@ -34,7 +34,7 @@
     background-color: var(--bg1);
 
     &:hover {
-        background-color: color-mix(in srgb, var(--p50), transparent 75%);
+        background-color: color-mix(in srgb, var(--c50), transparent 75%);
     }
     
     & > :global(.name) {

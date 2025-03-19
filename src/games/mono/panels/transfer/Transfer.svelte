@@ -1,10 +1,11 @@
 <script lang="ts">
     import * as mono from "$games/mono"
     import { sideEffect } from "$lib/utils.svelte"
-    import { propertyItem } from "$games/mono/Properties.svelte"
+    import { propertyItem } from "$games/mono/PropertyList.svelte"
     import SelectProperties from "./SelectProperties.svelte"
     import Icon from "$lib/components/Icon.svelte"
     import { SvelteSet } from "svelte/reactivity"
+    import { untrack } from "svelte"
 
     interface Props {
         ownerships: mono.Ownerships
@@ -29,11 +30,8 @@
     }: Props = $props()
     
     let amount = $state(defaultAmount)
-    let payerSells = $state(new SvelteSet([]))
-    let chargerSells = $state(new SvelteSet(defaultSell === null ? [] : [defaultSell]))
-    
-    sideEffect(() => pays, () => payerSells.clear())
-    sideEffect(() => charges, () => chargerSells.clear())
+    let payerSells = $state(new SvelteSet<number>([]))
+    let chargerSells = $state(new SvelteSet<number>(defaultSell === null ? [] : [defaultSell]))
     
     // const forced = $derived(exchange.houses != 0 || exchange.mortgage.length > 0)
     const forced = false
@@ -51,26 +49,25 @@
 
     $inspect(amount)
     
-    function askConfirm(ev: Event) {
+    function toExchangeOwnerships(from: mono.Player, to: mono.Player, selected: Set<number>) {
+        return mono.filterOwnerIDs(ownerships, from.id).filter(id => selected.has(id)).map(id => ({ id, soldTo: to.id }))
+    }
+    function submit(ev: Event) {
         if (pays === null || charges === null) {
             return
         }
         
-        // TODO: actually ask
+
         onSubmit({
             pays: {
                 id: pays.id,
-                sells: Array.from(payerSells)
+                ownerships: toExchangeOwnerships(pays, charges, payerSells)
             },
             charges: {
                 id: charges.id,
-                sells: Array.from(chargerSells)
+                ownerships: toExchangeOwnerships(charges, pays, chargerSells)
             },
             amount,
-            buildings: 0,
-            buildingsFor: 0,
-            liftMortgage: [],
-            mortgage: [],
         })
         ev.preventDefault()
     }
@@ -94,7 +91,7 @@
             </p>
         </nav>
         <div class="gradient pal-{charges?.color}"></div>
-        <form action="#" onsubmit={askConfirm}>
+        <form action="#" onsubmit={submit}>
             <div class="value">
                 <label class="big">
                     $
@@ -195,7 +192,7 @@
         --shadow-parent: var(--shadow);
 
         position: relative;
-        background-image: linear-gradient(to bottom, var(--p90) 25%, transparent 100%);
+        background-image: linear-gradient(to bottom, var(--c90) 25%, transparent 100%);
         background-color: transparent !important;
         overflow: hidden;
         padding: 0.5rem;
@@ -219,7 +216,7 @@
     .player {
         display: grid;
         grid-template-columns: 1fr auto;
-        background-color: var(--p50);
+        background-color: var(--c50);
 
         color: var(--contrast);
         --height: 3.5rem;
@@ -259,17 +256,17 @@
         margin: 0 -1rem;
     }
     span[class^="pal-"] {
-        color: var(--p50);
+        color: var(--c50);
     }
-    @property --p50 {
+    @property --c50 {
         syntax: '<color>';
         initial-value: transparent;
         inherits: true;
     }
 
     .set-left {
-        --left-color: var(--p50, transparent);
-        transition: --p50 .5s;
+        --left-color: var(--c50, transparent);
+        transition: --c50 .5s;
     }
     .gradient {
         position: absolute;
@@ -277,8 +274,8 @@
         z-index: -1;
         width: 100%;
         height: 100%;
-        --right-color: var(--p50, transparent);
+        --right-color: var(--c50, transparent);
         background-image: radial-gradient(in oklch circle at 70%, var(--right-color) 25%, var(--left-color) 100%);
-        transition: --p50 .5s;
+        transition: --c50 .5s;
     }
 </style>

@@ -79,6 +79,8 @@ export function useGame<T>(
             : importSave(game, encoded)
     )
 
+    console.log(data)
+
     addToRecents(game.identifier, id)
 
     const mutableData = $state(data)

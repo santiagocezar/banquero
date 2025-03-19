@@ -12,6 +12,16 @@
     import favicon from "$game/assets/favicon.svg?url"
     import logo from "$game/assets/icon.svg?url"
     
+    // // Polyfill for scroll animations
+    // // Quite clunky in firefox mobile, disabled it for now
+    
+    // import { onMount } from "svelte"
+    // import { browser } from "$app/environment"
+    
+    // onMount(async () => {
+    //     if (browser) await import('scroll-timeline-polyfill/dist/scroll-timeline.js')
+    // })
+
     const { data, children }: LayoutProps = $props()
 </script>
 

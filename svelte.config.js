@@ -1,4 +1,3 @@
-import { preprocessMeltUI, sequence } from '@melt-ui/pp'
 import adapter from '@sveltejs/adapter-auto';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { gameBase, meta } from './auto-game.js';
@@ -8,10 +7,7 @@ import { resolve } from "node:path"
 const config = {
 	// Consult https://svelte.dev/docs/kit/integrations
 	// for more information about preprocessors
-	preprocess: sequence([
-		vitePreprocess(),
-		preprocessMeltUI(),
-	]),
+	preprocess: vitePreprocess(),
 
 	kit: {
 		// adapter-auto only supports some environments, see https://svelte.dev/docs/kit/adapter-auto for a list.

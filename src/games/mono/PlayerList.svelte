@@ -66,7 +66,7 @@
         <div class="player-wrapper">
             {@render properties(mono.filterOwnerIDs(ownerships, player.id))}
             <button
-                class="player-card pal-{player.color} plastic"
+                class="player-card pal-{player.color} plastic accent"
                 data-active={from === player.id || to === player.id}
                 onclick={() => onClick(player.id)}
             >
@@ -148,7 +148,7 @@
         padding-right: calc(0.5rem + var(--width));
 
         & > p {
-            color: var(---p70);
+            color: var(---c70);
             font-size: 0.75em;
             font-style: italic;
         }
@@ -183,7 +183,7 @@
                 height: var(--height);
                 padding: 1px;
                 background-color: white;
-                box-shadow: 0 0 0 1px var(--p70);
+                box-shadow: 0 0 0 1px var(--c70);
 
                 &::before {
                     content: "";
@@ -214,18 +214,19 @@
             background-color 0.4s;
 
         &[data-active="true"] {
-            /*             box-shadow: 0 0.4rem 1rem var(--p40); */
+            box-shadow: var(--plastic-box-shadow), 0 0 1rem var(--bg) inset;
             --elevation: 0.25rem;
-            background-color: var(--p40);
-            border-color: var(--p10);
+            background-color: var(--top);
+            border-color: var(--c10);
             translate: 0 -0.25rem;
+            color: var(--c10);
         }
     }
     .bank-card {
         --height: 5rem;
 
-        background-image: linear-gradient(0deg, var(--p70), var(--p50));
-        color: var(--p10);
+        background-image: linear-gradient(0deg, var(--c70), var(--c50));
+        color: var(--c10);
 
         & :global(.bank) {
             width: 72px;
@@ -237,7 +238,7 @@
     .player-card {
         box-shadow:
             var(--plastic-box-shadow),
-            0 0 2rem 0.5rem inset var(--p50);
+            0 0 2rem 0.5rem inset var(--bg);
         color: var(--contrast);
 
         & .money {
@@ -256,8 +257,8 @@
         height: 2rem;
         width: 2rem;
         scale: 0;
-        background-color: var(--p30);
-        color: var(--p90);
+        background-color: var(--c30);
+        color: var(--c90);
         border-radius: 2rem;
         overflow: hidden;
         opacity: 0;

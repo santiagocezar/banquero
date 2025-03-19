@@ -38,7 +38,7 @@
                 origin: { x: 0 },
                 shapes: "star",
                 scalar: 1.5,
-                colors: computed.getPropertyValue("--p50"),
+                colors: computed.getPropertyValue("--c50"),
             })
             confetti({
                 particleCount: 50,
@@ -47,7 +47,7 @@
                 origin: { x: 1 },
                 shapes: "star",
                 scalar: 1.5,
-                colors: computed.getPropertyValue("--p50"),
+                colors: computed.getPropertyValue("--c50"),
             })
             onwin(team)
         }
@@ -90,11 +90,11 @@
             justify-content: space-between;
             background-image: linear-gradient(
                 to bottom,
-                var(--p30),
+                var(--c30),
                 transparent
             );
             padding: 1rem;
-            color: var(--p90);
+            color: var(--c90);
             height: 4rem;
             flex-shrink: 0;
         }
@@ -117,7 +117,7 @@
         left: 1rem;
         bottom: -.05em;
         font-variant-numeric: tabular-nums;
-        color: var(--p40);*/
+        color: var(--c40);*/
         }
 
         .goal {
@@ -127,7 +127,7 @@
             font-size: 1.5rem;
             line-height: 1;
             padding: 1rem;
-            color: var(--p40);
+            color: var(--c40);
         }
 
         .actions {
@@ -138,14 +138,14 @@
             button {
                 border-radius: 0;
                 background-color: transparent;
-                /*             background-image: linear-gradient(to bottom, transparent, var(--p10)); */
-                color: var(--p90);
+                /*             background-image: linear-gradient(to bottom, transparent, var(--c10)); */
+                color: var(--c90);
                 font-size: 16px;
                 display: grid;
                 place-items: center;
 
                 &:last-child {
-                    border-left: 1px solid var(--p50);
+                    border-left: 1px solid var(--c50);
                 }
             }
         }

@@ -1,0 +1,120 @@
+/*
+@mixin plastic-light {
+    --bg: var(--c10);
+    --text: var(--c90);
+    --light: white;
+    --dark: var(--c30);
+    --shadow: color-mix(in srgb, var(--c70), transparent 75%);
+    --border: var(--c70);
+}
+
+@mixin plastic-dark {
+    --bg: var(--c80);
+    --text: var(--c10);
+    --light: var(--c60);
+    --dark: var(--c90);
+    --shadow: color-mix(in srgb, var(--c70), transparent 75%);
+    --border: var(--c90);
+}
+
+.plastic {
+    --bg: var(--c60);
+    --text: var(--contrast);
+    --light: var(--c80);
+    --dark: var(--c70);
+    --border: var(--c20);
+    --shadow: color-mix(in srgb, var(--c70), transparent 75%);
+    
+    --elevation: 1px;
+    --plastic-bevel-top-box-shadow: 0 1px 0 0 inset var(--light);
+    --plastic-bevel-bottom-box-shadow: 0 -2px 2px 0px inset var(--dark);
+    --plastic-drop-box-shadow: 0 var(--elevation) calc(var(--elevation) * 4) var(--shadow);
+    --plastic-box-shadow: 
+        var(--plastic-bevel-top-box-shadow),
+        var(--plastic-bevel-bottom-box-shadow),
+        var(--plastic-drop-box-shadow);
+
+    background-color: var(--bg);
+    color: var(--text);
+    border-radius: 0.5rem;
+    box-shadow: var(--plastic-box-shadow);
+    border: 1px solid var(--border);
+
+    &-light {
+        @extend .plastic;
+        @include plastic-light();
+
+        @media (prefers-color-scheme: dark) {
+            @include plastic-dark();
+        }
+    }
+
+    &-dark {
+        @extend .plastic;
+        @include plastic-dark();
+
+        @media (prefers-color-scheme: dark) {
+            @include plastic-light();
+        }
+    }
+}
+*/
+
+@mixin plastic-light {
+    --bg: var(--c90);
+    --text: var(--c10);
+    --top: white;
+    --bottom: var(--c80);
+    --shadow: color-mix(in srgb, var(--c60), transparent 75%);
+    --border: var(--c60);
+}
+
+@mixin plastic-accent {
+    --bg: var(--c60);
+    --text: var(--c95);
+    --top: var(--c90);
+    --bottom: var(--c75);
+    --border: var(--c50);
+    --shadow: color-mix(in srgb, var(--c50), transparent 50%);
+}
+
+@mixin plastic-dark {
+    --bg: var(--c20);
+    --text: var(--c90);
+    --top: var(--c40);
+    --bottom: var(--c30);
+    --shadow: color-mix(in srgb, var(--c10), transparent 75%);
+    --border: var(--c10);
+}
+
+.plastic { 
+    @include plastic-light();
+
+    --elevation: 2px;
+    --plastic-inner-bottom-box-shadow: 0 -1px 0 1px var(--bottom) inset;
+    --plastic-inner-top-box-shadow: 0 1px 0 var(--top) inset;
+    --plastic-drop-box-shadow: 0 var(--elevation) calc(var(--elevation) * 4) var(--shadow);
+    --plastic-box-shadow: 
+        var(--plastic-inner-top-box-shadow),
+        var(--plastic-inner-bottom-box-shadow),
+        var(--plastic-drop-box-shadow);
+
+    background-color: var(--bg);
+    color: var(--text);
+    border-radius: .5rem;
+    box-shadow: var(--plastic-box-shadow);
+    border: 1px solid var(--border);
+
+    @media (prefers-color-scheme: dark) {
+        @include plastic-dark();
+        --plastic-box-shadow: 
+            var(--plastic-inner-top-box-shadow),
+            var(--plastic-inner-bottom-box-shadow),
+            var(--plastic-drop-box-shadow);
+    }
+
+    &.accent {
+        @extend .plastic;
+        @include plastic-accent();
+    }
+}

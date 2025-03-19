@@ -39,7 +39,7 @@
         padding: 0 0.5rem;
         height: 4rem;
         flex-shrink: 0;
-        border-bottom: 1px solid var(--p30);
+        border-bottom: 1px solid var(--c30);
         justify-content: space-between;
 
         .logo {

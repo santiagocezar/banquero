@@ -63,7 +63,7 @@
         <path
             d="M 0,{BOX_SIZE + BOX_MARGIN / 2} L {BOX_SIZE},{BOX_SIZE +
                 BOX_MARGIN / 2}"
-            stroke="var(--p50)"
+            stroke="var(--c50)"
         />
     {/if}
     <!-- <text y="1em">{minCount}, {maxCount}</text> -->
@@ -84,11 +84,11 @@
 
         .stick {
             transition: 0.15s fill linear;
-            fill: var(--p90);
+            fill: var(--c90);
         }
         .head {
             transition: 0.15s fill linear;
-            fill: var(--p50);
+            fill: var(--c50);
         }
 
         &[data-hidden="true"] {
@@ -100,10 +100,10 @@
         &[data-hidden="true"],
         &[data-ghost="true"] {
             .stick {
-                fill: var(--p40);
+                fill: var(--c40);
             }
             .head {
-                fill: var(--p40);
+                fill: var(--c40);
             }
         }
     }

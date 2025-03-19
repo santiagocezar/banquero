@@ -1,5 +1,25 @@
 @use 'sass:color';
+@use 'sass:string';
 @use 'sass:math';
+
+
+@function rel($ch, $value) {
+    @if $lightness > 0 {
+        @return calc(#{$ch} + ((1 - #{$ch}) * calc($value / 100%)));
+    } @else {
+        @return calc(#{$ch} - (#{$ch} * calc($value / 100%)));
+    }
+}
+
+@function okscale($base, $chroma, $lightness, $dynamic: false) {
+    @if $dynamic {
+        $rc: rel(c, $chroma);
+        $rl: rel(l, $lightness);
+        @return oklch(from $base $rl $rc h);
+    } @else {
+        @return color.scale($base, $chroma: $chroma, $lightness: $lightness, $space: oklch);
+    }
+}
 
 @function brightness($color) {
     @return round(
@@ -17,74 +37,106 @@
     }
 }
 
+@function two-digit($i) {
+    @return string.slice("0" + $i, -2, -1);
+}
 
+@debug two-digit(20);
+@debug two-digit(2);
+@debug two-digit(17);
+@debug two-digit(199);
 
-@mixin palette($hue, $chrlight: 70%, $chrdark: 50%) {
-    $p50: oklch(60% $chrlight ($hue + 45deg));
+// FIXME: kinda pointless since sass doesn't sovle the relative color functions
+@mixin palette($base) {
+    $base: color.to-space($base, oklch);
+    $baseLightness: calc(color.channel($base, "lightness", $space: oklch) / 100%);
+    $baseChroma: color.channel($base, "chroma", $space: oklch);
+    $baseHue: calc(color.channel($base, "hue", $space: oklch) / 1deg);
+    @for $i from 0 through 19 {
+        $L: math.div($i, 19);
+        $C: math.min(
+            calc($baseChroma / $baseLightness * $L),
+            calc($baseChroma / ($baseLightness - 1) * ($L - $baseLightness) + $baseChroma)
+        );
+        $H: calc($baseHue + $L * 40);
 
-    --p10: #{color.scale($p50, $chroma: -60%, $lightness: 100%, $space: oklch)};
-    --p20: #{color.scale($p50, $chroma: -45%, $lightness: 85%, $space: oklch)};
-    --p30: #{color.scale($p50, $chroma: -30%, $lightness: 70%, $space: oklch)};
-    --p40: #{color.scale($p50, $chroma: -10%, $lightness: 45%, $space: oklch)};
-    --p50: #{$p50};
-    --p60: #{color.scale($p50, $lightness: -15%, $space: oklch)};
-    --p70: #{color.scale($p50, $lightness: -25%, $space: oklch)};
-    --p80: #{color.scale($p50, $lightness: -45%, $space: oklch)};
-    --p90: #{color.scale($p50, $lightness: -60%, $space: oklch)};
-
-    --contrast: white; // #{contrasting($p50)};
-
-    @media (prefers-color-scheme: dark) {
-        $p50: oklch(50% $chrdark($hue + 45deg));
-
-        --p10: #{color.scale($p50, $chroma: -50%, $lightness: 80%, $space: oklch)};
-        --p20: #{color.scale($p50, $chroma: -40%, $lightness: 60%, $space: oklch)};
-        --p30: #{color.scale($p50, $chroma: -30%, $lightness: 40%, $space: oklch)};
-        --p40: #{color.scale($p50, $chroma: -10%, $lightness: 20%, $space: oklch)};
-        --p50: #{$p50};
-        --p60: #{color.scale($p50, $lightness: -25%, $space: oklch)};
-        --p70: #{color.scale($p50, $lightness: -35%, $space: oklch)};
-        --p80: #{color.scale($p50, $lightness: -55%, $space: oklch)};
-        --p90: #{color.scale($p50, $lightness: -70%, $space: oklch)};
-        
-        --contrast: white; // #{contrasting($p50)};
+        --c#{two-digit($i * 5)}: #{oklch($L $C $H)}; 
+        --k#{two-digit($i * 5)}: #{oklch($L $C calc($H + 180))}; 
+        @if $i == 5 {
+            // --contrast: #{contrasting($c)};
+        }
     }
 }
-.pal-0 { @include palette(10deg); }
-.pal-1 { @include palette(45deg); }
-.pal-2 { @include palette(65deg); }
-.pal-3 { @include palette(110deg); }
-.pal-4 { @include palette(140deg); }
-.pal-5 { @include palette(225deg); }
-.pal-6 { @include palette(260deg); }
-.pal-7 { @include palette(300deg); }
-.pal--1 { @include palette(90deg, 20%, 15%); }
 
-.pal-gen {
-    
-    --p10: oklch(from var(--pal-gen-color) calc(l + ((1 - l) * 0.80)) calc(c - (c * 0.50)) h);
-    --p20: oklch(from var(--pal-gen-color) calc(l + ((1 - l) * 0.60)) calc(c - (c * 0.40)) h);
-    --p30: oklch(from var(--pal-gen-color) calc(l + ((1 - l) * 0.40)) calc(c - (c * 0.30)) h);
-    --p40: oklch(from var(--pal-gen-color) calc(l + ((1 - l) * 0.20)) calc(c - (c * 0.10)) h);
-    --p50: oklch(from var(--pal-gen-color) 60% c h);
-    --p60: oklch(from var(--pal-gen-color) calc(l - (l * 0.25)) c h);
-    --p70: oklch(from var(--pal-gen-color) calc(l - (l * 0.35)) c h);
-    --p80: oklch(from var(--pal-gen-color) calc(l - (l * 0.55)) c h);
-    --p90: oklch(from var(--pal-gen-color) calc(l - (l * 0.70)) c h);
+.palette-dynamic {
+    @for $i from 0 through 19 {
+        $L: math.div($i, 19);
+        --c#{two-digit($i * 5)}: oklch(
+            from var(--base)
+            #{$L}
+            min(
+                c / l * #{$L},
+                c / (l - 1) * (#{$L} - l) + c
+            )
+            calc(h + #{$L * 40})
+        );
+        --k#{two-digit($i * 5)}: oklch(
+            from var(--base)
+            #{$L}
+            min(
+                c / l * #{$L},
+                c / (l - 1) * (#{$L} - l) + c
+            )
+            calc(h + #{$L * 40} + 180)
+        );
+    }
 
     @media (prefers-color-scheme: dark) {
 
+    }
+}
+
+.pal--1 { @include palette(#527141); }
+.pal-0 { @include palette(#f10000); }
+.pal-1 { @include palette(#fc8a00); }
+.pal-2 { @include palette(#ecde0d); }
+.pal-3 { @include palette(#00aa19); }
+.pal-4 { @include palette(#27e0c8); }
+.pal-5 { @include palette(#485eff); }
+.pal-6 { @include palette(#a930ff); }
+.pal-7 { @include palette(#e500a5); }
+
+.palette-primary {
+    @include palette(#2c37de);
+}
+
+.palette-secondary {
+    @include palette(#fe1e6e);
+}
+
+.palette-neutral {
+    @include palette(#604d72);
+}
+
+.surface-colors {
+    --bg0: var(--c80);
+    --bg1: var(--c85);
+    --bg2: var(--c90);
+    --bg3: var(--c95);
+    --bg4: white;
+
+    @media (prefers-color-scheme: dark) {
+        --bg0: var(--c30);
+        --bg1: var(--c25);
+        --bg2: var(--c20);
+        --bg3: var(--c15);
+        --bg4: var(--c10);
     }
 }
 
 :root {
-    @include palette(10deg, 5%, 5%);
-
-    --bg0: #eeeeee;
-    --bg1: #f4f4f4;
-    --bg2: #fafafa;
-    --bg3: #fdfdfd;
-    --bg4: #ffffff;
+    @extend .palette-neutral;
+    @extend .surface-colors;
 
     --text: #000;
     --textContrast: #fff;
@@ -114,12 +166,6 @@
     color: var(--text);
 
     @media (prefers-color-scheme: dark) {
-        --bg0: #000;
-        --bg1: #111;
-        --bg2: #222;
-        --bg3: #333;
-        --bg4: #444;
-
         --text: #eee;
         --textContrast: #111;
         --secondaryText: #eee8;

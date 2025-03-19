@@ -1,6 +1,6 @@
 <script lang="ts">
     import * as mono from "$games/mono"
-    import { propertyItem } from "$games/mono/Properties.svelte"
+    import { propertyItem } from "$games/mono/PropertyList.svelte"
     import Icon from "$lib/components/Icon.svelte"
     import { slide } from "svelte/transition"
 
@@ -25,10 +25,14 @@
     }
     const owned = $derived(mono.filterOwnerIDs(ownerships, player.id))
     const filtered = $derived(
-        owned.reduce((arr, id) => (arr[+selected.has(id)].push(id), arr), [
-            [],
-            [],
-        ] as [number[], number[]])
+        owned.reduce(
+            (arr, id) => (
+                // coerces the boolean into an array index, 0 if false, 1 if true
+                // esentially partitioning the list of player properties in two:
+                // selected and unselected.
+                arr[+selected.has(id)].push(id), arr
+            ), 
+            [ [], [] ] as [number[], number[]])
     )
 </script>
 
@@ -44,7 +48,7 @@
             mono.properties[id].name,
             mono.properties[id].price
         )}
-        <div class={["checkbox plastic", { "plastic-light": !selected }]}>
+        <div class={["checkbox plastic", { "accent": selected }]}>
             <Icon use="ic-check" />
         </div>
     </button>
@@ -83,16 +87,16 @@
         width: 2rem;
         height: 2rem;
         /* border-radius: 0.5rem; */
-        /* border: 1px solid var(--p70); */
-        /* color: var(--p10); */
+        /* border: 1px solid var(--c70); */
+        /* color: var(--c10); */
 
         & :global(svg) {
             visibility: hidden;
         }
     }
     .selected .checkbox {
-        /* border: 1px solid var(--p50);
-        background-color: var(--p50); */
+        /* border: 1px solid var(--c50);
+        background-color: var(--c50); */
 
         & :global(svg) {
             visibility: visible;
