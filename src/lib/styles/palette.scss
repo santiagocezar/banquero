@@ -58,7 +58,7 @@
             calc($baseChroma / $baseLightness * $L),
             calc($baseChroma / ($baseLightness - 1) * ($L - $baseLightness) + $baseChroma)
         );
-        $H: calc($baseHue + $L * 40);
+        $H: calc($baseHue + $L * 0);
 
         --c#{two-digit($i * 5)}: #{oklch($L $C $H)}; 
         --k#{two-digit($i * 5)}: #{oklch($L $C calc($H + 180))}; 
@@ -78,7 +78,7 @@
                 c / l * #{$L},
                 c / (l - 1) * (#{$L} - l) + c
             )
-            calc(h + #{$L * 40})
+            calc(h + #{$L * 0})
         );
         --k#{two-digit($i * 5)}: oklch(
             from var(--base)
@@ -87,7 +87,7 @@
                 c / l * #{$L},
                 c / (l - 1) * (#{$L} - l) + c
             )
-            calc(h + #{$L * 40} + 180)
+            calc(h + #{$L * 0} + 180)
         );
     }
 

@@ -1,25 +1,26 @@
 <script lang="ts">
-    import Properties from "$games/mono/PropertyList.svelte"
     import Icon from "$lib/components/Icon.svelte"
     import { Tabs } from "melt/builders";
     import * as mono from "$games/mono"
     import { crossfade } from "svelte/transition"
     import { cubicInOut } from "svelte/easing"
-    import PropertyFlow from "$games/mono/PropertyFlow.svelte"
 
     import IconMoneySend from "~icons/hugeicons/money-send-02"
     import IconMoneyReceive from "~icons/hugeicons/money-receive-flow-02"
     import IconLegalDocument from "~icons/hugeicons/legal-document-02"
     import IconMovements from "~icons/hugeicons/arrow-data-transfer-horizontal"
+    import { sum } from "$lib/utils.svelte"
+    import type { Snippet } from "svelte"
     
     interface Props {
         player: mono.Player
         ownerships: mono.Ownerships
-        onPropertyClick: (id: number) => void
         onRemoveClick: () => void
         onReturn: () => void
         pay: () => void
         charge: () => void
+        properties?: Snippet
+        transactions?: Snippet
     }
 
     
@@ -33,14 +34,30 @@
     const {
         player,
         ownerships,
-        onPropertyClick,
         onRemoveClick,
         onReturn,
         pay,
-        charge
+        charge,
+        properties,
+        transactions
     }: Props = $props()
 
     // TODO: capital acumulado
+
+    const capital = $derived(
+        player.money +
+        mono.filterOwner(ownerships, player.id).reduce(
+            sum((curr) =>
+                ((prop = mono.properties[curr.id]) =>
+                    (curr.mortgaged ? 0 : prop.price) +
+                    (prop.kind === "lot"
+                        ? curr.houses * prop.housing
+                        : 0))()
+            ),
+            0
+        )
+    )
+    
 
     const [send, receive] = crossfade({
         duration: 250,
@@ -67,6 +84,10 @@
                 <p class="big">$ {player.money.toLocaleString(undefined, {
                     useGrouping: "always"
                 })}</p>
+                <p class="label">Capital estimado $ {capital.toLocaleString(undefined, {
+                    useGrouping: "always"
+                })}</p>
+                
             {/if}
         </div>
 
@@ -101,13 +122,11 @@
         {/each}
     </div>
     <main {...tabs.getContent(tablist[0].id)}>
-        {#if player.id === mono.BANK.id}
-            <Properties {ownerships} owner={player.id} onpropertyselected={onPropertyClick} displayPrice={player === mono.BANK} />
-        {:else}
-            <PropertyFlow {ownerships} owner={player.id} onpropertyselected={onPropertyClick} displayPrice={player === mono.BANK} />
-        {/if}
+        {@render properties?.()}
     </main>
-    <main {...tabs.getContent(tablist[1].id)}></main>
+    <main {...tabs.getContent(tablist[1].id)}>
+        {@render transactions?.()}
+    </main>
 </section>
 
 <style>

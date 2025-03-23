@@ -1,35 +1,40 @@
 <script module>
-    import { crossfade } from "svelte/transition"
-    import { cubicInOut } from "svelte/easing"
+    import { crossfade, fade } from "svelte/transition"
+    import { expoOut } from "svelte/easing"
 
     export const [sendCard, receiveCard] = crossfade({
-        duration: 250,
-        easing: cubicInOut,
+        duration: 400,
+        easing: expoOut,
     });
 </script>
 
 <script lang="ts">
-    import Icon from "$lib/components/Icon.svelte"
-    import * as mono from "$games/mono"
-    import { contrast, range } from "$lib/utils.svelte"
+    import type { Snippet } from "svelte"
     import { slide } from "svelte/transition"
-    import PropertyCard from "$games/mono/PropertyCard.svelte"
     import { Popover } from "melt/builders"
-
+    
+    import IconCheck from "~icons/hugeicons/tick-02"
+    import IconAdd from "~icons/hugeicons/add-01"
+    import IconRemove from "~icons/hugeicons/remove-01"
+    import IconBack from "~icons/hugeicons/arrow-left-01"
     import IconKey from "~icons/hugeicons/key-01"
     import IconLoan from "~icons/hugeicons/save-money-dollar"
     import IconExchange from "~icons/hugeicons/agreement-01"
     import IconHouse from "~icons/hugeicons/house-03"
     import IconMenu from "~icons/hugeicons/menu-01"
 
+    import * as mono from "$games/mono"
+    import PropertyCard from "./PropertyCard.svelte"
+
     interface Props {
         id: number
         ownerships: mono.Ownerships
-        onReturn: (player: number) => void
+        onReturn: () => void
         sell: (owner: number, price: number) => void
         chargeRent: (owner: number, price: number) => void
         buyHouses: (owner: number, amount: number, price: number) => void
         mortgage: (owner: number, price: number) => void
+        children?: Snippet
     }
 
     const {
@@ -49,6 +54,7 @@
             placement: "top",
         },
     })
+    
     const buildsPopover = new Popover({
         computePositionOptions: {
             placement: "top",
@@ -66,8 +72,6 @@
     const onSellClick = () => sell(mono.getOwner(ownerships, id), prop.price)
     const onHouseConfirmClick = () => buyHouses(mono.getOwner(ownerships, id), houseCount - (ownerships[id]?.houses ?? 0), (prop as {housing: number}).housing)
     const onMortageClick = () => mortgage(mono.getOwner(ownerships, id), prop.price / 2)
-    
-    const goBack = () => onReturn(mono.getOwner(ownerships, id))
 </script>
 
 {#snippet houses(count: number, price: number, diff: number)}
@@ -93,12 +97,12 @@
                     </p>
                 </div>
                 <button class="accent" onclick={onHouseConfirmClick}>
-                    <Icon use="ic-check" />
+                    <IconCheck />
                 </button>
             </div>
         {/if}
         <div class="amount">
-            <Icon use="ic-house" />
+            <IconHouse />
             × {count}
             {#if diff != 0}
                 <strong>
@@ -108,8 +112,8 @@
             {/if}
         </div>
         <div class="actions even-row">
-            <button onclick={houseDec}><Icon use="ic-remove" /></button>
-            <button class="accent" onclick={houseInc}><Icon use="ic-add" /></button>
+            <button onclick={houseDec}><IconRemove /></button>
+            <button class="accent" onclick={houseInc}><IconAdd /></button>
         </div>
         <div class="legend">
             Compra: ${price} · Venta: ${price / 2}
@@ -117,21 +121,26 @@
     </div>
 {/snippet}
 
-<section class="palette-dynamic surface-colors" style="--base: {prop.color}">
+<section 
+    class="palette-dynamic surface-colors"
+    style="--base: {prop.color}"
+    in:fade={{duration: 200}}
+    out:fade={{duration: 100}}
+>
     <header class="plastic-pal">
         <nav>
-            <button onclick={goBack} class="flat">
-                <Icon use="ic-arrow-back" />
+            <button onclick={onReturn} class="flat">
+                <IconBack />
             </button>
         </nav>
     </header>
 
     <div
-        class="wrapper"
+        class="card"
         in:receiveCard|global={{key: id}}
         out:sendCard|global={{key: id}}
     >
-        <PropertyCard {id} {ownerships} />
+        <PropertyCard {ownerships} {id} />
     </div>
 
     <div class="op-bar even-row">
@@ -190,6 +199,8 @@
         display: grid;
         grid-template-rows: auto 1fr auto;
         height: 100%;
+        position: absolute;
+        inset: 0;
     }
     header {
         height: 3rem;
@@ -199,8 +210,9 @@
         display: flex;
     }
 
-    .wrapper {
+    .card {
         place-self: center;
+        z-index: 100;
     }
     .menu {
         margin: .5rem;

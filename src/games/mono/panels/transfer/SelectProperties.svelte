@@ -1,6 +1,6 @@
 <script lang="ts">
     import * as mono from "$games/mono"
-    import { propertyItem } from "$games/mono/PropertyList.svelte"
+    import { propertyItem } from "$games/mono/properties/PropertyList.svelte"
     import Icon from "$lib/components/Icon.svelte"
     import { slide } from "svelte/transition"
 
@@ -41,7 +41,8 @@
         out:slide
         in:slide
         onclick={selected ? deselect(id) : select(id)}
-        class={["reset", "property-item", { selected }]}
+        class={["property-item palette-dynamic surface-colors", { selected }]}
+        style="--base: {mono.properties[id].color}"
     >
         {@render propertyItem(
             mono.properties[id].color,
@@ -73,7 +74,7 @@
 </div>
 
 <style>
-    @import "../../property-item.css";
+    @import "../../properties/property-item.css";
 
     .properties {
         display: grid;

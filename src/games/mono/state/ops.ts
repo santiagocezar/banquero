@@ -7,10 +7,10 @@ export function applyExchangeToPlayers(prevPlayers: Player[], ex: Exchange): Pla
     const paysIndex = findPlayerIndex(players, ex.pays.id)
     const chargesIndex = findPlayerIndex(players, ex.charges.id)
 
-    if (paysIndex !== null) {
+    if (paysIndex >= 0) {
         players[paysIndex] = addMoney(players[paysIndex], -ex.amount)
     }
-    if (chargesIndex !== null) {
+    if (chargesIndex >= 0) {
         players[chargesIndex] = addMoney(players[chargesIndex], ex.amount)
     }
     return players

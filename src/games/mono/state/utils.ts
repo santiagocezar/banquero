@@ -54,32 +54,30 @@ export function filterOwnerIDs(owners: Ownerships, playerID: number): number[] {
  * @param id ID of the property
  * @returns The player ID for the owner
  */
-export function getOwner(owners: Ownerships, id: number): number {
-    return owners[id]?.owner ?? BANK.id
-}
+export const getOwner = (owners: Ownerships, id: number) => (
+    owners[id]?.owner ?? BANK.id
+)
 
 export function indexPlayers(players: Player[]) {
     return new Map(players.concat(BANK).map(p => [p.id, p]))
 }
 
-export function getPlayer(players: Map<number, Player>, id: number): Player | null {
-    if (id === BANK.id) { return BANK }
+export const getPlayer = (players: Map<number, Player>, id: number | null) => (
+    id === null ? undefined :
+    id === BANK.id ? BANK :
+    players.get(id)
+)
 
-    return players.get(id) ?? null
-}
+export const findPlayerIndex = (players: Player[], id: number) => (
+    id === BANK.id 
+        ? -1                                              // we already know the bank is not a real player
+        : players.findIndex(player => player.id === id)   // find it if it's real
+)
 
-export function findPlayerIndex(players: Player[], id: number): number | null {
-    return (
-        id === BANK.id ? null :                         // we already know the bank is not a real player
-        players.findIndex(player => player.id === id)   // find it if it's real
-    )
-}
-
-export function newOwnership(id: number, owner: number): Ownership {
-    return {
+export const newOwnership = (id: number, owner: number) => ({
         id,
         owner,
         houses: 0,
         mortgaged: false,
-    }
-}
+})
+

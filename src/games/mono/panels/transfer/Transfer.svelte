@@ -1,7 +1,7 @@
 <script lang="ts">
     import * as mono from "$games/mono"
     import { sideEffect } from "$lib/utils.svelte"
-    import { propertyItem } from "$games/mono/PropertyList.svelte"
+    import { propertyItem } from "$games/mono/properties/PropertyList.svelte"
     import SelectProperties from "./SelectProperties.svelte"
     import Icon from "$lib/components/Icon.svelte"
     import { SvelteSet } from "svelte/reactivity"
@@ -9,8 +9,8 @@
 
     interface Props {
         ownerships: mono.Ownerships
-        pays: mono.Player | null
-        charges: mono.Player | null
+        pays?: mono.Player
+        charges?: mono.Player
         defaultAmount: number,
         defaultSell: number | null,
         onSwitchClick: (who: "pays" | "charges") => void
@@ -33,7 +33,6 @@
     let payerSells = $state(new SvelteSet<number>([]))
     let chargerSells = $state(new SvelteSet<number>(defaultSell === null ? [] : [defaultSell]))
     
-    // const forced = $derived(exchange.houses != 0 || exchange.mortgage.length > 0)
     const forced = false
     
     $effect(() => {
@@ -53,7 +52,7 @@
         return mono.filterOwnerIDs(ownerships, from.id).filter(id => selected.has(id)).map(id => ({ id, soldTo: to.id }))
     }
     function submit(ev: Event) {
-        if (pays === null || charges === null) {
+        if (!pays || !charges) {
             return
         }
         
@@ -183,7 +182,6 @@
 
 <style>
     @import "../../foreheader.css";
-    @import "../../property-item.css";
 
     form {
         display: contents;
@@ -251,9 +249,6 @@
     .extra {
         font-size: 1.5rem;
         margin-bottom: .25em;
-    }
-    .properties {
-        margin: 0 -1rem;
     }
     span[class^="pal-"] {
         color: var(--c50);

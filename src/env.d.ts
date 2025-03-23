@@ -18,5 +18,9 @@ declare module "$view" {
     const comp: import("astro/runtime/server/index.js").AstroComponentFactory
     export default comp
 }
+
 declare module "scroll-timeline-polyfill/dist/scroll-timeline.js";
 
+declare class ViewTimeline extends AnimationTimeline {
+    constructor(options: any)
+}
